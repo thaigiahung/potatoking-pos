@@ -10,9 +10,10 @@ module.exports = {
   broadcast: function(req, res) {
     var roomName = req.body.roomName;
     var message = req.body.message;
+    var eventName = req.body.eventName;
     console.log(roomName);
     console.log(message);
-    sails.sockets.broadcast(roomName, 'chat', { msg: message });    
+    sails.sockets.broadcast(roomName, eventName, { msg: message });    
   },
 
   listSubscriber: function(req, res) {

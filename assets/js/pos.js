@@ -35,6 +35,9 @@ $("#subscribe").click(function (event) {
     $("#lbMessage").text(data.message);
     $("#divChat").show();
   });
+
+  io.socket.get('/subscribe/auto', function (data) {
+  });
 });
 
 $("#btnSubscribe").click(function (event) {
