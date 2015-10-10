@@ -33,8 +33,8 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': {
-    view: 'homepage'
-  }
+    view: 'test'
+  },
 
   /***************************************************************************
   *                                                                          *
@@ -45,5 +45,7 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-
+  'GET /subscribe/:roomName': 'TestController.subscribeToFunRoom',
+  'POST /broadcast': 'TestController.broadcast',
+  'GET /list-subscriber/:roomName': 'TestController.listSubscriber',
 };
