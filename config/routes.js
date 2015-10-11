@@ -48,6 +48,6 @@ module.exports.routes = {
   'GET /subscribe/:roomName': 'TestController.subscribeToFunRoom',
   'POST /broadcast': 'TestController.broadcast',
   'GET /list-subscriber/:roomName': 'TestController.listSubscriber',
-  'GET /device/list': 'DeviceController.listDevice',
+  'GET /devices': 'DeviceController.listDevice',
   'POST /device/connect': 'DeviceController.connect',
 };
