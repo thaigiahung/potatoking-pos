@@ -1,14 +1,26 @@
 $( document ).ready(function() {
   
 });
-io.socket.on('connect', function socketConnected() {
+io.socket.on('connect', function () {
   console.log("Connected");
   //TODO: call api update device status
+  io.socket.post('/device/connect', function (data) {
+    console.log(data);
+  });
 });
 
-io.socket.on('chat', function onServerSentEvent (data) {
+io.socket.get('/subscribe/pos', function (data) {
+  console.log("Subscribed to pos");
+});
+
+io.socket.on('chat', function (data) {
   console.log(data);
   $("#divChatContent").append(data.msg);
+});
+
+io.socket.on('newDeviceConnected', function (data) {
+  console.log(data);
+  $("#divDeviceList").append(data.ip + "<br>");
 });
 
 

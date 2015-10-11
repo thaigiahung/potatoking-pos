@@ -21,11 +21,17 @@ module.exports.sockets = {
   * automatically.                                                           *
   *                                                                          *
   ***************************************************************************/
-  onConnect: function(session, socket) {
+  /***************************************************************************
+    * Deprecation notice: onConnect() has been removed as of v0.11.0           *
+    * To achieve it's function run a request from the client when socket       *
+    * connects instead                                                         *
+    ***************************************************************************/
+  // onConnect: function(session, socket) {
 
-    // By default, do nothing.
-
-  },
+  //   // By default, do nothing.
+  //   console.log(session);
+  //   console.log(socket);
+  // },
 
 
   /***************************************************************************
@@ -34,10 +40,24 @@ module.exports.sockets = {
   * disconnects                                                              *
   *                                                                          *
   ***************************************************************************/
-  onDisconnect: function(session, socket) {
+  // onDisconnect: function(session, socket) {
 
-    // By default: do nothing.
-  },
+  //   // By default: do nothing.
+  // },
+
+  /***************************************************************************
+    *                                                                          *
+    * `afterDisconnect`                                                        *
+    *                                                                          *
+    * This custom afterDisconnect function will be run each time a socket      *
+    * disconnects                                                              *
+    *                                                                          *
+    * Deprecation notice: This is a replacement for old onDisconnect()         *
+    ***************************************************************************/
+    // afterDisconnect: function(session, socket, cb) {
+    //   // By default: do nothing.
+    //   return cb();
+    // },
 
 
   /***************************************************************************
