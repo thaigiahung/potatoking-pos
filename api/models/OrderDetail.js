@@ -1,5 +1,5 @@
 /**
-* Device.js
+* OrderDetail.js
 *
 * @description :: TODO: You might write a short summary of how this model works and what it represents here.
 * @docs        :: http://sailsjs.org/#!documentation/models
@@ -8,14 +8,15 @@
 module.exports = {
 
   attributes: {
-    ip: { type: 'string' },
-    mac: { type: 'string' },
-    table: { type: 'integer' },
-    connecting: { type: 'boolean' },
+    order: { model: 'Order' },
+    dish: { model: 'Dish' },
+    quantity: { type: 'integer' },
+    price: { type: 'integer' },
+    subTotal: { type: 'integer' },
     status: {
       type: 'string',
-      enum: ['enable', 'disable']
-    },
+      enum: ['preparing', 'cancelled', 'delivering', 'delivered']
+    }
   }
 };
 

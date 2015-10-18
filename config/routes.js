@@ -32,9 +32,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'test'
-  },
+  // '/': {
+  //   view: 'test'
+  // },
 
   /***************************************************************************
   *                                                                          *
@@ -45,9 +45,11 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
+  'GET /': 'DishController.view',
   'GET /subscribe/:roomName': 'TestController.subscribeToFunRoom',
   'POST /broadcast': 'TestController.broadcast',
   'GET /list-subscriber/:roomName': 'TestController.listSubscriber',
   'GET /devices': 'DeviceController.listDevice',
   'POST /device/connect': 'DeviceController.connect',
+  'POST /table/open': 'SessionController.openTable',
 };
