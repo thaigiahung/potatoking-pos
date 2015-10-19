@@ -34,7 +34,7 @@ io.socket.on('connect', function () {
       io.socket.on('newDeviceConnected', function (newDeviceConnectedData) {
         if(newDeviceConnectedData.status == 0)
         {
-          $("#divUnauthorisedDevice").append(newDeviceConnectedData.ip + "<br>");  
+          $("#divUnauthorisedDevice").prepend(newDeviceConnectedData.ip + "<br>");  
         }
         else
         {
@@ -47,7 +47,7 @@ io.socket.on('connect', function () {
           }
           else
           {
-            $("#divInactiveDevice").append(newDeviceConnectedData.ip + "<br>");
+            $("#divInactiveDevice").prepend(newDeviceConnectedData.ip + "<br>");
           }
         }    
       });
@@ -63,7 +63,7 @@ io.socket.on('connect', function () {
       //Listen for event open table
       io.socket.on('opened', function (message) {
         console.log(message);
-        $("#divDishPageAlert").append('<div class="alert alert-success">' +
+        $("#divDishPageAlert").prepend('<div class="alert alert-success">' +
                                       '<button type="button" class="close" data-dismiss="alert">×</button>' +
                                       message.message +
                                     '</div>');
@@ -74,7 +74,7 @@ io.socket.on('connect', function () {
         console.log(mergedMessage);
         io.socket.get('/subscribe/'+mergedMessage.room, function (message) {
           console.log("Subscribed to room table"+deviceData.data.table);
-          $("#divDishPageAlert").append('<div class="alert alert-success">' +
+          $("#divDishPageAlert").prepend('<div class="alert alert-success">' +
                                         '<button type="button" class="close" data-dismiss="alert">×</button>' +
                                         mergedMessage.message +
                                       '</div>');
@@ -153,13 +153,13 @@ $("#btnMergeAndOpenTable").click(function (event) {
     {
       //TODO: update style
       
-      $("#divDeviceListAlert").append('<div class="alert alert-success">' +
+      $("#divDeviceListAlert").prepend('<div class="alert alert-success">' +
                                       '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
                                       '</div>')
     }
     else //Fail
     {
-      $("#divDeviceListAlert").append('<div class="alert alert-error">' +
+      $("#divDeviceListAlert").prepend('<div class="alert alert-error">' +
                                       '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
                                       '</div>')
     }
@@ -174,13 +174,13 @@ $("#btnOpenTable").click(function (event) {
       {
         //TODO: update style
 
-        $("#divDeviceListAlert").append('<div class="alert alert-success">' +
+        $("#divDeviceListAlert").prepend('<div class="alert alert-success">' +
                                         '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
                                         '</div>')
       }
       else //Fail
       {
-        $("#divDeviceListAlert").append('<div class="alert alert-error">' +
+        $("#divDeviceListAlert").prepend('<div class="alert alert-error">' +
                                         '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
                                         '</div>')
       }

@@ -28,40 +28,57 @@ module.exports = {
       }
       else
       {
-        //Update table Session
-        Session.create({
+        Session.findOne({
           device: device.id,
-          table: device.table,
-          status: 'open',
-          startTime: new Date(),
-          endTime: new Date()
-        }).exec(function (err2, createdSession){
-          if(err2 || !createdSession)
+          status: 'open'
+        }).exec(function (err, session) {
+          if(err || !session)
+          {
+            //Update table Session
+            Session.create({
+              device: device.id,
+              table: device.table,
+              status: 'open',
+              startTime: new Date(),
+              endTime: new Date()
+            }).exec(function (err2, createdSession){
+              if(err2 || !createdSession)
+              {
+                return res.json({
+                  status: 0,
+                  message: 'Không thể mở bàn'
+                });
+              }
+              else
+              {
+                //Broadcast to room tableId with the event name opened
+                sails.sockets.broadcast('table'+device.table, 'opened', {message: '[Bàn ' + device.table + '] Mở bàn thành công!'});
+
+                return res.json({
+                  status: 1,
+                  message: '[Bàn ' + device.table + '] Mở bàn thành công!'
+                });
+
+                //Broadcast to room
+                /*sails.sockets.broadcast('table', 'table'+device.table, {message: "Thiết bị này đã được ghép vào bàn " + device.table});
+
+                return res.json({
+                  status: 1,
+                  message: 'Thiết bị này đã được ghép vào bàn ' + device.table
+                });*/
+              }
+            });
+          }
+          else 
           {
             return res.json({
               status: 0,
-              message: 'Không thể mở bàn'
+              message: 'Bàn đang hoạt động!'
             });
-          }
-          else
-          {
-            //Broadcast to room tableId with the event name opened
-            sails.sockets.broadcast('table'+device.table, 'opened', {message: '[Bàn ' + device.table + '] Mở bàn thành công!'});
-
-            return res.json({
-              status: 1,
-              message: '[Bàn ' + device.table + '] Mở bàn thành công!'
-            });
-
-            //Broadcast to room
-            /*sails.sockets.broadcast('table', 'table'+device.table, {message: "Thiết bị này đã được ghép vào bàn " + device.table});
-
-            return res.json({
-              status: 1,
-              message: 'Thiết bị này đã được ghép vào bàn ' + device.table
-            });*/
           }
         });
+
+        
       }
     });    
   },
