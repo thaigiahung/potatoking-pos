@@ -52,4 +52,5 @@ module.exports.routes = {
   'GET /devices': 'DeviceController.listDevice',
   'POST /device/connect': 'DeviceController.connect',
   'POST /table/open': 'SessionController.openTable',
+  'POST /table/openAndOpen': 'SessionController.mergeAndOpenTable',
 };

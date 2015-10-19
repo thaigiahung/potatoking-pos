@@ -66,7 +66,19 @@ io.socket.on('connect', function () {
         $("#divDishPageAlert").append('<div class="alert alert-success">' +
                                       '<button type="button" class="close" data-dismiss="alert">×</button>' +
                                       message.message +
-                                    '</div>')
+                                    '</div>');
+      });
+
+      //Listen for event merge table
+      io.socket.on('merged', function (mergedMessage) {
+        console.log(mergedMessage);
+        io.socket.get('/subscribe/'+mergedMessage.room, function (message) {
+          console.log("Subscribed to room table"+deviceData.data.table);
+          $("#divDishPageAlert").append('<div class="alert alert-success">' +
+                                        '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                        mergedMessage.message +
+                                      '</div>');
+        });
       });
     }
   });
@@ -133,6 +145,26 @@ $("#btnMergeAndOpenTable").click(function (event) {
   var selectedMergeTable = $('input[name=rdoMergeTable]:checked').val();
   console.log(arrSelectedTable);
   console.log(selectedMergeTable);
+  io.socket.post('/table/openAndOpen', {
+                                        arrSelectedTable: JSON.stringify(arrSelectedTable), 
+                                        selectedMergeTable: selectedMergeTable
+  }, function (data) {
+    if(data.status == 1) //Success
+    {
+      //TODO: update style
+      
+      $("#divDeviceListAlert").append('<div class="alert alert-success">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
+                                      '</div>')
+    }
+    else //Fail
+    {
+      $("#divDeviceListAlert").append('<div class="alert alert-error">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
+                                      '</div>')
+    }
+    $('#mergeTableModal').modal('hide');
+  });
 });
 
 $("#btnOpenTable").click(function (event) {
@@ -140,6 +172,8 @@ $("#btnOpenTable").click(function (event) {
     io.socket.post('/table/open', {id: $(this).val()}, function (data) {
       if(data.status == 1) //Success
       {
+        //TODO: update style
+
         $("#divDeviceListAlert").append('<div class="alert alert-success">' +
                                         '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
                                         '</div>')
