@@ -25,31 +25,16 @@ io.socket.on('connect', function () {
     *
     *******************************************************/
     //Page: Devices
-    if($('#divActiveDevice').length > 0)
+    if($('#devicesPage').length > 0)
     {
       io.socket.get('/subscribe/device', function (message) {
         console.log("Subscribed to device");
       });
 
       io.socket.on('newDeviceConnected', function (newDeviceConnectedData) {
-        if(newDeviceConnectedData.status == 0)
-        {
-          $("#divUnauthorisedDevice").prepend(newDeviceConnectedData.ip + "<br>");  
-        }
-        else
-        {
-          if(newDeviceConnectedData.data.status == 'enable')
-          {
-            if($("#table"+newDeviceConnectedData.data.table).length == 0)
-            {
-              $("#divActiveDevice").append('<input type="checkbox" id="table'+newDeviceConnectedData.data.table+'" value="'+newDeviceConnectedData.data.table+'"> Bàn '+newDeviceConnectedData.data.table);
-            }        
-          }
-          else
-          {
-            $("#divInactiveDevice").prepend(newDeviceConnectedData.ip + "<br>");
-          }
-        }    
+        //Find img tag & change img source
+        var img = $("#table"+newDeviceConnectedData.data.table).parent().parent().parent().children("img").eq(0);
+        img.attr('src','/img/device-status/green.png');
       });
     }
     //Page: Dishes

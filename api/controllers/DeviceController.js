@@ -8,8 +8,10 @@
 module.exports = {
   listDevice: function(req, res) {
     Device.find({
-      status: 'enable',
-      connecting: true
+      where: {
+        status: 'enable'
+      },
+      sort: 'table asc'
     }).exec(function (err, devices) {
       if(err || !devices)
       {
