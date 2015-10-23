@@ -12,6 +12,7 @@ module.exports = {
     mac: { type: 'string' },
     table: { type: 'integer' },
     connecting: { type: 'boolean' },
+    socketId: {type: 'string'},
     status: {
       type: 'string',
       enum: ['enable', 'disable']

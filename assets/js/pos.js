@@ -37,6 +37,12 @@ io.socket.on('connect', function () {
         img.attr('src','/img/device-status/green.png');
       });
 
+      io.socket.on('deviceDisconnected', function (deviceDisconnectedData) {
+        //Find img tag & change img source
+        var img = $("#table"+deviceDisconnectedData.table).parent().parent().parent().children("img").eq(0);
+        img.attr('src','/img/device-status/black.png');
+      });
+
       io.socket.on('opened', function (openedData) {
         //Find img tag & change img source
         var img = $("#table"+openedData.table).parent().parent().parent().children("img").eq(0);

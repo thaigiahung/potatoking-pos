@@ -52,7 +52,6 @@ module.exports = {
   },
 
   connect: function(req, res) {
-    console.log("Broadcast: " + req.ip);
     var ip = req.ip;
     var data;
     Device.findOne({
@@ -70,6 +69,7 @@ module.exports = {
       else
       {
         device.connecting = true;
+        device.socketId = sails.sockets.id(req.socket);
         device.save(function(err, saved){});
         
         data = {

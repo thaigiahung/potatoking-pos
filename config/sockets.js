@@ -40,10 +40,19 @@ module.exports.sockets = {
   * disconnects                                                              *
   *                                                                          *
   ***************************************************************************/
-  // onDisconnect: function(session, socket) {
+  onDisconnect: function(session, socket) {
+    Device.findOne({
+      socketId: socket.id
+    }).exec(function (err, device) {
+      if(device)
+      {
+        device.connecting = false;
+        device.save(function(err, saved){});
 
-  //   // By default: do nothing.
-  // },
+        sails.sockets.broadcast('device', 'deviceDisconnected', device);
+      }
+    });
+  },
 
   /***************************************************************************
     *                                                                          *
@@ -55,7 +64,7 @@ module.exports.sockets = {
     * Deprecation notice: This is a replacement for old onDisconnect()         *
     ***************************************************************************/
     // afterDisconnect: function(session, socket, cb) {
-    //   // By default: do nothing.
+    //   // By default: do nothing.      
     //   return cb();
     // },
 
