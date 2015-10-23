@@ -19,7 +19,9 @@
 <div class="row-fluid">
   <div class="span3">
     <input type="checkbox" name="chkSelectTable" id="table7" value="<%= data[6].id %>"> 
-    <% if(data[6].connecting) { %>
+    <% if(data[6].isOpened) { %>
+      <img class="device-status-img" src="/img/device-status/yellow.png">    
+    <% } else if(data[6].connecting) { %>
       <img class="device-status-img" src="/img/device-status/green.png">
     <% } else { %>
       <img class="device-status-img" src="/img/device-status/black.png">
@@ -28,7 +30,9 @@
   </div>
   <div class="span3">
     <input type="checkbox" name="chkSelectTable" id="table5" value="<%= data[4].id %>"> 
-    <% if(data[4].connecting) { %>
+    <% if(data[4].isOpened) { %>
+      <img class="device-status-img" src="/img/device-status/yellow.png">
+    <% } else if(data[4].connecting) { %>
       <img class="device-status-img" src="/img/device-status/green.png">
     <% } else { %>
       <img class="device-status-img" src="/img/device-status/black.png">
@@ -37,7 +41,9 @@
   </div>
   <div class="span3">
     <input type="checkbox" name="chkSelectTable" id="table3" value="<%= data[2].id %>"> 
-    <% if(data[2].connecting) { %>
+    <% if(data[2].isOpened) { %>
+      <img class="device-status-img" src="/img/device-status/yellow.png">
+    <% } else if(data[2].connecting) { %>
       <img class="device-status-img" src="/img/device-status/green.png">
     <% } else { %>
       <img class="device-status-img" src="/img/device-status/black.png">
@@ -46,7 +52,9 @@
   </div>
   <div class="span3">
     <input type="checkbox" name="chkSelectTable" id="table1" value="<%= data[0].id %>"> 
-    <% if(data[0].connecting) { %>
+    <% if(data[0].isOpened) { %>
+      <img class="device-status-img" src="/img/device-status/yellow.png">
+    <% } else if(data[0].connecting) { %>
       <img class="device-status-img" src="/img/device-status/green.png">
     <% } else { %>
       <img class="device-status-img" src="/img/device-status/black.png">
@@ -57,7 +65,9 @@
 <div class="row-fluid">
   <div class="span3">
     <input type="checkbox" name="chkSelectTable" id="table8" value="<%= data[7].id %>"> 
-    <% if(data[7].connecting) { %>
+    <% if(data[7].isOpened) { %>
+      <img class="device-status-img" src="/img/device-status/yellow.png">
+    <% } else if(data[7].connecting) { %>
       <img class="device-status-img" src="/img/device-status/green.png">
     <% } else { %>
       <img class="device-status-img" src="/img/device-status/black.png">
@@ -66,7 +76,9 @@
   </div>
   <div class="span3">
     <input type="checkbox" name="chkSelectTable" id="table6" value="<%= data[5].id %>"> 
-    <% if(data[5].connecting) { %>
+    <% if(data[5].isOpened) { %>
+      <img class="device-status-img" src="/img/device-status/yellow.png">
+    <% } else if(data[5].connecting) { %>
       <img class="device-status-img" src="/img/device-status/green.png">
     <% } else { %>
       <img class="device-status-img" src="/img/device-status/black.png">
@@ -75,7 +87,9 @@
   </div>
   <div class="span3">
     <input type="checkbox" name="chkSelectTable" id="table4" value="<%= data[3].id %>"> 
-    <% if(data[3].connecting) { %>
+    <% if(data[3].isOpened) { %>
+      <img class="device-status-img" src="/img/device-status/yellow.png">
+    <% } else if(data[3].connecting) { %>
       <img class="device-status-img" src="/img/device-status/green.png">
     <% } else { %>
       <img class="device-status-img" src="/img/device-status/black.png">
@@ -84,7 +98,9 @@
   </div>
   <div class="span3">
     <input type="checkbox" name="chkSelectTable" id="table2" value="<%= data[1].id %>"> 
-    <% if(data[1].connecting) { %>
+    <% if(data[1].isOpened) { %>
+      <img class="device-status-img" src="/img/device-status/yellow.png">
+    <% } else if(data[1].connecting) { %>
       <img class="device-status-img" src="/img/device-status/green.png">
     <% } else { %>
       <img class="device-status-img" src="/img/device-status/black.png">

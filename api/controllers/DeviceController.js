@@ -5,6 +5,8 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var async = require('async');
+
 module.exports = {
   listDevice: function(req, res) {
     Device.find({
@@ -15,11 +17,36 @@ module.exports = {
     }).exec(function (err, devices) {
       if(err || !devices)
       {
-        return res.view('device-list',{status: 0, data: []});
+        return res.view('device-list',{status: 0, data: [], session: {}});
       }
       else
       {
-        return res.view('device-list', {status: 1, data: devices});
+        var newArrDevices = [];
+        async.forEachOfSeries(devices, function (device, index, callback) {
+          Session.findOne({
+            device: device.id,
+            status: 'open'
+          }).exec(function (err2, session) {
+            var isOpened;
+            if(err2 || !session)
+            {
+              isOpened = false;
+              session = {};
+            }
+            else
+            {
+              isOpened = true;
+              session = session;
+            }
+            device['isOpened'] = isOpened;
+            device['session'] = session;
+            newArrDevices.push(device);
+            
+            callback();
+          }); 
+        }, function done() {
+          return res.view('device-list', {status: 1, data: newArrDevices});
+        });
       }
     });    
   },
