@@ -54,6 +54,9 @@ module.exports = {
                 //Broadcast to room tableId with the event name opened
                 sails.sockets.broadcast('table'+device.table, 'opened', {message: '[Bàn ' + device.table + '] Mở bàn thành công!'});
 
+                //Broadcast to room device with the event name opened
+                sails.sockets.broadcast('device', 'opened', {table: device.table, message: '[Bàn ' + device.table + '] Mở bàn thành công!'});
+
                 return res.json({
                   status: 1,
                   message: '[Bàn ' + device.table + '] Mở bàn thành công!'
@@ -114,6 +117,9 @@ module.exports = {
                                                                           table: selectedMergeTable,
                                                                           room: 'table'+selectedMergeTable,
                                                                           message: '[Bàn ' + selectedMergeTable + '] Mở bàn thành công!'});
+
+                //Broadcast to room device with the event name opened
+                sails.sockets.broadcast('device', 'opened', {table: device.table, message: '[Bàn ' + device.table + '] Mở bàn thành công!'});
               });
             }
             else

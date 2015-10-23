@@ -36,7 +36,14 @@ io.socket.on('connect', function () {
         var img = $("#table"+newDeviceConnectedData.data.table).parent().parent().parent().children("img").eq(0);
         img.attr('src','/img/device-status/green.png');
       });
+
+      io.socket.on('opened', function (openedData) {
+        //Find img tag & change img source
+        var img = $("#table"+openedData.table).parent().parent().parent().children("img").eq(0);
+        img.attr('src','/img/device-status/yellow.png');
+      });
     }
+
     //Page: Dishes
     if($('#dishesPage').length > 0)
     {      
