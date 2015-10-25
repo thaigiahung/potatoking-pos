@@ -155,49 +155,43 @@
   <div id="divUnauthorisedDevice"></div>
 </div> -->
 
-<div class="modal fade" id="mergeTableModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Vui lòng chọn bàn để ghép</h4>
-      </div>
-      <div class="modal-body">
-        <div class="control-group">
-          <div class="controls">
-            <label class="radio">
-              <input type="radio" name="rdoMergeTable" value="1">Bàn 1
-            </label>
-            <div style="clear:both"></div>
-            <label class="radio">
-              <input type="radio" name="rdoMergeTable" value="2">Bàn 2
-            </label>
-            <div style="clear:both"></div>
-            <label class="radio">
-              <input type="radio" name="rdoMergeTable" value="3">Bàn 3
-            </label>
-            <div style="clear:both"></div>
-            <label class="radio">
-              <input type="radio" name="rdoMergeTable" value="4">Bàn 4
-            </label>
-            <div style="clear:both"></div>
-            <label class="radio">
-              <input type="radio" name="rdoMergeTable" value="5">Bàn 5
-            </label>
-            <div style="clear:both"></div>
-            <label class="radio">
-              <input type="radio" name="rdoMergeTable" value="6">Bàn 7
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button id="btnMergeAndOpenTable" class="btn btn-success">Ghép & Mở bàn</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+<div class="modal hide fade" id="mergeTableModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Vui lòng chọn bàn để ghép</h3>
+  </div>
+  <div class="modal-body">
+    <div class="control-group">
+      <div class="controls">
+        <label class="radio">
+          <input type="radio" name="rdoMergeTable" value="1">Bàn 1
+        </label>
+        <div style="clear:both"></div>
+        <label class="radio">
+          <input type="radio" name="rdoMergeTable" value="2">Bàn 2
+        </label>
+        <div style="clear:both"></div>
+        <label class="radio">
+          <input type="radio" name="rdoMergeTable" value="3">Bàn 3
+        </label>
+        <div style="clear:both"></div>
+        <label class="radio">
+          <input type="radio" name="rdoMergeTable" value="4">Bàn 4
+        </label>
+        <div style="clear:both"></div>
+        <label class="radio">
+          <input type="radio" name="rdoMergeTable" value="5">Bàn 5
+        </label>
+        <div style="clear:both"></div>
+        <label class="radio">
+          <input type="radio" name="rdoMergeTable" value="6">Bàn 7
+        </label>
       </div>
     </div>
-    <!-- /.modal-content -->
   </div>
-  <!-- /.modal-dialog -->
+  <div class="modal-footer">
+    <button id="btnMergeAndOpenTable" class="btn btn-success">Ghép & Mở bàn</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  </div>
 </div>
-<!-- /.modal -->
