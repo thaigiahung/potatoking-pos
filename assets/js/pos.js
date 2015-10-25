@@ -12,8 +12,7 @@ $( document ).ready(function() {
 io.socket.on('connect', function () {
   console.log("Connected");
   //TODO: call api update device status
-  io.socket.post('/device/connect', function (deviceData) {
-    
+  io.socket.post('/device/connect', function (deviceData) {    
     //Subscribe to global room named 'pos'
     io.socket.get('/subscribe/pos', function (message) {
       console.log("Subscribed to pos");
@@ -32,9 +31,18 @@ io.socket.on('connect', function () {
       });
 
       io.socket.on('newDeviceConnected', function (newDeviceConnectedData) {
+        var imgSrc;
+        if(newDeviceConnectedData.data.isOpened)
+        {
+          imgSrc = '/img/device-status/yellow.png';
+        }
+        else
+        {
+          imgSrc = '/img/device-status/green.png';
+        }
         //Find img tag & change img source
         var img = $("#table"+newDeviceConnectedData.data.table).parent().parent().parent().children("img").eq(0);
-        img.attr('src','/img/device-status/green.png');
+        img.attr('src', imgSrc);
       });
 
       io.socket.on('deviceDisconnected', function (deviceDisconnectedData) {
@@ -60,7 +68,6 @@ io.socket.on('connect', function () {
 
       //Listen for event open table
       io.socket.on('opened', function (message) {
-        console.log(message);
         $("#divDishPageAlert").prepend('<div class="alert alert-success">' +
                                       '<button type="button" class="close" data-dismiss="alert">×</button>' +
                                       message.message +
@@ -69,7 +76,6 @@ io.socket.on('connect', function () {
 
       //Listen for event merge table
       io.socket.on('merged', function (mergedMessage) {
-        console.log(mergedMessage);
         io.socket.get('/subscribe/'+mergedMessage.room, function (message) {
           console.log("Subscribed to room table"+deviceData.data.table);
           $("#divDishPageAlert").prepend('<div class="alert alert-success">' +

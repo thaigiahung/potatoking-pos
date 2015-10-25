@@ -65,22 +65,44 @@ module.exports = {
                   ip: ip,
                   data: []
                 };
+
+        return res.send(data);
       }
       else
-      {
-        device.connecting = true;
-        device.socketId = sails.sockets.id(req.socket);
-        device.save(function(err, saved){});
-        
-        data = {
-                  status: 1,
-                  message: "Success!",
-                  ip: ip,
-                  data: device
-                };
-      }
-      sails.sockets.broadcast('device', 'newDeviceConnected', data);
-      return res.send(data);
+      {   
+        Session.findOne({
+          device: device.id,
+          status: 'open'
+        }).exec(function (err2, session) {
+          var isOpened;
+          if(err2 || !session)
+          {
+            isOpened = false;
+            session = {};
+          }
+          else
+          {
+            isOpened = true;
+            session = session;
+          }
+          device.isOpened = isOpened;
+          device.session = session;
+
+          device.connecting = true;
+          device.socketId = sails.sockets.id(req.socket);
+          device.save(function(err, saved){});
+          
+          data = {
+                    status: 1,
+                    message: "Success!",
+                    ip: ip,
+                    data: device
+                  };
+
+          sails.sockets.broadcast('device', 'newDeviceConnected', data);
+          return res.send(data);
+        });        
+      }      
     });
   },
 };
