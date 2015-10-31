@@ -8,11 +8,15 @@
 module.exports = {
 
   attributes: {
-    device: { model: 'Device' },
     table: { type: 'string' },
     status: {
       type: 'string',
       enum: ['open', 'close']
+    },
+    total: { type: 'integer', defaultsTo: 0},
+    paymentStatus: {
+      type: 'string',
+      enum: ['paid', 'cancelled']
     },
     startTime: {type: 'datetime'},
     endTime: {type: 'datetime'}

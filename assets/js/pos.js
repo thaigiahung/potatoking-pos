@@ -63,11 +63,20 @@ io.socket.on('connect', function () {
     {      
       //Subscribe to room table
       io.socket.get('/subscribe/table'+deviceData.data.table, function (message) {
-        console.log("Subscribed to room table"+deviceData.data.table);
+        //Save originalTable (field table in Device) to localStorage
+        localStorage.originalTable = deviceData.data.table;
+        console.log("Subscribed to room table"+deviceData.data.table);        
       });
 
       //Listen for event open table
       io.socket.on('opened', function (message) {
+        console.log(message)
+        //Single table (not merged to any others) => currentTable will be original table
+        localStorage.currentTable = deviceData.data.table;
+
+        //Store current session id in localStorage
+        localStorage.sessionId = message.sessionId;
+
         $("#divDishPageAlert").prepend('<div class="alert alert-success">' +
                                       '<button type="button" class="close" data-dismiss="alert">×</button>' +
                                       message.message +
@@ -77,12 +86,22 @@ io.socket.on('connect', function () {
       //Listen for event merge table
       io.socket.on('merged', function (mergedMessage) {
         io.socket.get('/subscribe/'+mergedMessage.room, function (message) {
-          console.log("Subscribed to room table"+deviceData.data.table);
+          //Table is merged => currentTable will be the return value from API
+          localStorage.currentTable = mergedMessage.table;
+
+          //Store current session id in localStorage
+          localStorage.sessionId = mergedMessage.sessionId;
+
           $("#divDishPageAlert").prepend('<div class="alert alert-success">' +
                                         '<button type="button" class="close" data-dismiss="alert">×</button>' +
                                         mergedMessage.message +
                                       '</div>');
         });
+      });
+
+      //Listen for event add item
+      io.socket.on('addItem', function (message) {
+        console.log(message);
       });
     }
   });
@@ -103,7 +122,28 @@ io.socket.on('chat', function (data) {
 * Custom Function
 *
 *******************************************************/
+function addItem (id, name) {
+  console.log(id);
+  console.log(name);
+  console.log(localStorage.currentTable);
+  console.log(localStorage.sessionId);
+  
 
+  var data = {
+    roomName: 'table'+localStorage.currentTable,
+    eventName: 'addItem',
+    message: {
+      id: id,
+      sessionId: localStorage.sessionId,
+      name: name,
+      table: localStorage.currentTable
+    }
+  }
+
+  io.socket.post('/broadcast', data, function (data) {
+    console.log(data)
+  });
+}
 
 
 

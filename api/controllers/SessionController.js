@@ -51,24 +51,44 @@ module.exports = {
               }
               else
               {
-                //Broadcast to room tableId with the event name opened
-                sails.sockets.broadcast('table'+device.table, 'opened', {message: '[Bàn ' + device.table + '] Mở bàn thành công!'});
+                SessionDevice.create({
+                  device: device.id,
+                  session: createdSession.id
+                }).exec(function (err3, createdSessionDevice){
+                  //Broadcast to room tableId with the event name opened
+                  sails.sockets.broadcast(
+                    'table'+device.table, 
+                    'opened', 
+                    {
+                      table: device.table,
+                      sessionId: createdSession.id,
+                      message: '[Bàn ' + device.table + '] Mở bàn thành công!'
+                    }
+                  );
 
-                //Broadcast to room device with the event name opened
-                sails.sockets.broadcast('device', 'opened', {table: device.table, message: '[Bàn ' + device.table + '] Mở bàn thành công!'});
+                  //Broadcast to room device with the event name opened
+                  sails.sockets.broadcast(
+                    'device', 
+                    'opened', 
+                    {
+                      table: device.table,
+                      sessionId: createdSession.id,
+                      message: '[Bàn ' + device.table + '] Mở bàn thành công!'}
+                  );
 
-                return res.json({
-                  status: 1,
-                  message: '[Bàn ' + device.table + '] Mở bàn thành công!'
-                });
+                  return res.json({
+                    status: 1,
+                    message: '[Bàn ' + device.table + '] Mở bàn thành công!'
+                  });
 
-                //Broadcast to room
-                /*sails.sockets.broadcast('table', 'table'+device.table, {message: "Thiết bị này đã được ghép vào bàn " + device.table});
+                  //Broadcast to room
+                  /*sails.sockets.broadcast('table', 'table'+device.table, {message: "Thiết bị này đã được ghép vào bàn " + device.table});
 
-                return res.json({
-                  status: 1,
-                  message: 'Thiết bị này đã được ghép vào bàn ' + device.table
-                });*/
+                  return res.json({
+                    status: 1,
+                    message: 'Thiết bị này đã được ghép vào bàn ' + device.table
+                  });*/
+                });                
               }
             });
           }
@@ -89,63 +109,116 @@ module.exports = {
   mergeAndOpenTable: function(req, res) {
     var arrSelectedTable = JSON.parse(req.body.arrSelectedTable);
     var selectedMergeTable = req.body.selectedMergeTable;
-
     var arrError = [];
-    async.forEachOfSeries(arrSelectedTable, function (selectedTable, index, callback) {
-      Device.findOne({
-        id: selectedTable,
-        connecting: true
-      }).exec(function (err, device) {
-        if(device)
-        {
-          Session.findOne({
-            device: device.id,
-            status: 'open'
-          }).exec(function (err2, session) {
-            if(!session)
-            {
-              //Update table Session
-              Session.create({
-                device: device.id,
-                table: selectedMergeTable,
-                status: 'open',
-                startTime: new Date(),
-                endTime: new Date()
-              }).exec(function (err2, createdSession){                
-                //Broadcast to current table's room to order it subscribes to new table
-                sails.sockets.broadcast('table'+device.table, 'merged', {
-                                                                          table: selectedMergeTable,
-                                                                          room: 'table'+selectedMergeTable,
-                                                                          message: '[Bàn ' + selectedMergeTable + '] Mở bàn thành công!'});
 
-                //Broadcast to room device with the event name opened
-                sails.sockets.broadcast('device', 'opened', {table: device.table, message: '[Bàn ' + device.table + '] Mở bàn thành công!'});
-              });
-            }
-            else
-            {
-              arrError.push(device.table);              
-            }
-            callback();
-          });          
-        }   
-      });           
-    }, function done() {
-      if(arrError.length > 0)
+    Session.findOne({
+      table: selectedMergeTable,
+      status: 'open',
+    }).exec(function (err, session){
+      if(session)
       {
+        //Already created
         return res.json({
           status: 0,
-          message: 'Không thể ghép bàn ' + arrError.toString() + ' vào bàn ' + selectedMergeTable
+          message: 'Bàn đã được mở từ trước!'
         });
       }
       else
       {
-        return res.json({
-        status: 1,
-        message: '[Bàn ' + selectedMergeTable + '] Mở bàn thành công!'
-      });
+        //Update table Session
+        Session.create({
+          table: selectedMergeTable,
+          status: 'open',
+          startTime: new Date(),
+          endTime: new Date()
+        }).exec(function (err, createdSession){
+          if(err || !createdSession)
+          {
+            return res.json({
+              status: 0,
+              message: 'Không thể mở bàn!'
+            });
+          }
+          else
+          {
+            async.forEachOfSeries(arrSelectedTable, function (selectedTable, index, callback) {
+              Device.findOne({
+                id: selectedTable,
+                connecting: true
+              }).exec(function (err2, device) {            
+                if(!err2 && device)
+                {
+                  SessionDevice.findOne({
+                    device: device.id,
+                    session: createdSession.id
+                  }).exec(function (err3, sessionDevice) {
+                    if(err3 || !sessionDevice)
+                    {
+                      SessionDevice.create({
+                        device: device.id,
+                        session: createdSession.id
+                      }).exec(function (err3, createdSessionDevice){
+                        //Broadcast to current table's room to order it subscribes to new table
+                        sails.sockets.broadcast(
+                          'table'+device.table,
+                          'merged', 
+                          {
+                            table: selectedMergeTable,
+                            room: 'table'+selectedMergeTable,
+                            sessionId: createdSession.id,
+                            message: '[Bàn ' + selectedMergeTable + '] Mở bàn thành công!'
+                          }
+                        );
+
+                        //Broadcast to room device with the event name opened
+                        sails.sockets.broadcast(
+                          'device', 
+                          'opened', 
+                          {
+                            table: device.table,
+                            sessionId: createdSession.id,
+                            message: '[Bàn ' + device.table + '] Mở bàn thành công!'
+                          }
+                        );
+                      });
+                    }
+                  });              
+                }
+                else
+                {
+                  arrError.push(device.table); 
+                }
+                callback();
+              });
+            }, function done() {
+              if(arrError.length > 0)
+              {
+                return res.json({
+                  status: 0,
+                  message: 'Không thể ghép bàn ' + arrError.toString() + ' vào bàn ' + selectedMergeTable
+                });
+              }
+              else
+              {
+                return res.json({
+                status: 1,
+                message: '[Bàn ' + selectedMergeTable + '] Mở bàn thành công!'
+              });
+              }
+            });
+          }
+        });
       }
-    });   
+    });    
+  },
+
+  addItem: function(req, res) {
+    var roomName = req.body.roomName;
+    var message = req.body.message;
+    var eventName = req.body.eventName;
+    console.log(roomName);
+    console.log(message);
+    sails.sockets.broadcast(roomName, eventName, { msg: message });    
   },
 };
 
