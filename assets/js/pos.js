@@ -32,7 +32,7 @@ io.socket.on('connect', function () {
 
       io.socket.on('newDeviceConnected', function (newDeviceConnectedData) {
         var imgSrc;
-        if(newDeviceConnectedData.data.isOpened)
+        if(newDeviceConnectedData.data.opening)
         {
           imgSrc = '/img/device-status/yellow.png';
         }

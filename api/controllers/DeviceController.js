@@ -21,7 +21,7 @@ module.exports = {
       }
       else
       {
-        var newArrDevices = [];
+        /*var newArrDevices = [];
         async.forEachOfSeries(devices, function (device, index, callback) {
           Session.findOne({
             device: device.id,
@@ -46,7 +46,9 @@ module.exports = {
           }); 
         }, function done() {
           return res.view('device-list', {status: 1, data: newArrDevices});
-        });
+        });*/
+        // return res.json(devices);
+        return res.view('device-list', {status: 1, data: devices});
       }
     });    
   },

@@ -55,6 +55,9 @@ module.exports = {
                   device: device.id,
                   session: createdSession.id
                 }).exec(function (err3, createdSessionDevice){
+                  device.opening = true;
+                  device.save(function(err, saved){});
+
                   //Broadcast to room tableId with the event name opened
                   sails.sockets.broadcast(
                     'table'+device.table, 
@@ -158,6 +161,9 @@ module.exports = {
                         device: device.id,
                         session: createdSession.id
                       }).exec(function (err3, createdSessionDevice){
+                        device.opening = true;
+                        device.save(function(err, saved){});
+                        
                         //Broadcast to current table's room to order it subscribes to new table
                         sails.sockets.broadcast(
                           'table'+device.table,

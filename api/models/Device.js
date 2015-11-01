@@ -17,6 +17,7 @@ module.exports = {
       type: 'string',
       enum: ['enable', 'disable']
     },
+    opening: {type: 'boolean'},
   }
 };
 
