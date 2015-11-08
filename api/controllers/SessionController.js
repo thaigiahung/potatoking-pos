@@ -266,6 +266,7 @@ module.exports = {
               }
               else
               {
+                data['sessionDetailId'] = createdSessionDetail.id;
                 sails.sockets.broadcast(roomName, eventName, { msg: data });
                 return res.json({
                   status: 1,

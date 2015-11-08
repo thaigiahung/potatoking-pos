@@ -108,7 +108,7 @@ io.socket.on('connect', function () {
               message.msg.name +
             '</td>' +
             '<td>' +
-              '<input type="button" onclick="removeItem('+message.msg.id+')" value="Xóa"' +
+              '<input type="button" onclick="removeItem('+message.msg.sessionDetailId+')" value="Xóa"' +
             '</td>' +
           '</tr>'
         );

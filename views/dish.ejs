@@ -35,7 +35,18 @@
 				  	</tr>
 			  	</thead>   
 			  	<tbody id="addedItemTableBody">
-					
+			  		<% if (status == 1) { %>
+				  		<% _.each(added, function (item) { %>
+					  		<tr>
+					  			<td>
+					  				<%= item.dish.name %>
+					  			</td>
+					  			<td>
+					  				<input type="button" onclick="removeItem(<%= item.id %>)" value="Xóa"
+					  			</td>
+					  		</tr>
+				  		<% }) %>
+			  		<% } %>
 			  	</tbody>
 		  	</table>            
 		</div>
