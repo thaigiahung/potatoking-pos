@@ -163,7 +163,7 @@ module.exports = {
                       }).exec(function (err3, createdSessionDevice){
                         device.opening = true;
                         device.save(function(err, saved){});
-                        
+
                         //Broadcast to current table's room to order it subscribes to new table
                         sails.sockets.broadcast(
                           'table'+device.table,
@@ -207,9 +207,9 @@ module.exports = {
               else
               {
                 return res.json({
-                status: 1,
-                message: '[Bàn ' + selectedMergeTable + '] Mở bàn thành công!'
-              });
+                  status: 1,
+                  message: '[Bàn ' + selectedMergeTable + '] Mở bàn thành công!'
+                });
               }
             });
           }
@@ -220,11 +220,63 @@ module.exports = {
 
   addItem: function(req, res) {
     var roomName = req.body.roomName;
-    var message = req.body.message;
+    var data = req.body.data;
     var eventName = req.body.eventName;
-    console.log(roomName);
-    console.log(message);
-    sails.sockets.broadcast(roomName, eventName, { msg: message });    
+
+    Dish.findOne({
+      id: data.id,
+      status: 'enable',
+    }).exec(function (err, dish){
+      if(err || !dish)
+      {
+        return res.json({
+          status: 0,
+          message: 'Không thể đặt món!'
+        });
+      }
+      else
+      {
+        //Find Session
+        Session.findOne({
+          id: data.sessionId,
+          status: 'open',
+        }).exec(function (err, session){
+          if(err || !session)
+          {
+            return res.json({
+              status: 0,
+              message: 'Không thể đặt món!'
+            });
+          }
+          else
+          {
+            //Create Session Detail
+            SessionDetail.create({
+              session: session.id,
+              dish: dish.id,
+              price: dish.price,
+              status: 'added'
+            }).exec(function (err, createdSessionDetail){
+              if(err || !createdSessionDetail)
+              {
+                return res.json({
+                  status: 0,
+                  message: 'Không thể đặt món!'
+                });
+              }
+              else
+              {
+                sails.sockets.broadcast(roomName, eventName, { msg: data });
+                return res.json({
+                  status: 1,
+                  message: 'Thành công!'
+                });
+              }
+            });
+          }
+        });
+      }
+    });
   },
 };
 

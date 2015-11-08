@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-  
+  // $('#addedItemTable').DataTable();
 });
 
 
@@ -92,7 +92,7 @@ io.socket.on('connect', function () {
           //Store current session id in localStorage
           localStorage.sessionId = mergedMessage.sessionId;
 
-          $("#divDishPageAlert").prepend('<div class="alert alert-success">' +
+          $('#divDishPageAlert').prepend('<div class="alert alert-success">' +
                                         '<button type="button" class="close" data-dismiss="alert">×</button>' +
                                         mergedMessage.message +
                                       '</div>');
@@ -102,6 +102,16 @@ io.socket.on('connect', function () {
       //Listen for event add item
       io.socket.on('addItem', function (message) {
         console.log(message);
+        $('#addedItemTableBody').prepend(
+          '<tr>' +
+            '<td>' +
+              message.msg.name +
+            '</td>' +
+            '<td>' +
+              '<input type="button" onclick="removeItem('+message.msg.id+')" value="Xóa"' +
+            '</td>' +
+          '</tr>'
+        );
       });
     }
   });
@@ -132,7 +142,7 @@ function addItem (id, name) {
   var data = {
     roomName: 'table'+localStorage.currentTable,
     eventName: 'addItem',
-    message: {
+    data: {
       id: id,
       sessionId: localStorage.sessionId,
       name: name,
@@ -140,8 +150,15 @@ function addItem (id, name) {
     }
   }
 
-  io.socket.post('/broadcast', data, function (data) {
-    console.log(data)
+  io.socket.post('/addItem', data, function (result) {
+    console.log(result)
+    if(result.status == 0)
+    {
+      $("#divDishPageAlert").prepend('<div class="alert alert-error">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                      result.message +
+                                    '</div>');
+    }
   });
 }
 
