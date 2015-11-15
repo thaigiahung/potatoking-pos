@@ -56,9 +56,9 @@ module.exports = {
   connect: function(req, res) {
     var ip = req.ip;
     var data;
-    Device.findOne({
+    DeviceIp.findOne({
       ip: ip
-    }).exec(function (err, device) {
+    }).populate('device').exec(function (err, device) {
       if(err || !device)
       {
         data = {
@@ -71,7 +71,8 @@ module.exports = {
         return res.send(data);
       }
       else
-      {   
+      {
+        device = device.device;
         Session.findOne({
           device: device.id,
           status: 'open'

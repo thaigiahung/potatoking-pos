@@ -9,13 +9,11 @@
 <hr>
 
 <!-- <div class="row-fluid"> -->
-  <% if (status == 1) { %>
-    <% _.each(dishes, function (dish) { %>
-      <div class="span3">
-        <button onclick="addItem(<%= dish.id %>, '<%= dish.name %>')"><%= dish.name %></button>
-      </div>
-    <% }) %>
-  <% } %>
+<% _.each(dishes, function (dish) { %>
+	<div class="span3">
+		<button onclick="addItem(<%= dish.id %>, '<%= dish.name %>')"><%= dish.name %></button>
+	</div>
+<% }) %>
 <!-- </div> -->
 
 <div class="row-fluid"></div>
@@ -35,18 +33,16 @@
 				  	</tr>
 			  	</thead>   
 			  	<tbody id="addedItemTableBody">
-			  		<% if (status == 1) { %>
-				  		<% _.each(added, function (item) { %>
-					  		<tr>
-					  			<td>
-					  				<%= item.dish.name %>
-					  			</td>
-					  			<td>
-					  				<input type="button" onclick="removeItem(<%= item.id %>)" value="Xóa"
-					  			</td>
-					  		</tr>
-				  		<% }) %>
-			  		<% } %>
+	  		  		<% _.each(added, function (item) { %>
+	  			  		<tr>
+	  			  			<td>
+	  			  				<%= item.dish.name %>
+	  			  			</td>
+	  			  			<td>
+	  			  				<input type="button" onclick="removeItem(<%= item.id %>)" value="Xóa"
+	  			  			</td>
+	  			  		</tr>
+	  		  		<% }) %>
 			  	</tbody>
 		  	</table>            
 		</div>

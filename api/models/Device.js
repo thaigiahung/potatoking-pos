@@ -7,8 +7,7 @@
 
 module.exports = {
 
-  attributes: {
-    ip: { type: 'string' },
+  attributes: {    
     mac: { type: 'string' },
     table: { type: 'integer' },
     connecting: { type: 'boolean' },
