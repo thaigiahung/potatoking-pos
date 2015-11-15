@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-  // $('#addedItemTable').DataTable();
+  // $('#addedItemTable').DataTable();  
 });
 
 
@@ -10,13 +10,10 @@ $( document ).ready(function() {
 *
 *******************************************************/
 io.socket.on('connect', function () {
-  console.log("Connected");
   //TODO: call api update device status
   io.socket.post('/device/connect', function (deviceData) {    
     //Subscribe to global room named 'pos'
-    io.socket.get('/subscribe/pos', function (message) {
-      console.log("Subscribed to pos");
-    });
+    io.socket.get('/subscribe/pos', function (message) {});
 
     /*******************************************************
     *
@@ -26,9 +23,7 @@ io.socket.on('connect', function () {
     //Page: Devices
     if($('#devicesPage').length > 0)
     {
-      io.socket.get('/subscribe/device', function (message) {
-        console.log("Subscribed to device");
-      });
+      io.socket.get('/subscribe/device', function (message) {});
 
       io.socket.on('newDeviceConnected', function (newDeviceConnectedData) {
         var imgSrc;
@@ -61,16 +56,17 @@ io.socket.on('connect', function () {
     //Page: Dishes
     if($('#dishesPage').length > 0)
     {      
-      //Subscribe to room table
+      //Subscribe to original room table
       io.socket.get('/subscribe/table'+deviceData.data.table, function (message) {
         //Save originalTable (field table in Device) to localStorage
-        localStorage.originalTable = deviceData.data.table;
-        console.log("Subscribed to room table"+deviceData.data.table);        
+        localStorage.originalTable = deviceData.data.table;     
       });
+
+      //Subscribe to current room table (Necessary for reloading page)
+      io.socket.get('/subscribe/table'+localStorage.currentTable, function (message) {});
 
       //Listen for event open table
       io.socket.on('opened', function (message) {
-        console.log(message)
         //Single table (not merged to any others) => currentTable will be original table
         localStorage.currentTable = deviceData.data.table;
 
@@ -101,7 +97,6 @@ io.socket.on('connect', function () {
 
       //Listen for event add item
       io.socket.on('addItem', function (message) {
-        console.log(message);
         $('#addedItemTableBody').prepend(
           '<tr>' +
             '<td>' +
@@ -133,12 +128,6 @@ io.socket.on('chat', function (data) {
 *
 *******************************************************/
 function addItem (id, name) {
-  console.log(id);
-  console.log(name);
-  console.log(localStorage.currentTable);
-  console.log(localStorage.sessionId);
-  
-
   var data = {
     roomName: 'table'+localStorage.currentTable,
     eventName: 'addItem',
@@ -151,7 +140,6 @@ function addItem (id, name) {
   }
 
   io.socket.post('/addItem', data, function (result) {
-    console.log(result)
     if(result.status == 0)
     {
       $("#divDishPageAlert").prepend('<div class="alert alert-error">' +
@@ -161,6 +149,8 @@ function addItem (id, name) {
     }
   });
 }
+
+function removeItem (id) {};
 
 
 
@@ -204,8 +194,6 @@ $("#btnMergeAndOpenTable").click(function (event) {
   });
 
   var selectedMergeTable = $('input[name=rdoMergeTable]:checked').val();
-  console.log(arrSelectedTable);
-  console.log(selectedMergeTable);
   io.socket.post('/table/openAndOpen', {
                                         arrSelectedTable: JSON.stringify(arrSelectedTable), 
                                         selectedMergeTable: selectedMergeTable
