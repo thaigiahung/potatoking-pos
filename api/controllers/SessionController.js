@@ -266,7 +266,7 @@ module.exports = {
               }
               else
               {
-                data['sessionDetailId'] = createdSessionDetail.id;
+                data['sessionDetail'] = createdSessionDetail;
                 sails.sockets.broadcast(roomName, eventName, { msg: data });
                 return res.json({
                   status: 1,
@@ -276,6 +276,48 @@ module.exports = {
             });
           }
         });
+      }
+    });
+  },
+
+  removeItem: function(req, res) {
+    var roomName = req.body.roomName;
+    var data = req.body.data;
+    var eventName = req.body.eventName;
+
+    //Update status in Session Detail
+    SessionDetail.findOne({
+      id: data.id,
+      status: 'added'
+    }).exec(function (err, sessionDetail){
+      if(err || !sessionDetail)
+      {
+        return res.json({
+          status: 0,
+          message: 'Không thể hủy món!'
+        });
+      }
+      else
+      {
+        sessionDetail.status = 'removed';
+        sessionDetail.save(function(err, saved){
+          if(err)
+          {
+            return res.json({
+              status: 0,
+              message: 'Không thể hủy món!'
+            });
+          }
+          else
+          {
+            data['sessionDetail'] = saved;
+            sails.sockets.broadcast(roomName, eventName, { msg: data });
+            return res.json({
+              status: 1,
+              message: 'Thành công!'
+            });
+          }
+        });        
       }
     });
   },

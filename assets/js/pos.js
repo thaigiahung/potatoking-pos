@@ -98,15 +98,26 @@ io.socket.on('connect', function () {
       //Listen for event add item
       io.socket.on('addItem', function (message) {
         $('#addedItemTableBody').prepend(
-          '<tr>' +
+          '<tr class="dish' + message.msg.sessionDetail.dish + '">' +
             '<td>' +
               message.msg.name +
             '</td>' +
             '<td>' +
-              '<input type="button" onclick="removeItem('+message.msg.sessionDetailId+')" value="Xóa"' +
+              '<input type="button" onclick="removeItem('+message.msg.sessionDetail.id+')" value="Xóa"' +
             '</td>' +
           '</tr>'
         );
+      });
+
+      //Listen for event remove item
+      io.socket.on('removeItem', function (message) {        
+        console.log($(".dish"+message.msg.sessionDetail.dish.id));
+        var firstTR = $(".dish"+message.msg.sessionDetail.dish.id).first();
+        console.log(firstTR);
+        if(firstTR.length > 0)
+        {
+          firstTR.remove();
+        }
       });
     }
   });
@@ -150,7 +161,27 @@ function addItem (id, name) {
   });
 }
 
-function removeItem (id) {};
+function removeItem (id) {
+  var data = {
+    roomName: 'table'+localStorage.currentTable,
+    eventName: 'removeItem',
+    data: {
+      id: id,
+      sessionId: localStorage.sessionId,
+      table: localStorage.currentTable
+    }
+  }
+
+  io.socket.post('/removeItem', data, function (result) {
+    if(result.status == 0)
+    {
+      $("#divDishPageAlert").prepend('<div class="alert alert-error">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                      result.message +
+                                    '</div>');
+    }
+  });
+};
 
 
 
