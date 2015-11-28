@@ -8,6 +8,22 @@
 var async = require('async');
 
 module.exports = {
+  subscribe: function(req, res) {
+    var roomName = req.params.roomName;
+    sails.sockets.join(req.socket, roomName);
+    res.json({
+      message: 'Subscribed to a fun room called '+roomName+'!'
+    }); 
+  },
+
+  unsubscribe: function(req, res) {
+    var roomName = req.params.roomName;
+    sails.sockets.leave(req.socket, roomName);
+    res.json({
+      message: 'Left a fun room called '+roomName+'!'
+    }); 
+  },
+
   listDevice: function(req, res) {
     Device.find({
       where: {

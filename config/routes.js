@@ -50,7 +50,8 @@ module.exports.routes = {
   'GET /devices': 'DeviceController.listDevice',
 
   //API
-  'GET /subscribe/:roomName': 'TestController.subscribeToFunRoom',
+  'GET /subscribe/:roomName': 'DeviceController.subscribe',
+  'GET /unsubscribe/:roomName': 'DeviceController.unsubscribe',
   'GET /list-subscriber/:roomName': 'TestController.listSubscriber',
   'POST /broadcast': 'TestController.broadcast',
   'POST /device/connect': 'DeviceController.connect',

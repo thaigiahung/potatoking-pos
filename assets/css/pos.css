@@ -28,3 +28,15 @@
   background-image: -ms-linear-gradient(top, #97d879, #78cd51);
   background-image: linear-gradient(top, #97d879, #78cd51);      
 }
+
+.device-list-footer {
+  margin-top: 20px;
+}
+
+.device-list-footer-left {
+  float: left;
+}
+
+.device-list-footer-right {
+  float: right;
+}

@@ -132,8 +132,16 @@
   </div>
 </div>
 
-<button type="submit" class="btn btn-large btn-warning" data-toggle="modal" data-target="#mergeTableModal">Ghép bàn</button>
-<button id="btnOpenTable" class="btn btn-large btn-success">Mở bàn</button>
+<div class="device-list-footer">
+  <div class="device-list-footer-left">
+    <button class="btn btn-danger" data-toggle="modal" data-target="#closeTableModal">Đóng bàn</button>
+  </div>
+  <div class="device-list-footer-right">
+    <button type="submit" class="btn btn-large btn-warning" data-toggle="modal" data-target="#mergeTableModal">Ghép bàn</button>
+    <button id="btnOpenTable" class="btn btn-large btn-success" data-toggle="modal">Mở bàn</button>
+  </div>
+</div>
+
 
 <hr>
 
@@ -156,6 +164,7 @@
 </div> -->
 
 
+<!-- Model Merge Table -->
 <div class="modal hide fade" id="mergeTableModal">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">×</button>
@@ -191,7 +200,68 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button id="btnMergeAndOpenTable" class="btn btn-success">Ghép & Mở bàn</button>
-    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button id="btnMergeAndOpenTable" class="btn btn-success" data-toggle="modal">Ghép & Mở bàn</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
   </div>
 </div>
+<!-- End - Model Merge Table -->
+
+
+
+<!-- Model Close Table -->
+<div class="modal hide fade" id="closeTableModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Đóng bàn</h3>
+  </div>
+  <div class="modal-body">
+    <div class="control-group">
+      <div class="controls">
+        <label class="radio">
+          <input type="radio" name="rdoMergeTable" value="1">Bàn 1
+        </label>
+        <div style="clear:both"></div>
+        <label class="radio">
+          <input type="radio" name="rdoMergeTable" value="2">Bàn 2
+        </label>
+        <div style="clear:both"></div>
+        <label class="radio">
+          <input type="radio" name="rdoMergeTable" value="3">Bàn 3
+        </label>
+        <div style="clear:both"></div>
+        <label class="radio">
+          <input type="radio" name="rdoMergeTable" value="4">Bàn 4
+        </label>
+        <div style="clear:both"></div>
+        <label class="radio">
+          <input type="radio" name="rdoMergeTable" value="5">Bàn 5
+        </label>
+        <div style="clear:both"></div>
+        <label class="radio">
+          <input type="radio" name="rdoMergeTable" value="6">Bàn 7
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button id="btnMergeAndOpenTable" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#confirmCloseTableModal">Đóng bàn</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+  </div>
+</div>
+<!-- End - Model Close Table -->
+
+<!-- Model Confirm Close Table -->
+<div class="modal hide fade" id="confirmCloseTableModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Lưu ý</h3>
+  </div>
+  <div class="modal-body">
+    Bạn có chắc chắn muốn đóng bàn không?
+  </div>
+  <div class="modal-footer">
+    <button id="btnConfirmCancelTable" class="btn btn-success" data-dismiss="modal">Đóng bàn</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+  </div>
+</div>
+<!-- End - Model Confirm Close Table -->
