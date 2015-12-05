@@ -51,6 +51,12 @@ io.socket.on('connect', function () {
         var img = $("#table"+openedData.table).parent().parent().parent().children("img").eq(0);
         img.attr('src','/img/device-status/yellow.png');
       });
+
+      io.socket.on('cancelled', function (cancelledData) {
+        //Find img tag & change img source
+        var img = $("#table"+cancelledData).parent().parent().parent().children("img").eq(0);
+        img.attr('src','/img/device-status/green.png');
+      });
     }
 
     //Page: Dishes
@@ -93,6 +99,14 @@ io.socket.on('connect', function () {
                                         mergedMessage.message +
                                       '</div>');
         });
+      });
+
+      //Listen for event cancel table
+      io.socket.on('cancelled', function (message) {
+        if(localStorage.originalTable != message)
+        {
+          io.socket.get('/unsubscribe/table'+localStorage.message, function (message) {});
+        }
       });
 
       //Listen for event add item
@@ -269,7 +283,23 @@ $("#btnOpenTable").click(function (event) {
   });
 });
 
-
+//Close table
+$("#confirmCloseTableModal").click(function (event) {
+  var selectedTable = $("input[name='rdoOpenedTable']:checked").val();
+  io.socket.post('/cancelTable', {sessionId: selectedTable}, function (data) {
+    if(data.status == 1)
+    {
+      console.log($("input[name='rdoOpenedTable']:checked").parent().parent().parent())
+      $("input[name='rdoOpenedTable']:checked").parent().parent().parent().remove();
+    }
+    else
+    {
+      $("#divOpenedTable").prepend('<div class="alert alert-error">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
+                                      '</div>');
+    }
+  });
+});
 
 
 

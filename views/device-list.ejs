@@ -132,7 +132,7 @@
   </div>
 </div>
 
-<div class="device-list-footer">
+<div class="row-fluid device-list-footer">
   <div class="device-list-footer-left">
     <button class="btn btn-danger" data-toggle="modal" data-target="#closeTableModal">Đóng bàn</button>
   </div>
@@ -145,7 +145,7 @@
 
 <hr>
 
-<div id="divDeviceListAlert">  
+<div class="row-fluid" id="divDeviceListAlert">  
   
 </div><!--/row-->
 
@@ -216,30 +216,15 @@
   </div>
   <div class="modal-body">
     <div class="control-group">
-      <div class="controls">
-        <label class="radio">
-          <input type="radio" name="rdoMergeTable" value="1">Bàn 1
-        </label>
-        <div style="clear:both"></div>
-        <label class="radio">
-          <input type="radio" name="rdoMergeTable" value="2">Bàn 2
-        </label>
-        <div style="clear:both"></div>
-        <label class="radio">
-          <input type="radio" name="rdoMergeTable" value="3">Bàn 3
-        </label>
-        <div style="clear:both"></div>
-        <label class="radio">
-          <input type="radio" name="rdoMergeTable" value="4">Bàn 4
-        </label>
-        <div style="clear:both"></div>
-        <label class="radio">
-          <input type="radio" name="rdoMergeTable" value="5">Bàn 5
-        </label>
-        <div style="clear:both"></div>
-        <label class="radio">
-          <input type="radio" name="rdoMergeTable" value="6">Bàn 7
-        </label>
+      <div class="controls" id="divOpenedTable">
+        <% if(opened.length > 0) { %> 
+          <% _.each(opened, function (obj) { %>
+            <div style="clear:both"></div>
+            <label class="radio">
+              <input type="radio" name="rdoOpenedTable" value="<%= obj.session %>">Bàn <%= obj.tables %>
+            </label>
+          <% }) %>
+        <% } %>        
       </div>
     </div>
   </div>

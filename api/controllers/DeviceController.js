@@ -31,9 +31,10 @@ module.exports = {
       },
       sort: 'table asc'
     }).exec(function (err, devices) {
+      var opened = [];
       if(err || !devices)
       {
-        return res.view('device-list',{status: 0, data: [], session: {}});
+        return res.view('device-list',{status: 0, data: [], opened: opened});
       }
       else
       {
@@ -64,7 +65,52 @@ module.exports = {
           return res.view('device-list', {status: 1, data: newArrDevices});
         });*/
         // return res.json(devices);
-        return res.view('device-list', {status: 1, data: devices});
+
+        Session.find({
+          where: {
+            status: 'open'
+          }
+        }).exec(function (err, sessions) {
+          if(err || !sessions)
+          {
+            return res.view('device-list', {status: 1, data: devices, opened: opened});    
+          }
+          else
+          {            
+            async.forEachOfSeries(sessions, function (session, index, callback) {
+              SessionDevice.find({
+                where: {
+                  session: session.id
+                },
+                sort: 'device', 
+                select: ['device']                
+              }).exec(function (err2, sessionDevices) {
+                if(!err2 && sessionDevices && sessionDevices.length > 0)
+                {
+                  var tables = [];
+                  async.forEachOfSeries(sessionDevices, function (sessionDevice, index2, callback2) {
+                    tables.push(sessionDevice.device);
+                    callback2();
+                  }, function done() {
+                    var openedTable = {
+                      session: session.id,
+                      tables: tables.join()
+                    }
+                    opened.push(openedTable);
+                    callback();
+                  });
+                }
+                else
+                {
+                  callback(err);
+                }  
+              });              
+            }, function done() {
+              return res.view('device-list', {status: 1, data: devices, opened: opened});
+            });
+          }
+        });
+        
       }
     });    
   },

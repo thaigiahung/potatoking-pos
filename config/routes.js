@@ -59,4 +59,5 @@ module.exports.routes = {
   'POST /table/openAndOpen': 'SessionController.mergeAndOpenTable',
   'POST /addItem': 'SessionController.addItem',
   'POST /removeItem': 'SessionController.removeItem',
+  'POST /cancelTable': 'SessionController.cancelTable',
 };

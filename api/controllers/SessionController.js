@@ -321,5 +321,63 @@ module.exports = {
       }
     });
   },
+
+  cancelTable: function(req, res) {
+    var sessionId = JSON.parse(req.body.sessionId);
+
+    Session.findOne({
+      id: sessionId,
+      status: 'open'
+    }).exec(function (err, session){
+      if(err || !session)
+      {
+        return res.json({
+          status: 0,
+          message: 'Không thể hủy bàn!'
+        });
+      }
+      else
+      {
+        session.status = 'close';
+        session.paymentStatus = 'cancelled';
+        session.save(function (err2, saved){
+          if(err2 || !saved)
+          {
+            return res.json({
+              status: 0,
+              message: 'Không thể hủy bàn!'
+            });
+          }
+          else
+          {
+            SessionDevice.find({
+              session: sessionId
+            }).populate('device').exec(function (err3, sessionDevices){
+              if(!err3 && sessionDevices && sessionDevices.length > 0)
+              {
+                async.forEachOfSeries(sessionDevices, function (sessionDevice, index, callback) {
+                  sessionDevice.device.opening = false;
+                  sessionDevice.device.save(function(err4, saved){
+                    if(!err4)
+                    {
+                      sails.sockets.broadcast('device', 'cancelled', sessionDevice.device.table);
+                    }
+                  });
+                  callback();
+                }, function done() {
+                  sails.sockets.broadcast('table'+session.table, 'cancelled', { msg: session.table });
+
+                  return res.json({
+                    status: 1,
+                    message: 'Hủy bàn thành công!'
+                  });
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
 };
 
