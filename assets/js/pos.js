@@ -57,6 +57,17 @@ io.socket.on('connect', function () {
         var img = $("#table"+cancelledData).parent().parent().parent().children("img").eq(0);
         img.attr('src','/img/device-status/green.png');
       });
+
+      io.socket.on('addToDivOpenedTable', function (data) {        
+        $("#divOpenedTable").append(
+          '<div>' +
+            '<div style="clear:both"></div>' +
+            '<label>' +
+              '<input type="radio" name="rdoOpenedTable" value="'+data.session+'">Bàn' + data.table +
+            '</label>' +
+          '</div>'
+        );
+      });
     }
 
     //Page: Dishes
@@ -289,8 +300,7 @@ $("#confirmCloseTableModal").click(function (event) {
   io.socket.post('/cancelTable', {sessionId: selectedTable}, function (data) {
     if(data.status == 1)
     {
-      console.log($("input[name='rdoOpenedTable']:checked").parent().parent().parent())
-      $("input[name='rdoOpenedTable']:checked").parent().parent().parent().remove();
+      $("input[name='rdoOpenedTable']:checked").parent().remove();
     }
     else
     {

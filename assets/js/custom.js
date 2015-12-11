@@ -198,7 +198,8 @@ function template_functions(){
 	});
 
 	/* ---------- Uniform ---------- */
-	$("input:checkbox, input:radio, input:file").not('[data-no-uniform="true"],#uniform-is-ajax').uniform();
+	// $("input:checkbox, input:radio, input:file").not('[data-no-uniform="true"],#uniform-is-ajax').uniform();
+	$("input:checkbox, input:file").not('[data-no-uniform="true"],#uniform-is-ajax').uniform();
 
 	/* ---------- Choosen ---------- */
 	$('[data-rel="chosen"],[rel="chosen"]').chosen();

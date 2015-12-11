@@ -79,6 +79,15 @@ module.exports = {
                       message: '[Bàn ' + device.table + '] Mở bàn thành công!'}
                   );
 
+                  sails.sockets.broadcast(
+                    'device', 
+                    'addToDivOpenedTable', 
+                    {
+                      session: createdSession.id,
+                      table: device.table
+                    }
+                  );
+
                   return res.json({
                     status: 1,
                     message: '[Bàn ' + device.table + '] Mở bàn thành công!'
@@ -206,6 +215,14 @@ module.exports = {
               }
               else
               {
+                sails.sockets.broadcast(
+                  'device', 
+                  'addToDivOpenedTable', 
+                  {
+                    session: createdSession.id,
+                    table: arrSelectedTable.join()
+                  }
+                );
                 return res.json({
                   status: 1,
                   message: '[Bàn ' + selectedMergeTable + '] Mở bàn thành công!'
