@@ -29,7 +29,7 @@ module.exports = {
       else
       {
         Session.findOne({
-          device: device.id,
+          table: device.table,
           status: 'open'
         }).exec(function (err, session) {
           if(err || !session)
@@ -111,9 +111,7 @@ module.exports = {
               message: 'Bàn đang hoạt động!'
             });
           }
-        });
-
-        
+        });        
       }
     });    
   },

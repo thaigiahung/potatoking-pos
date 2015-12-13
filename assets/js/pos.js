@@ -53,6 +53,8 @@ io.socket.on('connect', function () {
       });
 
       io.socket.on('cancelled', function (cancelledData) {
+        $("#table"+cancelledData).prop('disabled', false);
+        $.uniform.update();
         //Find img tag & change img source
         var img = $("#table"+cancelledData).parent().parent().parent().children("img").eq(0);
         img.attr('src','/img/device-status/green.png');
@@ -256,9 +258,10 @@ $("#btnMergeAndOpenTable").click(function (event) {
   }, function (data) {
     if(data.status == 1) //Success
     {
-      //Uncheck all checkbox
+      //Uncheck & disable all checkbox
       $("input:checkbox[name=chkSelectTable]:checked").each(function(){
         $(this).prop('checked', false);
+        $(this).prop('disabled', true);
         $.uniform.update();
       });
       
@@ -286,6 +289,7 @@ $("#btnOpenTable").click(function (event) {
       {
         //Uncheck all checkbox
         $(_this).prop('checked', false);
+        $(_this).prop('disabled', true);
         $.uniform.update();
 
         //TODO: update style

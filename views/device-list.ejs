@@ -18,7 +18,7 @@
 
 <div class="row-fluid">
   <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table7" value="<%= data[6].id %>">       
+    <input type="checkbox" name="chkSelectTable" id="table7" value="<%= data[6].id %>" <% if(data[6].opening == true) { %> disabled <% } %>>       
     <% if(data[6].connecting) { %>
       <% if(data[6].opening) { %>
         <img class="device-status-img" src="/img/device-status/yellow.png">
@@ -32,7 +32,7 @@
   </div>
 
   <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table5" value="<%= data[4].id %>"> 
+    <input type="checkbox" name="chkSelectTable" id="table5" value="<%= data[4].id %>" <% if(data[4].opening == true) { %> disabled <% } %>> 
     <% if(data[4].connecting) { %>
       <% if(data[4].opening) { %>
         <img class="device-status-img" src="/img/device-status/yellow.png">
@@ -46,7 +46,7 @@
   </div>
 
   <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table3" value="<%= data[2].id %>">
+    <input type="checkbox" name="chkSelectTable" id="table3" value="<%= data[2].id %>" <% if(data[2].opening == true) { %> disabled <% } %>>
     <% if(data[2].connecting) { %>
       <% if(data[2].opening) { %>
         <img class="device-status-img" src="/img/device-status/yellow.png">
@@ -60,7 +60,7 @@
   </div>
 
   <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table1" value="<%= data[0].id %>">
+    <input type="checkbox" name="chkSelectTable" id="table1" value="<%= data[0].id %>" <% if(data[0].opening == 1) { %> disabled <% } %>>
     <% if(data[0].connecting) { %>
       <% if(data[0].opening) { %>
         <img class="device-status-img" src="/img/device-status/yellow.png">
@@ -76,7 +76,7 @@
 
 <div class="row-fluid">
   <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table8" value="<%= data[7].id %>"> 
+    <input type="checkbox" name="chkSelectTable" id="table8" value="<%= data[7].id %>" <% if(data[7].opening == true) { %> disabled <% } %>> 
     <% if(data[7].connecting) { %>
       <% if(data[7].opening) { %>
         <img class="device-status-img" src="/img/device-status/yellow.png">
@@ -90,7 +90,7 @@
   </div>
 
   <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table6" value="<%= data[5].id %>"> 
+    <input type="checkbox" name="chkSelectTable" id="table6" value="<%= data[5].id %>" <% if(data[5].opening == true) { %> disabled <% } %>> 
     <% if(data[5].connecting) { %>
       <% if(data[5].opening) { %>
         <img class="device-status-img" src="/img/device-status/yellow.png">
@@ -104,7 +104,7 @@
   </div>
 
   <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table4" value="<%= data[3].id %>"> 
+    <input type="checkbox" name="chkSelectTable" id="table4" value="<%= data[3].id %>" <% if(data[3].opening == true) { %> disabled <% } %>> 
     <% if(data[3].connecting) { %>
       <% if(data[3].opening) { %>
         <img class="device-status-img" src="/img/device-status/yellow.png">
@@ -118,7 +118,7 @@
   </div>
 
   <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table2" value="<%= data[1].id %>"> 
+    <input type="checkbox" name="chkSelectTable" id="table2" value="<%= data[1].id %>" <% if(data[1].opening == 1) { %> disabled <% } %>> 
     <% if(data[1].connecting) { %>
       <% if(data[1].opening) { %>
         <img class="device-status-img" src="/img/device-status/yellow.png">
