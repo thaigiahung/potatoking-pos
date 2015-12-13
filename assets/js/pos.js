@@ -65,7 +65,7 @@ io.socket.on('connect', function () {
           '<div>' +
             '<div style="clear:both"></div>' +
             '<label>' +
-              '<input type="radio" name="rdoOpenedTable" value="'+data.session+'">Bàn' + data.table +
+              '<input type="radio" name="rdoOpenedTable" value="'+data.session+'"> Bàn ' + data.table +
             '</label>' +
           '</div>'
         );
