@@ -119,6 +119,7 @@ io.socket.on('connect', function () {
         if(localStorage.originalTable != message)
         {
           io.socket.get('/unsubscribe/table'+localStorage.message, function (message) {});
+          reload();
         }
       });
 
@@ -210,6 +211,9 @@ function removeItem (id) {
   });
 };
 
+function reload () {
+  location.reload();
+}
 
 
 
