@@ -76,20 +76,19 @@ module.exports = {
             return res.view('device-list', {status: 1, data: devices, opened: opened});    
           }
           else
-          {            
+          {
             async.forEachOfSeries(sessions, function (session, index, callback) {
               SessionDevice.find({
                 where: {
                   session: session.id
                 },
-                sort: 'device', 
-                select: ['device']                
-              }).exec(function (err2, sessionDevices) {
+                sort: 'device'            
+              }).populate('device').exec(function (err2, sessionDevices) {
                 if(!err2 && sessionDevices && sessionDevices.length > 0)
                 {
                   var tables = [];
-                  async.forEachOfSeries(sessionDevices, function (sessionDevice, index2, callback2) {
-                    tables.push(sessionDevice.device);
+                  async.forEachOfSeries(sessionDevices, function (sessionDevice, index2, callback2) {                    
+                    tables.push(sessionDevice.device.table);
                     callback2();
                   }, function done() {
                     var openedTable = {

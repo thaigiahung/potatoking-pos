@@ -117,6 +117,7 @@ module.exports = {
   },
 
   mergeAndOpenTable: function(req, res) {
+    var arrSelectedTableName = [];
     var arrSelectedTable = JSON.parse(req.body.arrSelectedTable);
     var selectedMergeTable = req.body.selectedMergeTable;
     var arrError = [];
@@ -201,6 +202,7 @@ module.exports = {
                 {
                   arrError.push(device.table); 
                 }
+                arrSelectedTableName.push(device.table);
                 callback();
               });
             }, function done() {
@@ -218,7 +220,7 @@ module.exports = {
                   'addToDivOpenedTable', 
                   {
                     session: createdSession.id,
-                    table: arrSelectedTable.join()
+                    table: arrSelectedTableName.join()
                   }
                 );
                 return res.json({
