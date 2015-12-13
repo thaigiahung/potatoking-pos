@@ -256,8 +256,14 @@ $("#btnMergeAndOpenTable").click(function (event) {
   }, function (data) {
     if(data.status == 1) //Success
     {
-      //TODO: update style
+      //Uncheck all checkbox
+      $("input:checkbox[name=chkSelectTable]:checked").each(function(){
+        $(this).prop('checked', false);
+        $.uniform.update();
+      });
       
+
+      //TODO: update style      
       $("#divDeviceListAlert").prepend('<div class="alert alert-success">' +
                                       '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
                                       '</div>')
@@ -274,11 +280,15 @@ $("#btnMergeAndOpenTable").click(function (event) {
 
 $("#btnOpenTable").click(function (event) {
   $("input:checkbox[name=chkSelectTable]:checked").each(function(){
+    var _this = $(this);
     io.socket.post('/table/open', {id: $(this).val()}, function (data) {
       if(data.status == 1) //Success
       {
-        //TODO: update style
+        //Uncheck all checkbox
+        $(_this).prop('checked', false);
+        $.uniform.update();
 
+        //TODO: update style
         $("#divDeviceListAlert").prepend('<div class="alert alert-success">' +
                                         '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
                                         '</div>')
