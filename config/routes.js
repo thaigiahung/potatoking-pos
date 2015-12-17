@@ -48,6 +48,7 @@ module.exports.routes = {
   //VIEW
   'GET /': 'DishController.view',  
   'GET /devices': 'DeviceController.listDevice',
+  'GET /ordered': 'SessionController.listOrdered',
 
   //API
   'GET /subscribe/:roomName': 'DeviceController.subscribe',
@@ -60,4 +61,5 @@ module.exports.routes = {
   'POST /addItem': 'SessionController.addItem',
   'POST /removeItem': 'SessionController.removeItem',
   'POST /cancelTable': 'SessionController.cancelTable',
+  'POST /order': 'SessionController.order',
 };

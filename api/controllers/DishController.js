@@ -23,7 +23,7 @@ module.exports = {
         }).exec(function (err, dishes) {
           if(err || !dishes)
           {
-            return res.view('dish', {status: 0, dishes: [], added: []});
+            return res.view('dish', {status: 0, dishes: [], session: {}, added: []});
           }
           else
           {
@@ -31,7 +31,7 @@ module.exports = {
             Session.query(query, function(err, session) {
               if(err || !session || session.length == 0)
               {
-                return res.view('dish', {status: 0, dishes: dishes, added: []});
+                return res.view('dish', {status: 0, dishes: dishes, session: {}, added: []});
               }
               else
               {
@@ -44,11 +44,11 @@ module.exports = {
                 }).populate('dish').exec(function (err, added) {
                   if(err)
                   {
-                    return res.view('dish', {status: 0, dishes: dishes, added: []});
+                    return res.view('dish', {status: 0, dishes: dishes, session: session, added: []});
                   }
                   else
                   {
-                    return res.view('dish', {status: 1, dishes: dishes, added: added});
+                    return res.view('dish', {status: 1, dishes: dishes, session: session, added: added});
                   }
                 });
               }

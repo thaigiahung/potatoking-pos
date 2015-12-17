@@ -13,7 +13,7 @@ module.exports = {
     price: { type: 'integer' },
     status: {
       type: 'string',
-      enum: ['added', 'removed', 'preparing', 'delivering', 'delivered']
+      enum: ['added', 'ordered', 'removed', 'preparing', 'delivering', 'delivered']
     }
   }
 };

@@ -395,6 +395,117 @@ module.exports = {
         });
       }
     });
-  }
+  },
+  
+  order: function(req, res) {
+    var sessionId = req.body.sessionId;
+
+    var query = "SELECT SUM(price) AS sum FROM `sessiondetail` WHERE status = 'added' AND session = " + sessionId;
+    SessionDetail.query(query, function(err, sum) {
+      if(err || !sum)
+      {
+        return res.json({
+          status: 0,
+          message: 'Không thể đặt món!'
+        });
+      }
+      else
+      {
+        sum = sum[0];
+        Session.find({
+          id: sessionId
+        }).exec(function (err1, session) {
+          if(err1 || !session)
+          {
+            return res.json({
+              status: 0,
+              message: 'Không thể đặt món!'
+            });
+          }
+          else
+          {
+            session = session[0];
+            session.total = session.total + sum.sum;
+            session.save(function(err2, savedSession){
+              if(err2 || !savedSession)
+              {
+                return res.json({
+                  status: 0,
+                  message: 'Không thể đặt món!'
+                });
+              }
+              else
+              {
+                SessionDetail.update(
+                  {session: sessionId, status: 'added'},
+                  {status: 'ordered'}
+                ).exec(function (err3, updatedSessionDetail){
+                  if (err3 || !updatedSessionDetail) 
+                  {
+                    return res.json({
+                      status: 0,
+                      message: 'Không thể đặt món!'
+                    });
+                  }
+                  else
+                  {
+                    sails.sockets.broadcast('table'+session.table, 'ordered', { msg: '/ordered' });
+
+                    return res.json({
+                      status: 1,
+                      message: 'Đặt món thành công!'
+                    });
+                  }                  
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  },
+
+  listOrdered: function(req, res) {
+    DeviceIp.findOne({
+      ip: req.ip
+    }).populate('device').exec(function (err, device) {
+      if(err || !device)
+      {
+        return res.view('404');
+      }
+      else
+      {
+        device = device.device;
+
+        var query = "SELECT s.* FROM session s JOIN sessiondevice sd ON sd.session = s.id WHERE s.status = 'open' AND sd.device = " + device.id;
+        Session.query(query, function(err, session) {
+          if(err || !session || session.length == 0)
+          {
+            return res.view('ordered', {status: 0, session: session, ordered: []});
+          }
+          else
+          {
+            session = session[0];
+            SessionDetail.find({ 
+              where: { 
+                session: session.id,
+                status: 'ordered' 
+              },
+              sort: 'id DESC' 
+            }).populate('dish').exec(function (err, ordered) {
+              if(err || !ordered)
+              {
+                return res.view('ordered', {status: 0, session: session, ordered: []});
+              }
+              else
+              {
+                return res.view('ordered', {status: 1, session: session, ordered: ordered});
+              }
+            });
+          }
+        });
+      }
+    }); 
+  },
 };
 

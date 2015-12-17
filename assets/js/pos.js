@@ -138,14 +138,17 @@ io.socket.on('connect', function () {
       });
 
       //Listen for event remove item
-      io.socket.on('removeItem', function (message) {        
-        console.log($(".dish"+message.msg.sessionDetail.dish.id));
+      io.socket.on('removeItem', function (message) {
         var firstTR = $(".dish"+message.msg.sessionDetail.dish.id).first();
-        console.log(firstTR);
         if(firstTR.length > 0)
         {
           firstTR.remove();
         }
+      });
+
+      //Listen for event order item
+      io.socket.on('ordered', function (message) {        
+        redirect(message.msg);
       });
     }
   });
@@ -211,11 +214,32 @@ function removeItem (id) {
   });
 };
 
-function reload () {
+function order (sessionId) 
+{
+  var data = {
+    sessionId: sessionId
+  }
+
+  io.socket.post('/order', data, function (result) {
+    if(result.status == 0)
+    {
+      $("#divDishPageAlert").prepend('<div class="alert alert-error">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                      result.message +
+                                    '</div>');
+    }
+  });
+}
+
+function reload () 
+{
   location.reload();
 }
 
-
+function redirect (url) 
+{
+  window.location.replace(url);
+}
 
 /*******************************************************
 *
