@@ -529,5 +529,44 @@ module.exports = {
       }
     });
   },
+
+  checkout: function(req, res) {
+    var sessionId = req.body.sessionId;
+
+    Session.findOne({
+      id: sessionId,
+      status: 'open'
+    }).exec(function (err, session) {
+      if(err || !session)
+      {
+        return res.json({
+          status: 0,
+          message: 'Không thể thanh toán!'
+        });
+      }
+      else
+      {
+        session.paymentStatus = 'checkout';
+        session.save(function(err, saved){
+          if(err || !saved)
+          {
+            return res.json({
+              status: 0,
+              message: 'Không thể thanh toán!'
+            });
+          }
+          else
+          {
+            sails.sockets.broadcast('device', 'checkout', { sessionId: session.id });
+
+            return res.json({
+              status: 1,
+              message: 'Thành công!'
+            });
+          }
+        });        
+      }
+    });
+  },
 };
 

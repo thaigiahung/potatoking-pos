@@ -97,6 +97,10 @@ io.socket.on('connect', function () {
       io.socket.on('removeOverviewRow', function (sessionId) {
         $("#session"+sessionId).remove();
       });
+
+      io.socket.on('checkout', function (msg) {
+        $("#session"+msg.sessionId).addClass('pending-checkout');
+      });
     }
 
     //Page: Dishes
@@ -306,6 +310,29 @@ function order (sessionId)
     if(result.status == 0)
     {
       $("#divDishPageAlert").prepend('<div class="alert alert-error">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                      result.message +
+                                    '</div>');
+    }
+  });
+}
+
+function checkout (sessionId) 
+{
+  var data = {
+    sessionId: sessionId
+  }
+
+  io.socket.post('/checkout', data, function (result) {
+    if(result.status == 1)
+    {
+      $("#divOrderedPageAlert").prepend('<div class="alert alert-success">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' + result.message +
+                                      '</div>')
+    }
+    else
+    {
+      $("#divOrderedPageAlert").prepend('<div class="alert alert-error">' +
                                       '<button type="button" class="close" data-dismiss="alert">×</button>' +
                                       result.message +
                                     '</div>');

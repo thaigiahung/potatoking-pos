@@ -16,7 +16,7 @@ module.exports = {
     total: { type: 'integer', defaultsTo: 0},
     paymentStatus: {
       type: 'string',
-      enum: ['paid', 'cancelled']
+      enum: ['checkout', 'paid', 'cancelled']
     },
     startTime: {type: 'datetime'},
     endTime: {type: 'datetime'}

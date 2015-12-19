@@ -13,7 +13,7 @@
 			  	</thead>   
 			  	<tbody id="overviewOpenedTable">
 	  		  		<% _.each(sessions, function (item) { %>
-	  		  			<tr id="session<%= item.id %>">
+	  		  			<tr id="session<%= item.id %>" <% if(item.paymentStatus == 'checkout') { %> class="pending-checkout" <% } %>>
 	  		  				<td>
 	  		  					<%= item.table %>
 	  		  				</td>
