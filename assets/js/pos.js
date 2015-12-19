@@ -95,7 +95,6 @@ io.socket.on('connect', function () {
       });
 
       io.socket.on('removeOverviewRow', function (sessionId) {
-        console.log(sessionId)
         $("#session"+sessionId).remove();
       });
     }
@@ -120,11 +119,13 @@ io.socket.on('connect', function () {
         //Store current session id in localStorage
         localStorage.sessionId = message.sessionId;
 
-        $("#divDishPageAlert").prepend('<div class="alert alert-success">' +
+        /*$("#divDishPageAlert").prepend('<div class="alert alert-success">' +
                                       '<button type="button" class="close" data-dismiss="alert">×</button>' +
                                       message.message +
-                                    '</div>');
+                                    '</div>');*/   
+        reload();     
       });
+
 
       //Listen for event merge table
       io.socket.on('merged', function (mergedMessage) {
@@ -135,11 +136,12 @@ io.socket.on('connect', function () {
           //Store current session id in localStorage
           localStorage.sessionId = mergedMessage.sessionId;
 
-          $('#divDishPageAlert').prepend('<div class="alert alert-success">' +
+          /*$('#divDishPageAlert').prepend('<div class="alert alert-success">' +
                                         '<button type="button" class="close" data-dismiss="alert">×</button>' +
                                         mergedMessage.message +
-                                      '</div>');
+                                      '</div>');*/
         });
+        reload();
       });
 
       //Listen for event cancel table
@@ -177,6 +179,58 @@ io.socket.on('connect', function () {
       //Listen for event order item
       io.socket.on('ordered', function (message) {        
         redirect(message.msg);
+      });
+    }
+
+    //Page: Ordered
+    if($('#orderedPage').length > 0)
+    {      
+      //Subscribe to original room table
+      io.socket.get('/subscribe/table'+deviceData.data.table, function (message) {
+        //Save originalTable (field table in Device) to localStorage
+        localStorage.originalTable = deviceData.data.table;     
+      });
+
+      //Listen for event cancel table
+      io.socket.on('cancelled', function (message) {
+        if(localStorage.originalTable != message)
+        {
+          io.socket.get('/unsubscribe/table'+localStorage.message, function (message) {});
+          redirect('/');
+        }
+      });
+
+      //Listen for event open table
+      io.socket.on('opened', function (message) {
+        //Single table (not merged to any others) => currentTable will be original table
+        localStorage.currentTable = deviceData.data.table;
+
+        //Store current session id in localStorage
+        localStorage.sessionId = message.sessionId;
+
+        /*$("#divDishPageAlert").prepend('<div class="alert alert-success">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                      message.message +
+                                    '</div>');*/   
+        redirect('/');
+      });
+
+
+      //Listen for event merge table
+      io.socket.on('merged', function (mergedMessage) {
+        io.socket.get('/subscribe/'+mergedMessage.room, function (message) {
+          //Table is merged => currentTable will be the return value from API
+          localStorage.currentTable = mergedMessage.table;
+
+          //Store current session id in localStorage
+          localStorage.sessionId = mergedMessage.sessionId;
+
+          /*$('#divDishPageAlert').prepend('<div class="alert alert-success">' +
+                                        '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                        mergedMessage.message +
+                                      '</div>');*/
+        });
+        redirect('/');
       });
     }
   });

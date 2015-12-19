@@ -253,7 +253,7 @@ module.exports = {
       {
         return res.json({
           status: 0,
-          message: 'Không thể đặt món!'
+          message: 'Không thể chọn món!'
         });
       }
       else
@@ -267,7 +267,7 @@ module.exports = {
           {
             return res.json({
               status: 0,
-              message: 'Không thể đặt món!'
+              message: 'Không thể chọn món!'
             });
           }
           else
@@ -283,7 +283,7 @@ module.exports = {
               {
                 return res.json({
                   status: 0,
-                  message: 'Không thể đặt món!'
+                  message: 'Không thể chọn món!'
                 });
               }
               else
