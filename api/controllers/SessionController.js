@@ -557,7 +557,8 @@ module.exports = {
           }
           else
           {
-            sails.sockets.broadcast('device', 'checkout', { sessionId: session.id });
+            sails.sockets.broadcast('device', 'checkout', { session: session });
+            sails.sockets.broadcast('device', 'receive-message', { table: session.table, message: 'Thanh toán' });
 
             return res.json({
               status: 1,

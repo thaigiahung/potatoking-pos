@@ -70,6 +70,17 @@ io.socket.on('connect', function () {
           '</div>'
         );
       });
+
+      io.socket.on('receive-message', function (msg) {
+        $.gritter.add({
+          // (string | mandatory) the heading of the notification
+          title: 'Bàn ' + msg.table,
+          // (string | mandatory) the text inside the notification
+          text: msg.message,
+          sticky: true,
+          fade_out_speed: 100
+        });
+      });
     }
 
     //Page: Overview
@@ -99,7 +110,18 @@ io.socket.on('connect', function () {
       });
 
       io.socket.on('checkout', function (msg) {
-        $("#session"+msg.sessionId).addClass('pending-checkout');
+        $("#session"+msg.session.id).addClass('pending-checkout');
+      });
+
+      io.socket.on('receive-message', function (msg) {
+        $.gritter.add({
+          // (string | mandatory) the heading of the notification
+          title: 'Bàn ' + msg.table,
+          // (string | mandatory) the text inside the notification
+          text: msg.message,
+          sticky: true,
+          fade_out_speed: 100
+        });
       });
     }
 
