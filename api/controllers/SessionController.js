@@ -6,6 +6,7 @@
  */
 
 var async = require('async');
+var moment = require('moment-timezone');
 
 module.exports = {
 	openTable: function(req, res) {
@@ -75,9 +76,11 @@ module.exports = {
                     'opened', 
                     {
                       table: device.table,
-                      sessionId: createdSession.id,
+                      session: createdSession,
                       message: '[Bàn ' + device.table + '] Mở bàn thành công!'}
                   );
+
+                  sails.sockets.broadcast('device', 'addOverviewRow', {session: createdSession});
 
                   sails.sockets.broadcast(
                     'device', 
@@ -190,7 +193,7 @@ module.exports = {
                           'opened', 
                           {
                             table: device.table,
-                            sessionId: createdSession.id,
+                            session: createdSession,
                             message: '[Bàn ' + device.table + '] Mở bàn thành công!'
                           }
                         );
@@ -215,6 +218,8 @@ module.exports = {
               }
               else
               {
+                sails.sockets.broadcast('device', 'addOverviewRow', {session: createdSession});
+                
                 sails.sockets.broadcast(
                   'device', 
                   'addToDivOpenedTable', 
@@ -384,6 +389,8 @@ module.exports = {
                 }, function done() {
                   sails.sockets.broadcast('table'+session.table, 'cancelled', { msg: session.table });
 
+                  sails.sockets.broadcast('device', 'removeOverviewRow', sessionId);
+
                   return res.json({
                     status: 1,
                     message: 'Hủy bàn thành công!'
@@ -506,6 +513,21 @@ module.exports = {
         });
       }
     }); 
+  },
+
+  overview: function(req, res) {
+    Session.find({
+      status: 'open'
+    }).exec(function (err, sessions) {
+      if(err || !sessions)
+      {
+        return res.view('overview', {status: 0, moment: moment, sessions: []});
+      }
+      else
+      {
+        return res.view('overview', {status: 1, moment: moment, sessions: sessions});
+      }
+    });
   },
 };
 

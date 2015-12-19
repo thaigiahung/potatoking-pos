@@ -1,0 +1,34 @@
+<div id="overviewPage" class="row-fluid">
+  	<h1>Bàn đang mở</h1>
+
+	<div class="box span11">
+		<div class="box-content">
+			<table class="table">
+			  	<thead>
+				  	<tr>
+					  	<th>Bàn</th>
+					  	<th>Trạng thái</th>
+					  	<th>Giờ mở bàn</th>
+				  	</tr>
+			  	</thead>   
+			  	<tbody id="overviewOpenedTable">
+	  		  		<% _.each(sessions, function (item) { %>
+	  		  			<tr id="session<%= item.id %>">
+	  		  				<td>
+	  		  					<%= item.table %>
+	  		  				</td>
+	  		  				<td>
+	  		  					<%= item.status %>
+	  		  				</td>
+	  		  				<td>
+	  		  					<%= moment(item.startTime).format("DD/MM/YYYY hh:mm:ss a") %>
+	  		  				</td>
+	  		  			</tr>
+	  		  		<% }) %>
+			  	</tbody>
+		  	</table>            
+		</div>
+	</div>
+	
+	
+</div>

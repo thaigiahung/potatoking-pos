@@ -58,7 +58,7 @@ io.socket.on('connect', function () {
         //Find img tag & change img source
         var img = $("#table"+cancelledData).parent().parent().parent().children("img").eq(0);
         img.attr('src','/img/device-status/green.png');
-      });
+      });      
 
       io.socket.on('addToDivOpenedTable', function (data) {        
         $("#divOpenedTable").append(
@@ -69,6 +69,34 @@ io.socket.on('connect', function () {
             '</label>' +
           '</div>'
         );
+      });
+    }
+
+    //Page: Overview
+    if($('#overviewPage').length > 0)
+    {
+      io.socket.get('/subscribe/device', function (message) {});
+
+      io.socket.on('addOverviewRow', function (openedData) {
+        //Added session to page Overview
+        $("#overviewOpenedTable").append(
+          '<tr id="session'+openedData.session.id+'">' +
+            '<td>' +
+              openedData.session.table +
+            '</td>' +
+            '<td>' +
+              openedData.session.status +
+            '</td>' +
+            '<td>' +
+              moment(openedData.session.startTime).format("DD/MM/YYYY hh:mm:ss a") +
+            '</td>' +
+          '</tr>'
+        );
+      });
+
+      io.socket.on('removeOverviewRow', function (sessionId) {
+        console.log(sessionId)
+        $("#session"+sessionId).remove();
       });
     }
 
