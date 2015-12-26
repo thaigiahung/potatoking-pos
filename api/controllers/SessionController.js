@@ -407,9 +407,10 @@ module.exports = {
   order: function(req, res) {
     var sessionId = req.body.sessionId;
 
-    var query = "SELECT SUM(price) AS sum FROM `sessiondetail` WHERE status = 'added' AND session = " + sessionId;
-    SessionDetail.query(query, function(err, sum) {
-      if(err || !sum)
+    Session.findOne({
+      id: sessionId
+    }).exec(function (err, session){
+      if (err || !session) 
       {
         return res.json({
           status: 0,
@@ -418,11 +419,11 @@ module.exports = {
       }
       else
       {
-        sum = sum[0];
-        Session.find({
-          id: sessionId
-        }).exec(function (err1, session) {
-          if(err1 || !session)
+        SessionDetail.update(
+          {session: sessionId, status: 'added'},
+          {status: 'ordered'}
+        ).exec(function (err1, updatedSessionDetail){
+          if (err1 || !updatedSessionDetail) 
           {
             return res.json({
               status: 0,
@@ -431,45 +432,16 @@ module.exports = {
           }
           else
           {
-            session = session[0];
-            session.total = session.total + sum.sum;
-            session.save(function(err2, savedSession){
-              if(err2 || !savedSession)
-              {
-                return res.json({
-                  status: 0,
-                  message: 'Không thể đặt món!'
-                });
-              }
-              else
-              {
-                SessionDetail.update(
-                  {session: sessionId, status: 'added'},
-                  {status: 'ordered'}
-                ).exec(function (err3, updatedSessionDetail){
-                  if (err3 || !updatedSessionDetail) 
-                  {
-                    return res.json({
-                      status: 0,
-                      message: 'Không thể đặt món!'
-                    });
-                  }
-                  else
-                  {
-                    sails.sockets.broadcast('table'+session.table, 'ordered', { msg: '/ordered' });
+            sails.sockets.broadcast('table'+session.table, 'ordered', { msg: '/ordered' });
 
-                    return res.json({
-                      status: 1,
-                      message: 'Đặt món thành công!'
-                    });
-                  }                  
-                });
-              }
+            return res.json({
+              status: 1,
+              message: 'Đặt món thành công!'
             });
-          }
+          }                  
         });
       }
-    });
+    });    
   },
 
   listOrdered: function(req, res) {
@@ -495,8 +467,7 @@ module.exports = {
             session = session[0];
             SessionDetail.find({ 
               where: { 
-                session: session.id,
-                status: 'ordered' 
+                session: session.id
               },
               sort: 'id DESC' 
             }).populate('dish').exec(function (err, ordered) {
@@ -526,6 +497,27 @@ module.exports = {
       else
       {
         return res.view('overview', {status: 1, moment: moment, sessions: sessions});
+      }
+    });
+  },
+
+  kitchenOverview: function(req, res) {
+    /*var query = "SELECT DISTINCT(s.id), s.* 
+                FROM `sessiondetail` sd JOIN session s ON s.id = sd.session 
+                WHERE sd.status = 'ordered' AND s.status = 'open'";*/
+    SessionDetail.find({
+      where: { 
+        status: 'ordered'
+      },
+      sort: 'createdAt ASC'      
+    }).populate('dish').populate('session').exec(function (err, sessionDetails) {
+      if(err || !sessionDetails)
+      {
+        return res.view('kitchen-overview', {status: 0, moment: moment, sessionDetails: []});
+      }
+      else
+      {
+        return res.view('kitchen-overview', {status: 1, moment: moment, sessionDetails: sessionDetails});
       }
     });
   },

@@ -109,6 +109,16 @@ io.socket.on('connect', function () {
       });
     }
 
+    //Page: Kitchen Overview
+    if($('#kitchenOverviewPage').length > 0)
+    {
+      io.socket.get('/subscribe/device', function (message) {});
+
+      io.socket.on('removeKitchenOverview', function (result) {
+        $("#sessionDetail"+result.sessionDetailId).remove();
+      });
+    }
+
     //Page: Dishes
     if($('#dishesPage').length > 0)
     {      
@@ -190,6 +200,17 @@ io.socket.on('connect', function () {
       io.socket.on('ordered', function (message) {        
         redirect(message.msg);
       });
+
+      io.socket.on('item-delivered', function (msg) {
+        $.gritter.add({
+          // (string | mandatory) the heading of the notification
+          title: 'Món ' + msg.dishName,
+          // (string | mandatory) the text inside the notification
+          text: msg.message,
+          sticky: true,
+          fade_out_speed: 100
+        });
+      });
     }
 
     //Page: Ordered
@@ -200,6 +221,9 @@ io.socket.on('connect', function () {
         //Save originalTable (field table in Device) to localStorage
         localStorage.originalTable = deviceData.data.table;     
       });
+
+      //Subscribe to current room table (Necessary for reloading page)
+      io.socket.get('/subscribe/table'+localStorage.currentTable, function (message) {});
 
       //Listen for event cancel table
       io.socket.on('cancelled', function (message) {
@@ -241,6 +265,24 @@ io.socket.on('connect', function () {
                                       '</div>');*/
         });
         redirect('/');
+      });
+
+      //Listen for event order item
+      io.socket.on('ordered', function (message) {        
+        reload();
+      });
+
+      io.socket.on('item-delivered', function (msg) {
+        $.gritter.add({
+          // (string | mandatory) the heading of the notification
+          title: 'Món ' + msg.dishName,
+          // (string | mandatory) the text inside the notification
+          text: msg.message,
+          sticky: true,
+          fade_out_speed: 100
+        });
+
+        $("#tdSessionDetail"+msg.sessionDetailId).text(msg.message);
       });
     }
   });
@@ -339,6 +381,23 @@ function checkout (sessionId)
     else
     {
       $("#divOrderedPageAlert").prepend('<div class="alert alert-error">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                      result.message +
+                                    '</div>');
+    }
+  });
+}
+
+function deliver (sessionDetailId) 
+{
+  var data = {
+    sessionDetailId: sessionDetailId
+  }
+
+  io.socket.post('/deliver', data, function (result) {
+    if(result.status == 0)
+    {
+      $("#divKitchenOverviewPageAlert").prepend('<div class="alert alert-error">' +
                                       '<button type="button" class="close" data-dismiss="alert">×</button>' +
                                       result.message +
                                     '</div>');

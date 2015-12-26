@@ -1,0 +1,42 @@
+<div id="divKitchenOverviewPageAlert">  
+  
+</div><!--/row-->
+
+<div id="kitchenOverviewPage" class="row-fluid">
+  	<h1>Danh sách đặt món</h1>
+
+	<div class="box span11">
+		<div class="box-content">
+			<table class="table">
+			  	<thead>
+				  	<tr>
+					  	<th>Bàn</th>
+					  	<th>Món</th>
+					  	<th>Giờ đặt món</th>
+					  	<th>&nbsp;</th>
+				  	</tr>
+			  	</thead>   
+			  	<tbody id="kitchenOverview">
+	  		  		<% _.each(sessionDetails, function (item) { %>
+	  		  			<tr id="sessionDetail<%= item.id %>">
+	  		  				<td>
+	  		  					<%= item.session.table %>
+	  		  				</td>
+	  		  				<td>
+	  		  					<%= item.dish.name %>
+	  		  				</td>
+	  		  				<td>
+	  		  					<%= moment(item.updatedAt).format("DD/MM/YYYY hh:mm:ss a") %>
+	  		  				</td>
+	  		  				<td>
+	  		  					<button onclick="deliver(<%= item.id %>)">Giao</button>
+	  		  				</td>
+	  		  			</tr>
+	  		  		<% }) %>
+			  	</tbody>
+		  	</table>            
+		</div>
+	</div>
+	
+	
+</div>

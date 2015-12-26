@@ -11,13 +11,27 @@
 			  	<thead>
 				  	<tr>
 					  	<th>Món</th>
+					  	<th>Trạng thái</th>
 				  	</tr>
 			  	</thead>   
-			  	<tbody id="addedItemTableBody">
+			  	<tbody id="orderedItemTableBody">
 	  		  		<% _.each(ordered, function (item) { %>
 	  		  			<tr class="dish<%= item.dish.id %>">
 	  		  				<td>
 	  		  					<%= item.dish.name %>
+	  		  				</td>
+	  		  				<td id="tdSessionDetail<%= item.id %>">
+	  		  					<% if(item.status == 'added') { %>
+									Đã chọn
+	  		  					<% } else if(item.status == 'ordered') { %>
+									Đã đặt
+								<% } else if(item.status == 'removed') { %>
+									Đã hủy
+								<% } else if(item.status == 'delivered') { %>
+									Đã giao
+	  		  					<% } else { %>
+									<%= item.status %>
+								<% } %>
 	  		  				</td>
 	  		  			</tr>
 	  		  		<% }) %>
