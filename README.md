@@ -1,3 +1,2 @@
-# pos
-
-a [Sails](http://sailsjs.org) application
+# Note
+Work with Node JS 4.* only
