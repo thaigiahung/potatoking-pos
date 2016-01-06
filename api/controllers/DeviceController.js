@@ -116,6 +116,7 @@ module.exports = {
 
   connect: function(req, res) {
     var ip = req.ip;
+    ip = ip.substring(ip.lastIndexOf(":")+1, ip.length);
     var data;
     DeviceIp.findOne({
       ip: ip

@@ -7,8 +7,11 @@
 
 module.exports = {
 	view: function(req, res) {
+    var ip = req.ip;
+    ip = ip.substring(ip.lastIndexOf(":")+1, ip.length);
+    
     DeviceIp.findOne({
-      ip: req.ip
+      ip: ip
     }).populate('device').exec(function (err, device) {
       if(err || !device)
       {
