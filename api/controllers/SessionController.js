@@ -344,6 +344,46 @@ module.exports = {
     });
   },
 
+  removeOrderedItem: function(req, res) {
+    var id = req.body.id;
+
+    //Update status in Session Detail
+    SessionDetail.findOne({
+      id: id,
+      status: 'ordered'
+    }).populate('session').exec(function (err, sessionDetail){
+      if(err || !sessionDetail)
+      {
+        return res.json({
+          status: 0,
+          message: 'Không thể hủy món!'
+        });
+      }
+      else
+      {
+        sessionDetail.status = 'removed';
+        sessionDetail.save(function(err, saved){
+          if(err)
+          {
+            return res.json({
+              status: 0,
+              message: 'Không thể hủy món!'
+            });
+          }
+          else
+          {
+            sails.sockets.broadcast('device', 'removeKitchenOverview', { sessionDetailId: id });
+            sails.sockets.broadcast('table'+sessionDetail.session.table, 'removeOrderedItem', { sessionDetailId: id });
+            return res.json({
+              status: 1,
+              message: 'Thành công!'
+            });
+          }
+        });        
+      }
+    });
+  },
+
   cancelTable: function(req, res) {
     var sessionId = JSON.parse(req.body.sessionId);
 
@@ -489,7 +529,8 @@ module.exports = {
             session = session[0];
             SessionDetail.find({ 
               where: { 
-                session: session.id
+                session: session.id,
+                status : ['ordered', 'removed', 'delivered']
               },
               sort: 'id DESC' 
             }).populate('dish').exec(function (err, ordered) {

@@ -308,6 +308,11 @@ io.socket.on('connect', function () {
 
         $("#tdSessionDetail"+msg.sessionDetailId).text(msg.message);
       });
+
+      io.socket.on('removeOrderedItem', function (result) {
+        console.log(result);
+        $("#tdSessionDetail"+result.sessionDetailId).text('Đã hủy');
+      });
     }
   });
 });
@@ -365,6 +370,22 @@ function removeItem (id) {
     if(result.status == 0)
     {
       $("#divDishPageAlert").prepend('<div class="alert alert-error">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                      result.message +
+                                    '</div>');
+    }
+  });
+};
+
+function removeOrderedItem (id) {
+  var data = {
+    id: id
+  }
+
+  io.socket.post('/removeOrderedItem', data, function (result) {
+    if(result.status == 0)
+    {
+      $("#divKitchenOverviewPageAlert").prepend('<div class="alert alert-error">' +
                                       '<button type="button" class="close" data-dismiss="alert">×</button>' +
                                       result.message +
                                     '</div>');

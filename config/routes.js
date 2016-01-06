@@ -62,6 +62,7 @@ module.exports.routes = {
   'POST /table/openAndOpen': 'SessionController.mergeAndOpenTable',
   'POST /addItem': 'SessionController.addItem',
   'POST /removeItem': 'SessionController.removeItem',
+  'POST /removeOrderedItem': 'SessionController.removeOrderedItem',
   'POST /cancelTable': 'SessionController.cancelTable',
   'POST /order': 'SessionController.order',
   'POST /checkout': 'SessionController.checkout',
