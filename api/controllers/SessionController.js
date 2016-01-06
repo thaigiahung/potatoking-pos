@@ -419,26 +419,45 @@ module.exports = {
       }
       else
       {
-        SessionDetail.update(
-          {session: sessionId, status: 'added'},
-          {status: 'ordered'}
-        ).exec(function (err1, updatedSessionDetail){
-          if (err1 || !updatedSessionDetail) 
+        SessionDetail.find({
+          session: sessionId,
+          status: 'added'
+        }).populate('session').populate('dish').exec(function (err1, sessionDetails){
+          if(!err1 && sessionDetails.length > 0)
+          {
+            //Broadcast to view Kitchen Overview
+            sails.sockets.broadcast('device', 'newOrderAdded', { msg: JSON.stringify(sessionDetails) });
+
+            //Change status to ordered
+            SessionDetail.update(
+              {session: sessionId, status: 'added'},
+              {status: 'ordered'}
+            ).exec(function (err2, updatedSessionDetail){
+              if (err2 || !updatedSessionDetail) 
+              {
+                return res.json({
+                  status: 0,
+                  message: 'Không thể đặt món!'
+                });
+              }
+              else
+              {
+                sails.sockets.broadcast('table'+session.table, 'ordered', { msg: '/ordered' });
+
+                return res.json({
+                  status: 1,
+                  message: 'Đặt món thành công!'
+                });
+              }                  
+            });
+          }
+          else
           {
             return res.json({
               status: 0,
               message: 'Không thể đặt món!'
             });
           }
-          else
-          {
-            sails.sockets.broadcast('table'+session.table, 'ordered', { msg: '/ordered' });
-
-            return res.json({
-              status: 1,
-              message: 'Đặt món thành công!'
-            });
-          }                  
         });
       }
     });    

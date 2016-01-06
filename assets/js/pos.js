@@ -117,6 +117,30 @@ io.socket.on('connect', function () {
       io.socket.on('removeKitchenOverview', function (result) {
         $("#sessionDetail"+result.sessionDetailId).remove();
       });
+
+      io.socket.on('newOrderAdded', function (result) {
+        result = JSON.parse(result.msg);
+        for(var i = 0; i < result.length; i++)
+        {
+          var item = result[i];
+          $('#kitchenOverview').append(
+            '<tr id="sessionDetail'+item.id+'">' +
+              '<td>' +
+                item.session.table +
+              '</td>' +
+              '<td>' +
+                item.dish.name +
+              '</td>' +
+              '<td>' +
+                moment(item.updatedAt).format("DD/MM/YYYY hh:mm:ss a") +
+              '</td>' +
+              '<td>' +
+                '<button onclick="deliver('+item.id+')">Giao</button>' +
+              '</td>' +
+            '</tr>'
+          );
+        }        
+      });
     }
 
     //Page: Dishes
