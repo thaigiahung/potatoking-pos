@@ -135,7 +135,8 @@ io.socket.on('connect', function () {
                 moment(item.updatedAt).format("DD/MM/YYYY hh:mm:ss a") +
               '</td>' +
               '<td>' +
-                '<button onclick="deliver('+item.id+')">Giao</button>' +
+                '<button onclick="deliver('+item.id+')">Giao</button> ' +
+                '<input type="button" onclick="removeOrderedItem('+item.id+')" value="Xóa"' +
               '</td>' +
             '</tr>'
           );
