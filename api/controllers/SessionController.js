@@ -613,7 +613,7 @@ module.exports = {
           else
           {
             sails.sockets.broadcast('device', 'checkout', { session: session });
-            sails.sockets.broadcast('device', 'receive-message', { table: session.table, message: 'Thanh toán' });
+            sails.sockets.broadcast('device', 'receive-message', { table: session.table, sessionId: session.id, message: 'Thanh toán. <a href="/ordered/detail/'+session.id+'">Xem chi tiết</a>' });
 
             return res.json({
               status: 1,
