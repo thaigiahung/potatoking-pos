@@ -57,6 +57,35 @@
  				});
  			}
  		});
-},
+	},
+
+ 	detail: function(req, res) {
+ 		var sessionId = req.params.id;
+
+ 		Session.findOne({
+ 			id: sessionId,
+ 		}).exec(function (err, session) {
+ 			if(err || !session)
+ 			{
+ 				return res.view('session-detail',{status: 0, datas: [], session: {}});
+ 			}
+ 			else
+ 			{
+ 				SessionDetail.find({
+ 					session: sessionId,
+ 					status: 'delivered'
+ 				}).populate('dish').exec(function (err, sessionDetails) {
+ 					if(err || !sessionDetails || sessionDetails.length <= 0)
+ 					{
+ 						return res.view('session-detail',{status: 1, datas: [], session: session});
+ 					}
+ 					else
+ 					{
+ 						return res.view('session-detail',{status: 1, datas: sessionDetails, session: session});
+ 					}
+ 				});
+ 			}
+ 		});
+	},
 };
 

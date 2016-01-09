@@ -624,5 +624,64 @@ module.exports = {
       }
     });
   },
+
+  finalCheckout: function(req, res) {
+    var sessionId = req.body.sessionId;
+
+    Session.findOne({
+      id: sessionId,
+      status: 'open',
+      paymentStatus: 'checkout'
+    }).exec(function (err, session) {
+      if(err || !session)
+      {
+        return res.json({
+          status: 0,
+          message: 'Không thể thanh toán!'
+        });
+      }
+      else
+      {
+        session.status = 'close'
+        session.paymentStatus = 'paid';
+        session.receive = req.body.receive;
+        session.change = req.body.change;
+        session.save(function(err, saved){
+          if(err || !saved)
+          {
+            return res.json({
+              status: 0,
+              message: 'Không thể thanh toán!'
+            });
+          }
+          else
+          {
+            //Set Device Opening Status
+            SessionDevice.find({
+              session: sessionId
+            }).populate('device').exec(function (err, sessionDevices) {
+              if(!err && sessionDevices && sessionDevices.length > 0)
+              {
+                async.forEachOfSeries(sessionDevices, function (sessionDevice, index, callback) 
+                {
+                  sessionDevice.device.opening = false;
+                  sessionDevice.device.save(function(err4, saved){});
+                  callback();
+                }, function done() {});
+              }
+            });
+            
+            // sails.sockets.broadcast('device', 'paid', { session: session });
+            sails.sockets.broadcast('table'+session.table, 'paid', { table: session.table });
+
+            return res.json({
+              status: 1,
+              message: 'Thành công!'
+            });
+          }
+        });        
+      }
+    });
+  },
 };
 

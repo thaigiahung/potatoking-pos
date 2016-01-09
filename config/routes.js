@@ -50,6 +50,7 @@ module.exports.routes = {
   'GET /devices': 'DeviceController.listDevice',
   'GET /ordered': 'SessionController.listOrdered',
   'GET /ordered/overview': 'SessionController.overview',
+  'GET /ordered/detail/:id': 'SessionDetailController.detail',
   'GET /kitchen/overview': 'SessionController.kitchenOverview',
 
   //API
@@ -67,4 +68,5 @@ module.exports.routes = {
   'POST /order': 'SessionController.order',
   'POST /checkout': 'SessionController.checkout',
   'POST /deliver': 'SessionDetailController.deliver',
+  'POST /finalCheckout': 'SessionController.finalCheckout',
 };

@@ -44,3 +44,7 @@
 .pending-checkout {
   background-color: rgba(87, 199, 3, 0.35);
 }
+
+.change-warning {
+  color: red !important;
+}

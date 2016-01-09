@@ -14,6 +14,8 @@ module.exports = {
       enum: ['open', 'close']
     },
     total: { type: 'integer', defaultsTo: 0},
+    receive: { type: 'integer', defaultsTo: 0},
+    change: { type: 'integer', defaultsTo: 0},
     paymentStatus: {
       type: 'string',
       enum: ['checkout', 'paid', 'cancelled']

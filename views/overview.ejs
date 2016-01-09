@@ -9,19 +9,25 @@
 					  	<th>Bàn</th>
 					  	<th>Trạng thái</th>
 					  	<th>Giờ mở bàn</th>
+					  	<th>&nbsp;</th>
 				  	</tr>
 			  	</thead>   
 			  	<tbody id="overviewOpenedTable">
 	  		  		<% _.each(sessions, function (item) { %>
 	  		  			<tr id="session<%= item.id %>" <% if(item.paymentStatus == 'checkout') { %> class="pending-checkout" <% } %>>
 	  		  				<td>
-	  		  					<%= item.table %>
+	  		  					<a href="/ordered/detail/<%= item.id %>"><%= item.table %></a>
 	  		  				</td>
 	  		  				<td>
-	  		  					<%= item.status %>
+	  		  					<a href="/ordered/detail/<%= item.id %>"><%= item.status %></a>
 	  		  				</td>
 	  		  				<td>
-	  		  					<%= moment(item.startTime).format("DD/MM/YYYY hh:mm:ss a") %>
+	  		  					<a href="/ordered/detail/<%= item.id %>">
+	  		  						<%= moment(item.startTime).format("DD/MM/YYYY hh:mm:ss a") %>
+	  		  					</a>	  		  					
+	  		  				</td>
+	  		  				<td>
+	  		  					<a class="btn btn-large btn-success" href="/ordered/detail/<%= item.id %>">Chi tiết</a>
 	  		  				</td>
 	  		  			</tr>
 	  		  		<% }) %>

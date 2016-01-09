@@ -109,6 +109,58 @@ io.socket.on('connect', function () {
       });
     }
 
+    //Page: Order Detail
+    if($('#sessionDetailPage').length > 0)
+    {      
+      $( document ).ready(function() {
+        io.socket.get('/subscribe/device', function (message) {});
+
+        var total = $("#total").val();
+
+        //Calculate change
+        $( "#receive" ).keyup(function() {
+          var receive = $("#receive").val();
+          change = receive - total;
+          $("#change").val(change);
+
+          if(change < 0)
+          {
+            $("#change").addClass("change-warning");
+          }
+          else
+          {
+            $("#change").removeClass("change-warning");
+          }
+        });  
+
+        //Call API checkout
+        $("#btnCheckout").click(function () {
+          var change = $("#change").val();
+          if(change < 0)
+          {
+            $("#modalCheckoutBody").prepend('<div class="alert alert-error">' +
+                                            '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                            'Vui lòng kiểm tra lại số tiền!' +
+                                          '</div>');
+          }
+          else
+          {
+            var data = {
+              sessionId: $("#hdSessionId").val(),
+              receive: $("#receive").val(),
+              change: change
+            }
+
+            io.socket.post('/finalCheckout', data, function (result) {
+              $("#modalCheckoutResultBody").text(result.message);
+              $('#modalCheckoutResult').modal('show');
+              $('#modalCheckout').modal('hide');
+            });
+          }          
+        });      
+      });
+    }
+
     //Page: Kitchen Overview
     if($('#kitchenOverviewPage').length > 0)
     {
@@ -198,6 +250,15 @@ io.socket.on('connect', function () {
         }
       });
 
+      //Listen for event paid
+      io.socket.on('paid', function (message) {
+        if(localStorage.originalTable != message)
+        {
+          io.socket.get('/unsubscribe/table'+localStorage.message, function (message) {});
+          redirect('/');
+        }
+      });
+
       //Listen for event add item
       io.socket.on('addItem', function (message) {
         $('#addedItemTableBody').prepend(
@@ -252,6 +313,15 @@ io.socket.on('connect', function () {
 
       //Listen for event cancel table
       io.socket.on('cancelled', function (message) {
+        if(localStorage.originalTable != message)
+        {
+          io.socket.get('/unsubscribe/table'+localStorage.message, function (message) {});
+          redirect('/');
+        }
+      });
+
+      //Listen for event paid
+      io.socket.on('paid', function (message) {
         if(localStorage.originalTable != message)
         {
           io.socket.get('/unsubscribe/table'+localStorage.message, function (message) {});

@@ -1,0 +1,97 @@
+<div id="sessionDetailPage" class="row-fluid">
+  	<h1>	  	 
+	  	<% if(status) { %> 
+	  		Bàn <%= session.table %>
+	  	<% } %>
+  	</h1>
+
+	<div class="box span11">
+		<div class="box-content">
+			<table class="table">
+			  	<thead>
+				  	<tr>
+					  	<th>Món</th>
+					  	<th>Giá</th>
+				  	</tr>
+			  	</thead>   
+			  	<tbody id="sessionDetailsTable">
+			  		<% if(status) { %> 
+			  			<% _.each(datas, function (item) { %>
+			  				<tr>
+			  					<td>
+			  						<%= item.dish.name %>
+			  					</td>
+			  					<td>
+			  						<%= item.price %>
+			  					</td>
+			  				</tr>
+			  			<% }) %>
+		  				<tr style="font-weight: bold; font-size: 16px;">
+	  						<td>Tổng tiền</td>
+	  						<td><%= session.total %></td>
+		  				</tr>
+			  		<% } else { %>
+		  				Bàn này chưa đặt món
+			  		<% } %>	  		  		
+			  	</tbody>
+		  	</table>            
+		</div>
+		<div class="row-fluid device-list-footer">
+		  	<div class="device-list-footer-right">
+				<button class="btn btn-large btn-success" data-toggle="modal" data-target="#modalCheckout">Thanh toán</button>
+		  	</div>
+		</div>
+	</div>
+</div>
+
+<!-- Model Checkout -->
+<div class="modal hide fade" id="modalCheckout">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">×</button>
+		<h3>Thanh toán</h3>
+	</div>
+	<div class="modal-body" id="modalCheckoutBody">
+		<table>
+			<tr>
+				<td>Tổng tiền</td>
+				<td>
+					<input type="hidden" id="hdSessionId" value="<%= session.id %>">
+					<input type="text" id="total" value="<%= session.total %>" readonly>
+				</td>
+			</tr>
+			<tr>
+				<td>Nhận</td>
+				<td>
+					<input type="text" id="receive" autofocus>
+				</td>
+			</tr>
+			<tr>
+				<td>Thối</td>
+				<td>
+					<input type="text" id="change" readonly>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button id="btnCheckout" class="btn btn-success">Thanh toán</button>
+		<button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+	</div>
+</div>
+<!-- End - Model Checkout -->
+
+
+<!-- Model Checkout Result -->
+<div class="modal hide fade" id="modalCheckoutResult">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">×</button>
+		<h3>Thanh toán</h3>
+	</div>
+	<div class="modal-body" id="modalCheckoutResultBody">
+		
+	</div>
+	<div class="modal-footer">
+		<a href="/ordered/overview" class="btn btn-default">Ok</a>
+	</div>
+</div>
+<!-- End - Model Checkout Result -->
