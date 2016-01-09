@@ -248,7 +248,7 @@ module.exports = {
     Dish.findOne({
       id: data.id,
       status: 'enable',
-    }).exec(function (err, dish){
+    }).exec(function (err, dish){      
       if(err || !dish)
       {
         return res.json({
@@ -278,7 +278,7 @@ module.exports = {
               dish: dish.id,
               price: dish.price,
               status: 'added'
-            }).exec(function (err, createdSessionDetail){
+            }).exec(function (err, createdSessionDetail){              
               if(err || !createdSessionDetail)
               {
                 return res.json({

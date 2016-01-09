@@ -323,6 +323,39 @@ io.socket.on('connect', function () {
       //Subscribe to current room table (Necessary for reloading page)
       io.socket.get('/subscribe/table'+localStorage.currentTable, function (message) {});
 
+      //Listen for event open table
+      io.socket.on('opened', function (message) {
+        //Single table (not merged to any others) => currentTable will be original table
+        localStorage.currentTable = deviceData.data.table;
+
+        //Store current session id in localStorage
+        localStorage.sessionId = message.sessionId;
+
+        /*$("#divDishPageAlert").prepend('<div class="alert alert-success">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                      message.message +
+                                    '</div>');*/   
+        redirect('/');
+      });
+
+
+      //Listen for event merge table
+      io.socket.on('merged', function (mergedMessage) {
+        io.socket.get('/subscribe/'+mergedMessage.room, function (message) {
+          //Table is merged => currentTable will be the return value from API
+          localStorage.currentTable = mergedMessage.table;
+
+          //Store current session id in localStorage
+          localStorage.sessionId = mergedMessage.sessionId;
+
+          /*$('#divDishPageAlert').prepend('<div class="alert alert-success">' +
+                                        '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                        mergedMessage.message +
+                                      '</div>');*/
+        });
+        redirect('/');
+      });
+
       //Listen for event cancel table
       io.socket.on('cancelled', function (message) {
         if(localStorage.originalTable != message)
@@ -424,6 +457,7 @@ io.socket.on('chat', function (data) {
 *
 *******************************************************/
 function addItem (id, name) {
+  console.log(localStorage.sessionId)
   var data = {
     roomName: 'table'+localStorage.currentTable,
     eventName: 'addItem',
