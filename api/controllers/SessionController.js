@@ -351,7 +351,7 @@ module.exports = {
     SessionDetail.findOne({
       id: id,
       status: 'ordered'
-    }).populate('session').exec(function (err, sessionDetail){
+    }).populate('session').populate('dish').exec(function (err, sessionDetail){
       if(err || !sessionDetail)
       {
         return res.json({
@@ -373,7 +373,7 @@ module.exports = {
           else
           {
             sails.sockets.broadcast('device', 'removeKitchenOverview', { sessionDetailId: id });
-            sails.sockets.broadcast('table'+sessionDetail.session.table, 'removeOrderedItem', { sessionDetailId: id });
+            sails.sockets.broadcast('table'+sessionDetail.session.table, 'item-delivered', {sessionDetailId: id, dishName: sessionDetail.dish.name, message: 'Đã hủy' });
             return res.json({
               status: 1,
               message: 'Thành công!'

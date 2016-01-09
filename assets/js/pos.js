@@ -157,7 +157,19 @@ io.socket.on('connect', function () {
               $('#modalCheckout').modal('hide');
             });
           }          
-        });      
+        });
+
+        //http://www.jqueryscript.net/other/Classic-Growl-like-Notification-Plugin-For-jQuery-Gritter.html
+        io.socket.on('receive-message', function (msg) {
+          $.gritter.add({
+            // (string | mandatory) the heading of the notification
+            title: 'Bàn ' + msg.table,
+            // (string | mandatory) the text inside the notification
+            text: msg.message,
+            sticky: true,
+            fade_out_speed: 100
+          });
+        });
       });
     }
 
@@ -380,9 +392,17 @@ io.socket.on('connect', function () {
         $("#tdSessionDetail"+msg.sessionDetailId).text(msg.message);
       });
 
-      io.socket.on('removeOrderedItem', function (result) {
-        console.log(result);
-        $("#tdSessionDetail"+result.sessionDetailId).text('Đã hủy');
+      io.socket.on('removeOrderedItem', function (result) {  
+        $.gritter.add({
+          // (string | mandatory) the heading of the notification
+          title: 'Món ' + msg.dishName,
+          // (string | mandatory) the text inside the notification
+          text: msg.message,
+          sticky: true,
+          fade_out_speed: 100
+        });
+
+        $("#tdSessionDetail"+result.sessionDetailId).text(msg.message);
       });
     }
   });
