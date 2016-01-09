@@ -199,8 +199,8 @@ io.socket.on('connect', function () {
                 moment(item.updatedAt).format("DD/MM/YYYY hh:mm:ss a") +
               '</td>' +
               '<td>' +
-                '<button onclick="deliver('+item.id+')">Giao</button> ' +
-                '<input type="button" onclick="removeOrderedItem('+item.id+')" value="Xóa"' +
+                '<button class="btn btn-large btn-success" onclick="deliver('+item.id+')">Giao</button> ' +
+                '<input type="button" class="btn btn-large btn-danger" onclick="removeOrderedItem('+item.id+')" value="Hủy"' +
               '</td>' +
             '</tr>'
           );
@@ -279,7 +279,7 @@ io.socket.on('connect', function () {
               message.msg.name +
             '</td>' +
             '<td>' +
-              '<input type="button" onclick="removeItem('+message.msg.sessionDetail.id+')" value="Xóa"' +
+              '<input type="button" class="btn btn-danger" onclick="removeItem('+message.msg.sessionDetail.id+')" value="Hủy"' +
             '</td>' +
           '</tr>'
         );
@@ -457,7 +457,6 @@ io.socket.on('chat', function (data) {
 *
 *******************************************************/
 function addItem (id, name) {
-  console.log(localStorage.sessionId)
   var data = {
     roomName: 'table'+localStorage.currentTable,
     eventName: 'addItem',

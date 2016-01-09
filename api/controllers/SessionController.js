@@ -617,7 +617,7 @@ module.exports = {
 
             return res.json({
               status: 1,
-              message: 'Thành công!'
+              message: 'Nhân viên sẽ liên hệ với bạn ngay!'
             });
           }
         });        

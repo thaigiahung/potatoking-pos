@@ -29,8 +29,8 @@
 	  		  					<%= moment(item.updatedAt).format("DD/MM/YYYY hh:mm:ss a") %>
 	  		  				</td>
 	  		  				<td>
-	  		  					<button onclick="deliver(<%= item.id %>)">Giao</button>
-	  		  					<input type="button" onclick="removeOrderedItem(<%= item.id %>)" value="Xóa"
+	  		  					<button class="btn btn-large btn-success" onclick="deliver(<%= item.id %>)">Giao</button>
+	  		  					<input type="button" class="btn btn-large btn-danger" onclick="removeOrderedItem(<%= item.id %>)" value="Hủy"
 	  		  				</td>
 	  		  			</tr>
 	  		  		<% }) %>
