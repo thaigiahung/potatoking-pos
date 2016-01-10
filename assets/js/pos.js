@@ -208,9 +208,30 @@ io.socket.on('connect', function () {
       });
     }
 
+    //Page: Kitchen Dish
+    if($('#kitchenDishPage').length > 0)
+    {
+      io.socket.get('/subscribe/device', function (message) {});
+
+      //Listen for event hide dish
+      io.socket.on('hideDish', function (message) {
+        $("#itemStatus"+message.dishId).text(message.message)
+        $("#itemAction"+message.dishId).html('<button class="btn btn-large btn-success" onclick="showDish('+message.dishId+')">Hiện</button>');
+      });
+
+      //Listen for event show dish
+      io.socket.on('showDish', function (message) {        
+        $("#itemStatus"+message.dishId).text(message.message)
+        $("#itemAction"+message.dishId).html('<button class="btn btn-large btn-danger" onclick="hideDish('+message.dishId+')">Ẩn</button>');
+      });
+    }    
+
     //Page: Dishes
     if($('#dishesPage').length > 0)
-    {      
+    {
+      //Subscribe to room table (All table will subscribe to this room)
+      io.socket.get('/subscribe/table', function (message) {console.log("table")});
+
       //Subscribe to original room table
       io.socket.get('/subscribe/table'+deviceData.data.table, function (message) {
         //Save originalTable (field table in Device) to localStorage
@@ -309,11 +330,26 @@ io.socket.on('connect', function () {
           fade_out_speed: 100
         });
       });
+
+      //Listen for event hide dish
+      io.socket.on('hideDish', function (message) {
+        console.log("hide")
+        $("#item"+message.dishId).hide();
+      });
+
+      //Listen for event show dish
+      io.socket.on('showDish', function (message) {
+      console.log("show")    
+        $("#item"+message.dishId).show();
+      });
     }
 
     //Page: Ordered
     if($('#orderedPage').length > 0)
-    {      
+    {
+      //Subscribe to room table (All table will subscribe to this room)
+      io.socket.get('/subscribe/table', function (message) {});
+
       //Subscribe to original room table
       io.socket.get('/subscribe/table'+deviceData.data.table, function (message) {
         //Save originalTable (field table in Device) to localStorage
@@ -573,6 +609,38 @@ function deliver (sessionDetailId)
     }
   });
 }
+
+function hideDish (dishId) {
+  var data = {
+    id: dishId
+  }
+
+  io.socket.post('/hideDish', data, function (result) {
+    if(result.status == 0)
+    {
+      $("#divKitchenDishPageAlert").prepend('<div class="alert alert-error">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                      result.message +
+                                    '</div>');
+    }
+  });
+};
+
+function showDish (dishId) {
+  var data = {
+    id: dishId
+  }
+
+  io.socket.post('/showDish', data, function (result) {
+    if(result.status == 0)
+    {
+      $("#divKitchenDishPageAlert").prepend('<div class="alert alert-error">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                      result.message +
+                                    '</div>');
+    }
+  });
+};
 
 function reload () 
 {

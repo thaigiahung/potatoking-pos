@@ -52,6 +52,7 @@ module.exports.routes = {
   'GET /ordered/overview': 'SessionController.overview',
   'GET /ordered/detail/:id': 'SessionDetailController.detail',
   'GET /kitchen/overview': 'SessionController.kitchenOverview',
+  'GET /kitchen/dish': 'DishController.kitchenDish',
 
   //API
   'GET /subscribe/:roomName': 'DeviceController.subscribe',
@@ -69,4 +70,6 @@ module.exports.routes = {
   'POST /checkout': 'SessionController.checkout',
   'POST /deliver': 'SessionDetailController.deliver',
   'POST /finalCheckout': 'SessionController.finalCheckout',
+  'POST /hideDish': 'DishController.hideDish',
+  'POST /showDish': 'DishController.showDish',
 };

@@ -1,0 +1,46 @@
+<div id="divKitchenDishPageAlert">  
+  
+</div><!--/row-->
+
+<div id="kitchenDishPage" class="row-fluid">
+  	<h1>Danh sách món</h1>
+
+	<div class="box span11">
+		<div class="box-content">
+			<table class="table">
+			  	<thead>
+				  	<tr>
+					  	<th>Món</th>
+					  	<th>Trạng thái</th>
+					  	<th>&nbsp;</th>
+				  	</tr>
+			  	</thead>   
+			  	<tbody id="kitchenDishOverview">
+	  		  		<% _.each(datas, function (item) { %>
+	  		  			<tr>
+	  		  				<td>
+	  		  					<%= item.name %>
+	  		  				</td>
+	  		  				<td id="itemStatus<%= item.id %>">
+	  		  					<% if(item.status == 'enable') { %>
+	  		  						Hiện
+	  		  					<% } else { %>
+	  		  						Ẩn
+	  		  					<% } %>	  		  					
+	  		  				</td>
+	  		  				<td id="itemAction<%= item.id %>">
+	  		  					<% if(item.status == 'enable') { %>
+	  		  						<button class="btn btn-large btn-danger" onclick="hideDish(<%= item.id %>)">Ẩn</button>
+	  		  					<% } else { %>
+	  		  						<button class="btn btn-large btn-success" onclick="showDish(<%= item.id %>)">Hiện</button>
+	  		  					<% } %>
+	  		  				</td>
+	  		  			</tr>
+	  		  		<% }) %>
+			  	</tbody>
+		  	</table>            
+		</div>
+	</div>
+	
+	
+</div>

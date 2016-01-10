@@ -10,7 +10,7 @@
 
 <!-- <div class="row-fluid"> -->
 <% _.each(dishes, function (dish) { %>
-	<div class="span3">
+	<div class="span3" <%if(dish.status=='disable') {%>style="display: none;"<%}%> id="item<%= dish.id %>">
 		<button onclick="addItem(<%= dish.id %>, '<%= dish.name %>')"><%= dish.name %></button>
 	</div>
 <% }) %>
