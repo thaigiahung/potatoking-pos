@@ -304,19 +304,23 @@
         <div id="sidebar-left" class="span1">
           <div class="nav-collapse sidebar-nav">
             <ul class="nav nav-tabs nav-stacked main-menu">
-              <li><a href="/devices"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Thiết Bị</span></a></li>
-              <li><a href="/ordered/overview"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Bàn đang mở</span></a></li>
-              <li><a href="/kitchen/overview"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Nhà bếp</span></a></li>
-              <li><a href="/"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Thực Đơn</span></a></li>
-              <li>
-                <a href="/ordered"><i class="fa-icon-hdd"></i>
-                  <span class="hidden-tablet">Thanh Toán
-                    <!-- <span class="menu-notification green" id="numOfItem">0</span> -->
-                  </span>
-                </a>
-              </li>
-
-              
+              <% if(deviceIp.type == 'guest') { %>
+                <li><a href="/"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Thực Đơn</span></a></li>
+                <li>
+                  <a href="/ordered"><i class="fa-icon-hdd"></i>
+                    <span class="hidden-tablet">Thanh Toán
+                      <!-- <span class="menu-notification green" id="numOfItem">0</span> -->
+                    </span>
+                  </a>
+                </li>
+              <% } else if (deviceIp.type == 'cashier') { %>
+                <li><a href="/devices"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Thiết Bị</span></a></li>
+                <li><a href="/ordered/overview"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Bàn đang mở</span></a></li>
+              <% } else if (deviceIp.type == 'chief-cook') { %>
+                <li><a href="/devices"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Thiết Bị</span></a></li>
+                <li><a href="/ordered/overview"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Bàn đang mở</span></a></li>
+                <li><a href="/kitchen/overview"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Nhà bếp</span></a></li>
+              <% } %>
             </ul>
           </div>
         </div>

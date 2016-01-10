@@ -509,78 +509,127 @@ module.exports = {
 
     DeviceIp.findOne({
       ip: ip
-    }).populate('device').exec(function (err, device) {
-      if(err || !device)
+    }).populate('device').exec(function (err, deviceIp) {
+      if(err || !deviceIp)
       {
-        return res.view('404');
+        return res.view('404', {layout: false});
       }
       else
       {
-        device = device.device;
+        if(deviceIp.type == 'guest')
+        {
+          device = deviceIp.device;
 
-        var query = "SELECT s.* FROM session s JOIN sessiondevice sd ON sd.session = s.id WHERE s.status = 'open' AND sd.device = " + device.id;
-        Session.query(query, function(err, session) {
-          if(err || !session || session.length == 0)
-          {
-            return res.view('ordered', {status: 0, session: session, ordered: []});
-          }
-          else
-          {
-            session = session[0];
-            SessionDetail.find({ 
-              where: { 
-                session: session.id,
-                status : ['ordered', 'removed', 'delivered']
-              },
-              sort: 'id DESC' 
-            }).populate('dish').exec(function (err, ordered) {
-              if(err || !ordered)
-              {
-                return res.view('ordered', {status: 0, session: session, ordered: []});
-              }
-              else
-              {
-                return res.view('ordered', {status: 1, session: session, ordered: ordered});
-              }
-            });
-          }
-        });
+          var query = "SELECT s.* FROM session s JOIN sessiondevice sd ON sd.session = s.id WHERE s.status = 'open' AND sd.device = " + device.id;
+          Session.query(query, function(err, session) {
+            if(err || !session || session.length == 0)
+            {
+              return res.view('ordered', {status: 0, session: session, ordered: [], deviceIp: deviceIp});
+            }
+            else
+            {
+              session = session[0];
+              SessionDetail.find({ 
+                where: { 
+                  session: session.id,
+                  status : ['ordered', 'removed', 'delivered']
+                },
+                sort: 'id DESC' 
+              }).populate('dish').exec(function (err, ordered) {
+                if(err || !ordered)
+                {
+                  return res.view('ordered', {status: 0, session: session, ordered: [], deviceIp: deviceIp});
+                }
+                else
+                {
+                  return res.view('ordered', {status: 1, session: session, ordered: ordered, deviceIp: deviceIp});
+                }
+              });
+            }
+          });
+        }
+        else
+        {
+          return res.view('404', {layout: false});
+        }
       }
     }); 
   },
 
   overview: function(req, res) {
-    Session.find({
-      status: 'open'
-    }).exec(function (err, sessions) {
-      if(err || !sessions)
+    var ip = req.ip;
+    ip = ip.substring(ip.lastIndexOf(":")+1, ip.length);
+
+    DeviceIp.findOne({
+      ip: ip
+    }).exec(function (err, deviceIp) {
+      if(err || !deviceIp)
       {
-        return res.view('overview', {status: 0, moment: moment, sessions: []});
+        return res.view('404', {layout: false});
       }
       else
       {
-        return res.view('overview', {status: 1, moment: moment, sessions: sessions});
+        if(deviceIp.type == 'cashier' || deviceIp.type == 'chief-cook')
+        {
+          Session.find({
+            status: 'open'
+          }).exec(function (err, sessions) {
+            if(err || !sessions)
+            {
+              return res.view('overview', {status: 0, moment: moment, sessions: [], deviceIp: deviceIp});
+            }
+            else
+            {
+              return res.view('overview', {status: 1, moment: moment, sessions: sessions, deviceIp: deviceIp});
+            }
+          });
+        }
+        else
+        {
+          return res.view('404', {layout: false});
+        }
       }
     });
   },
 
   kitchenOverview: function(req, res) {
-    /*var query = "SELECT DISTINCT(s.id), s.* 
-                FROM `sessiondetail` sd JOIN session s ON s.id = sd.session 
-                WHERE sd.status = 'ordered' AND s.status = 'open'";*/
-    SessionDetail.find({
-      where: { 
-        status: 'ordered'
-      },
-      sort: 'createdAt ASC'      
-    }).populate('dish').populate('session').exec(function (err, sessionDetails) {
-      if(err || !sessionDetails)
+    var ip = req.ip;
+    ip = ip.substring(ip.lastIndexOf(":")+1, ip.length);
+
+    DeviceIp.findOne({
+      ip: ip
+    }).exec(function (err, deviceIp) {
+      if(err || !deviceIp)
       {
-        return res.view('kitchen-overview', {status: 0, moment: moment, sessionDetails: []});
+        return res.view('404', {layout: false}, {layout: false});
       }
       else
       {
-        return res.view('kitchen-overview', {status: 1, moment: moment, sessionDetails: sessionDetails});
+        if(deviceIp.type == 'chief-cook')
+        {
+          /*var query = "SELECT DISTINCT(s.id), s.* 
+                      FROM `sessiondetail` sd JOIN session s ON s.id = sd.session 
+                      WHERE sd.status = 'ordered' AND s.status = 'open'";*/
+          SessionDetail.find({
+            where: { 
+              status: 'ordered'
+            },
+            sort: 'createdAt ASC'      
+          }).populate('dish').populate('session').exec(function (err, sessionDetails) {
+            if(err || !sessionDetails)
+            {
+              return res.view('kitchen-overview', {status: 0, moment: moment, sessionDetails: [], deviceIp: deviceIp});
+            }
+            else
+            {
+              return res.view('kitchen-overview', {status: 1, moment: moment, sessionDetails: sessionDetails, deviceIp: deviceIp});
+            }
+          });
+        }
+        else
+        {
+          return res.view('404', {layout: false});
+        }
       }
     });
   },

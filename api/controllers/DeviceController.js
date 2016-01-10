@@ -25,93 +25,114 @@ module.exports = {
   },
 
   listDevice: function(req, res) {
-    Device.find({
-      where: {
-        status: 'enable'
-      },
-      sort: 'table asc'
-    }).exec(function (err, devices) {
-      var opened = [];
-      if(err || !devices)
+    var ip = req.ip;
+    ip = ip.substring(ip.lastIndexOf(":")+1, ip.length);
+
+    DeviceIp.findOne({
+      ip: ip
+    }).exec(function (err, deviceIp) {
+      if(err || !deviceIp)
       {
-        return res.view('device-list',{status: 0, data: [], opened: opened});
+        return res.view('404', {layout: false});
       }
       else
       {
-        /*var newArrDevices = [];
-        async.forEachOfSeries(devices, function (device, index, callback) {
-          Session.findOne({
-            device: device.id,
-            status: 'open'
-          }).exec(function (err2, session) {
-            var isOpened;
-            if(err2 || !session)
+        if(deviceIp.type == 'cashier' || deviceIp.type == 'chief-cook')
+        {
+          Device.find({
+            where: {
+              status: 'enable'
+            },
+            sort: 'table asc'
+          }).exec(function (err, devices) {
+            var opened = [];
+            if(err || !devices)
             {
-              isOpened = false;
-              session = {};
+              return res.view('device-list',{status: 0, data: [], opened: opened, deviceIp: deviceIp});
             }
             else
             {
-              isOpened = true;
-              session = session;
-            }
-            device['isOpened'] = isOpened;
-            device['session'] = session;
-            newArrDevices.push(device);
-            
-            callback();
-          }); 
-        }, function done() {
-          return res.view('device-list', {status: 1, data: newArrDevices});
-        });*/
-        // return res.json(devices);
+              /*var newArrDevices = [];
+              async.forEachOfSeries(devices, function (device, index, callback) {
+                Session.findOne({
+                  device: device.id,
+                  status: 'open'
+                }).exec(function (err2, session) {
+                  var isOpened;
+                  if(err2 || !session)
+                  {
+                    isOpened = false;
+                    session = {};
+                  }
+                  else
+                  {
+                    isOpened = true;
+                    session = session;
+                  }
+                  device['isOpened'] = isOpened;
+                  device['session'] = session;
+                  newArrDevices.push(device);
+                  
+                  callback();
+                }); 
+              }, function done() {
+                return res.view('device-list', {status: 1, data: newArrDevices});
+              });*/
+              // return res.json(devices);
 
-        Session.find({
-          where: {
-            status: 'open'
-          }
-        }).exec(function (err, sessions) {
-          if(err || !sessions)
-          {
-            return res.view('device-list', {status: 1, data: devices, opened: opened});    
-          }
-          else
-          {
-            async.forEachOfSeries(sessions, function (session, index, callback) {
-              SessionDevice.find({
+              Session.find({
                 where: {
-                  session: session.id
-                },
-                sort: 'device'            
-              }).populate('device').exec(function (err2, sessionDevices) {
-                if(!err2 && sessionDevices && sessionDevices.length > 0)
+                  status: 'open'
+                }
+              }).exec(function (err, sessions) {
+                if(err || !sessions)
                 {
-                  var tables = [];
-                  async.forEachOfSeries(sessionDevices, function (sessionDevice, index2, callback2) {                    
-                    tables.push(sessionDevice.device.table);
-                    callback2();
-                  }, function done() {
-                    var openedTable = {
-                      session: session.id,
-                      tables: tables.join()
-                    }
-                    opened.push(openedTable);
-                    callback();
-                  });
+                  return res.view('device-list', {status: 1, data: devices, opened: opened, deviceIp: deviceIp});    
                 }
                 else
                 {
-                  callback(err);
-                }  
-              });              
-            }, function done() {
-              return res.view('device-list', {status: 1, data: devices, opened: opened});
-            });
-          }
-        });
-        
+                  async.forEachOfSeries(sessions, function (session, index, callback) {
+                    SessionDevice.find({
+                      where: {
+                        session: session.id
+                      },
+                      sort: 'device'            
+                    }).populate('device').exec(function (err2, sessionDevices) {
+                      if(!err2 && sessionDevices && sessionDevices.length > 0)
+                      {
+                        var tables = [];
+                        async.forEachOfSeries(sessionDevices, function (sessionDevice, index2, callback2) {                    
+                          tables.push(sessionDevice.device.table);
+                          callback2();
+                        }, function done() {
+                          var openedTable = {
+                            session: session.id,
+                            tables: tables.join()
+                          }
+                          opened.push(openedTable);
+                          callback();
+                        });
+                      }
+                      else
+                      {
+                        callback(err);
+                      }  
+                    });              
+                  }, function done() {
+                    return res.view('device-list', {status: 1, data: devices, opened: opened, deviceIp: deviceIp});
+                  });
+                }
+              });
+              
+            }
+          });
+        }
+        else
+        {
+          return res.view('404', {layout: false});
+        }
       }
-    });    
+    });
   },
 
   connect: function(req, res) {

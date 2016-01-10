@@ -10,6 +10,10 @@ module.exports = {
   attributes: {
   	device: {model: 'Device'},
   	ip: { type: 'string' },
+  	type: {
+  	  type: 'string',
+  	  enum: ['guest', 'cashier', 'chief-cook']
+  	}
   }
 };
 
