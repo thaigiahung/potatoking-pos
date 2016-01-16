@@ -15,7 +15,7 @@ module.exports = {
     }).populate('device').exec(function (err, deviceIp) {
       if(err || !deviceIp)
       {
-        return res.view('404', {layout: false});
+        return res.view('403', {layout: false});
       }
       else
       {
