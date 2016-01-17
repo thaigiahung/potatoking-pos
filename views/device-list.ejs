@@ -4,132 +4,120 @@
 
 <hr>
 
-<!-- <div class="row-fluid">
-  <div id="divActiveDevice" class="controls">
-    <% if(status == 1) { %> 
-      <% _.each(data, function (obj) { %>
-        <label class="checkbox inline">
-          <input type="checkbox" name="chkSelectTable" id="table<%= obj.table %>" value="<%= obj.id %>"> Bàn <%= obj.table %>
-        </label>
-      <% }) %>
-    <% } %>
-  </div>
-</div> -->
-
 <div class="row-fluid">
-  <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table7" value="<%= data[6].id %>" <% if(data[6].opening == true) { %> disabled <% } %>>       
-    <% if(data[6].connecting) { %>
-      <% if(data[6].opening) { %>
-        <img class="device-status-img" src="/img/device-status/yellow.png">
-      <% } else { %>
-        <img class="device-status-img" src="/img/device-status/green.png">
-      <% } %>
-    <% } else { %>
-      <img class="device-status-img" src="/img/device-status/black.png">
-    <% } %>
-    Bàn 7
-  </div>
+  <label class="{{ checkbox6 ? 'select-device' : '' }} span3 device-table  <% if(data[6].opening == true) { %> disabled-table <% } %>"  >
+        <input hidden type="checkbox" ng-model="checkbox6" name="chkSelectTable" id="table7" value="<%= data[6].id %>">       
+        <% if(data[6].connecting) { %>
+          <% if(data[6].opening) { %>
+            <img class="device-status-img" src="/img/device-status/yellow.png">
+          <% } else { %>
+            <img class="device-status-img" src="/img/device-status/green.png">
+          <% } %>
+        <% } else { %>
+          <img class="device-status-img" src="/img/device-status/black.png">
+        <% } %>
+        Bàn 7
+  </label>
 
-  <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table5" value="<%= data[4].id %>" <% if(data[4].opening == true) { %> disabled <% } %>> 
-    <% if(data[4].connecting) { %>
-      <% if(data[4].opening) { %>
-        <img class="device-status-img" src="/img/device-status/yellow.png">
+  <label class="{{ checkbox4 ? 'select-device' : '' }} span3 device-table <% if(data[4].opening == true) { %> disabled-table <% } %>">
+      <input hidden type="checkbox" ng-model="checkbox4" name="chkSelectTable" id="table5" value="<%= data[4].id %>"> 
+      <% if(data[4].connecting) { %>
+        <% if(data[4].opening) { %>
+          <img class="device-status-img" src="/img/device-status/yellow.png">
+        <% } else { %>
+          <img class="device-status-img" src="/img/device-status/green.png">
+        <% } %>
       <% } else { %>
-        <img class="device-status-img" src="/img/device-status/green.png">
+        <img class="device-status-img" src="/img/device-status/black.png">
       <% } %>
-    <% } else { %>
-      <img class="device-status-img" src="/img/device-status/black.png">
-    <% } %>
-    Bàn 5
-  </div>
+      Bàn 5
+  </label>
 
-  <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table3" value="<%= data[2].id %>" <% if(data[2].opening == true) { %> disabled <% } %>>
-    <% if(data[2].connecting) { %>
-      <% if(data[2].opening) { %>
-        <img class="device-status-img" src="/img/device-status/yellow.png">
+  <label class="{{ checkbox2 ? 'select-device' : '' }} span3 device-table <% if(data[2].opening == true) { %> disabled-table <% } %>">
+      <input hidden type="checkbox" ng-model="checkbox2" name="chkSelectTable" id="table3" value="<%= data[2].id %>">
+      <% if(data[2].connecting) { %>
+        <% if(data[2].opening) { %>
+          <img class="device-status-img" src="/img/device-status/yellow.png">
+        <% } else { %>
+          <img class="device-status-img" src="/img/device-status/green.png">
+        <% } %>
       <% } else { %>
-        <img class="device-status-img" src="/img/device-status/green.png">
+        <img class="device-status-img" src="/img/device-status/black.png">
       <% } %>
-    <% } else { %>
-      <img class="device-status-img" src="/img/device-status/black.png">
-    <% } %>
-    Bàn 3
-  </div>
+      Bàn 3
+  </label>
 
-  <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table1" value="<%= data[0].id %>" <% if(data[0].opening == 1) { %> disabled <% } %>>
-    <% if(data[0].connecting) { %>
-      <% if(data[0].opening) { %>
-        <img class="device-status-img" src="/img/device-status/yellow.png">
+  <label class="{{ checkbox0 ? 'select-device' : '' }} span3 device-table <% if(data[0].opening == true) { %> disabled-table <% } %>">
+      <input hidden type="checkbox" ng-model="checkbox0" name="chkSelectTable" id="table1" value="<%= data[0].id %>" >
+      <% if(data[0].connecting) { %>
+        <% if(data[0].opening) { %>
+          <img class="device-status-img" src="/img/device-status/yellow.png">
+        <% } else { %>
+          <img class="device-status-img" src="/img/device-status/green.png">
+        <% } %>
       <% } else { %>
-        <img class="device-status-img" src="/img/device-status/green.png">
+        <img class="device-status-img" src="/img/device-status/black.png">
       <% } %>
-    <% } else { %>
-      <img class="device-status-img" src="/img/device-status/black.png">
-    <% } %>
-    Bàn 1
-  </div>
+      Bàn 1
+  </label>
 </div>
 
 <div class="row-fluid">
-  <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table8" value="<%= data[7].id %>" <% if(data[7].opening == true) { %> disabled <% } %>> 
-    <% if(data[7].connecting) { %>
-      <% if(data[7].opening) { %>
-        <img class="device-status-img" src="/img/device-status/yellow.png">
+  <label class="{{ checkbox7 ? 'select-device' : '' }} span3 device-table <% if(data[7].opening == true) { %> disabled-table <% } %>">
+      <input hidden type="checkbox" ng-model="checkbox7" name="chkSelectTable" id="table8" value="<%= data[7].id %>" > 
+      <% if(data[7].connecting) { %>
+        <% if(data[7].opening) { %>
+          <img class="device-status-img" src="/img/device-status/yellow.png">
+        <% } else { %>
+          <img class="device-status-img" src="/img/device-status/green.png">
+        <% } %>
       <% } else { %>
-        <img class="device-status-img" src="/img/device-status/green.png">
+        <img class="device-status-img" src="/img/device-status/black.png">
       <% } %>
-    <% } else { %>
-      <img class="device-status-img" src="/img/device-status/black.png">
-    <% } %>
-    Bàn 8
-  </div>
+      Bàn 8
+  </label>
 
-  <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table6" value="<%= data[5].id %>" <% if(data[5].opening == true) { %> disabled <% } %>> 
-    <% if(data[5].connecting) { %>
-      <% if(data[5].opening) { %>
-        <img class="device-status-img" src="/img/device-status/yellow.png">
+  <label class="{{ checkbox5 ? 'select-device' : '' }} span3 device-table <% if(data[5].opening == true) { %> disabled-table <% } %>">
+      <input hidden type="checkbox" ng-model="checkbox5" name="chkSelectTable" id="table6" value="<%= data[5].id %>" > 
+      <% if(data[5].connecting) { %>
+        <% if(data[5].opening) { %>
+          <img class="device-status-img" src="/img/device-status/yellow.png">
+        <% } else { %>
+          <img class="device-status-img" src="/img/device-status/green.png">
+        <% } %>
       <% } else { %>
-        <img class="device-status-img" src="/img/device-status/green.png">
+        <img class="device-status-img" src="/img/device-status/black.png">
       <% } %>
-    <% } else { %>
-      <img class="device-status-img" src="/img/device-status/black.png">
-    <% } %>
-    Bàn 6
-  </div>
+      Bàn 6
+  </label>
 
-  <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table4" value="<%= data[3].id %>" <% if(data[3].opening == true) { %> disabled <% } %>> 
-    <% if(data[3].connecting) { %>
-      <% if(data[3].opening) { %>
-        <img class="device-status-img" src="/img/device-status/yellow.png">
+  <label class="{{ checkbox3 ? 'select-device' : '' }} span3 device-table <% if(data[3].opening == true) { %> disabled-table <% } %>">
+      <input hidden type="checkbox" ng-model="checkbox3" name="chkSelectTable" id="table4" value="<%= data[3].id %>"> 
+      <% if(data[3].connecting) { %>
+        <% if(data[3].opening) { %>
+          <img class="device-status-img" src="/img/device-status/yellow.png">
+        <% } else { %>
+          <img class="device-status-img" src="/img/device-status/green.png">
+        <% } %>
       <% } else { %>
-        <img class="device-status-img" src="/img/device-status/green.png">
+        <img class="device-status-img" src="/img/device-status/black.png">
       <% } %>
-    <% } else { %>
-      <img class="device-status-img" src="/img/device-status/black.png">
-    <% } %>
-    Bàn 4
-  </div>
+      Bàn 4
+  </label>
 
-  <div class="span3">
-    <input type="checkbox" name="chkSelectTable" id="table2" value="<%= data[1].id %>" <% if(data[1].opening == 1) { %> disabled <% } %>> 
-    <% if(data[1].connecting) { %>
-      <% if(data[1].opening) { %>
-        <img class="device-status-img" src="/img/device-status/yellow.png">
+  <label class="{{ checkbox1 ? 'select-device' : '' }} span3 device-table <% if(data[1].opening == true) { %> disabled-table <% } %>">
+      <input hidden type="checkbox" ng-model="checkbox1" name="chkSelectTable" id="table2" value="<%= data[1].id %>"> 
+      <% if(data[1].connecting) { %>
+        <% if(data[1].opening) { %>
+          <img class="device-status-img" src="/img/device-status/yellow.png">
+        <% } else { %>
+          <img class="device-status-img" src="/img/device-status/green.png">
+        <% } %>
       <% } else { %>
-        <img class="device-status-img" src="/img/device-status/green.png">
+        <img class="device-status-img" src="/img/device-status/black.png">
       <% } %>
-    <% } else { %>
-      <img class="device-status-img" src="/img/device-status/black.png">
-    <% } %>
-    Bàn 2
-  </div>
+      Bàn 2
+  </label>
 </div>
 
 <div class="row-fluid device-list-footer">

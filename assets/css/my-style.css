@@ -1,0 +1,43 @@
+.device-table {
+	height:50px;
+	border: 1px solid black;
+	border-radius: 5px;    
+	text-align: center;
+    line-height: 7vh;
+    font-weight: 900;
+    font-size: 30px;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px #888888;
+}
+
+.device-table:active {
+	-webkit-transform: translateX(2px)  translateY(2px);
+	box-shadow:none;
+}
+
+.checker {
+	width: 20px;
+	height:20px;
+}
+
+.device-status-img{
+	width: 20px;
+	height:20px;
+    margin-top: -4px;
+}
+
+.device-table>input {    
+    margin-top: -3px;
+}
+
+.disabled-table {
+	opacity:0.5;
+	background-color: #DDD;
+	pointer-events:none;
+}
+
+.select-device {
+	border-color: green;
+	color: green;
+	background-color: rgba(0,150,50,0.25);
+}
