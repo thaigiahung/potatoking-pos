@@ -3,16 +3,29 @@
 	border: 1px solid black;
 	border-radius: 5px;    
 	text-align: center;
-    line-height: 5vh;
+    line-height: 4.5vh;
     font-weight: 900;
     font-size: 30px;
     font-weight: bold;
     box-shadow: 2px 2px 5px #888888;
+    background-color: #333;
+    color:white;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .device-table:active {
 	-webkit-transform: translateX(2px)  translateY(2px);
+	-moz-transform: translateX(2px)  translateY(2px);
+	-o-transform: translateX(2px)  translateY(2px);
+	-ms-transform: translateX(2px)  translateY(2px);
 	box-shadow:none;
+    opacity:0.9;
 }
 
 .checker {
@@ -32,12 +45,24 @@
 
 .disabled-table {
 	opacity:0.5;
-	background-color: #DDD;
+    background-color: #333;
 	pointer-events:none;
+}
+
+.label-list {
+	height: 40px;
+    border: 1px solid black;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 3.75vh;
+    background-color: #333;
+    color:white;
+    font-size: 25px;
+    font-weight: bold;
 }
 
 .select-device {
 	border-color: green;
-	color: green;
-	background-color: rgba(0,150,50,0.25);
+	color: rgb(255,243,250);
+	background-color: rgba(0,120,50,0.9);
 }
