@@ -8,16 +8,16 @@
   <div class="modal-body">
     <div class="control-group">
       <div class="controls">
-        <label class="label-list {{ mergeTable.selectedDevice == device.deviceIndex ? 'select-device' : '' }}"
-        ng-repeat="device in mergeTable.devices | filter:{isSelected: true}"
-        ng-init="mergeTable.selectedDevice = mergeTable.firstSelection()">
-          <input
-          hidden
-          ng-checked="mergeTable.isSelected(device.deviceIndex)"
-          type="radio"  name="rdoMergeTable" 
-          value="{{device.deviceIndex}}"
-          ng-click="mergeTable.changeDevice(device.deviceIndex)">Bàn {{device.deviceIndex + 1}}
-        </label>
+          <label class="label-list {{ mergeTable.selectedDevice == device.deviceIndex ? 'select-device' : '' }}"
+          ng-repeat="device in mergeTable.devices | filter:{isSelected: true}"
+          ng-init="mergeTable.selectedDevice = mergeTable.firstSelection()">
+            <input
+            hidden
+            ng-checked="mergeTable.isSelected(device.deviceIndex)"
+            type="radio"  name="rdoMergeTable" 
+            value="{{device.deviceIndex}}"
+            ng-click="mergeTable.changeDevice(device.deviceIndex)">Bàn {{device.deviceIndex + 1}}
+          </label>
       </div>
     </div>
   </div>

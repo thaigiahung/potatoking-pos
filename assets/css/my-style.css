@@ -3,7 +3,7 @@
 	border: 1px solid black;
 	border-radius: 5px;    
 	text-align: center;
-    line-height: 45px;
+    /*line-height: 45px;*/
     font-weight: 900;
     font-size: 30px;
     font-weight: bold;
@@ -17,6 +17,15 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.text-align-center{
+    display:table!important;
+}
+
+.text-align-center>.child-container {
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .device-table:active {
@@ -53,8 +62,8 @@
 	height: 40px;
     border: 1px solid black;
     border-radius: 5px;
+    line-height:45px;
     text-align: center;
-    line-height: 35px;
     background-color: #333;
     color:white;
     font-size: 25px;
