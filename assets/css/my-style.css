@@ -3,7 +3,7 @@
 	border: 1px solid black;
 	border-radius: 5px;    
 	text-align: center;
-    line-height: 4.5vh;
+    line-height: 45px;
     font-weight: 900;
     font-size: 30px;
     font-weight: bold;
@@ -54,7 +54,7 @@
     border: 1px solid black;
     border-radius: 5px;
     text-align: center;
-    line-height: 3.75vh;
+    line-height: 35px;
     background-color: #333;
     color:white;
     font-size: 25px;
