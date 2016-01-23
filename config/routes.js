@@ -46,7 +46,8 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
   //VIEW
-  'GET /': 'DishController.view',  
+  'GET /': 'DishController.index',
+  'GET /menu': 'DishController.viewMenu',
   'GET /devices': 'DeviceController.listDevice',
   'GET /ordered': 'SessionController.listOrdered',
   'GET /ordered/overview': 'SessionController.overview',

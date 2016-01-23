@@ -6,7 +6,40 @@
  */
 
 module.exports = {
-	view: function(req, res) {
+  index: function(req, res) {
+    var ip = req.ip;
+    ip = ip.substring(ip.lastIndexOf(":")+1, ip.length);
+    
+    DeviceIp.findOne({
+      ip: ip
+    }).exec(function (err, deviceIp) {
+      if(err || !deviceIp)
+      {
+        return res.view('404', {layout: false});
+      }
+      else
+      {
+        if(deviceIp.type == 'guest')
+        {
+          res.redirect('/menu');
+        }
+        else if(deviceIp.type == 'cashier')
+        {
+          res.redirect('/devices');
+        }
+        else if(deviceIp.type == 'chief-cook')
+        {
+          res.redirect('/kitchen/overview');
+        }
+        else
+        {
+          return res.view('404', {layout: false});
+        }
+      }
+    });
+  },
+
+	viewMenu: function(req, res) {
     var ip = req.ip;
     ip = ip.substring(ip.lastIndexOf(":")+1, ip.length);
     
