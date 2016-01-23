@@ -10,6 +10,7 @@
 			<table class="table">
 			  	<thead>
 				  	<tr>
+				  		<th>Mã số</th>
 					  	<th>Bàn</th>
 					  	<th>Món</th>
 					  	<th>Giờ đặt món</th>
@@ -19,6 +20,9 @@
 			  	<tbody id="kitchenOverview">
 	  		  		<% _.each(sessionDetails, function (item) { %>
 	  		  			<tr id="sessionDetail<%= item.id %>">
+	  		  				<td>
+	  		  					<%= item.id %>
+	  		  				</td>
 	  		  				<td>
 	  		  					<%= item.session.table %>
 	  		  				</td>

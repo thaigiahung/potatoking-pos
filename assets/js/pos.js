@@ -203,6 +203,9 @@ io.socket.on('connect', function () {
           $('#kitchenOverview').append(
             '<tr id="sessionDetail'+item.id+'">' +
               '<td>' +
+                item.id +
+              '</td>' +
+              '<td>' +
                 item.session.table +
               '</td>' +
               '<td>' +
