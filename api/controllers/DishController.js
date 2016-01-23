@@ -19,7 +19,7 @@ module.exports = {
       }
       else
       {
-        if(deviceIp.type == 'guest' || deviceIp.type == 'chief-cook')
+        if(deviceIp.type == 'guest')
         {
           device = deviceIp.device;
 
