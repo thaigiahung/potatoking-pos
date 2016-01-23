@@ -23,8 +23,10 @@
 	  		  				<td id="tdSessionDetail<%= item.id %>">
 	  		  					<% if(item.status == 'added') { %>
 									Đã chọn
+								<% } else if(item.status == 'cancelled') { %>
+									Đã xóa
 	  		  					<% } else if(item.status == 'ordered') { %>
-									Đã đặt
+									Đã đặt								
 								<% } else if(item.status == 'removed') { %>
 									Đã hủy
 								<% } else if(item.status == 'delivered') { %>

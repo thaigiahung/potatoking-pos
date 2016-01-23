@@ -321,7 +321,7 @@ module.exports = {
       }
       else
       {
-        sessionDetail.status = 'removed';
+        sessionDetail.status = 'cancelled';
         sessionDetail.save(function(err, saved){
           if(err)
           {
@@ -532,7 +532,7 @@ module.exports = {
               SessionDetail.find({ 
                 where: { 
                   session: session.id,
-                  status : ['ordered', 'removed', 'delivered']
+                  status : ['ordered', 'cancelled', 'removed', 'delivered']
                 },
                 sort: 'id DESC' 
               }).populate('dish').exec(function (err, ordered) {
