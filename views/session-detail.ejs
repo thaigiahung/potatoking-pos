@@ -36,11 +36,13 @@
 			  	</tbody>
 		  	</table>            
 		</div>
-		<div class="row-fluid device-list-footer">
-		  	<div class="device-list-footer-right">
-				<button class="btn btn-large btn-success" data-toggle="modal" data-target="#modalCheckout">Thanh toán</button>
-		  	</div>
-		</div>
+		<% if(deviceIp.type == "cashier") { %>
+			<div class="row-fluid device-list-footer">
+			  	<div class="device-list-footer-right">
+					<button class="btn btn-large btn-success" data-toggle="modal" data-target="#modalCheckout">Thanh toán</button>
+			  	</div>
+			</div>
+		<% } %>
 	</div>
 </div>
 
