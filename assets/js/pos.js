@@ -138,10 +138,9 @@ io.socket.on('connect', function () {
           var change = $("#change").val();
           if(change < 0)
           {
-            $("#modalCheckoutBody").prepend('<div class="alert alert-error">' +
-                                            '<button type="button" class="close" data-dismiss="alert">×</button>' +
-                                            'Vui lòng kiểm tra lại số tiền!' +
-                                          '</div>');
+            $("#modalCheckoutBodyAlert").prepend('<div class="alert alert-error">' +
+                                                  'Vui lòng kiểm tra lại số tiền!' +
+                                                '</div>');
           }
           else
           {
@@ -152,9 +151,23 @@ io.socket.on('connect', function () {
             }
 
             io.socket.post('/finalCheckout', data, function (result) {
-              $("#modalCheckoutResultBody").text(result.message);
-              $('#modalCheckoutResult').modal('show');
-              $('#modalCheckout').modal('hide');
+              if(result.status == 1)
+              {
+                $("#modalCheckoutBodyAlert").html('<div class="alert alert-success">' + 
+                                                  result.message +
+                                                '</div>');
+
+                $("#receive").prop('disabled', true);
+
+                //Clear modal footer & add button OK
+                $("#modalCheckoutFooter").html('<a href="/ordered/overview" class="btn btn-default">Ok</a>');
+              }
+              else
+              {
+                $("#modalCheckoutBodyAlert").append('<div class="alert alert-error">' +
+                                                  result.message +
+                                                '</div>');
+              }
             });
           }          
         });
@@ -581,7 +594,7 @@ function checkout (sessionId)
     {
       $("#divOrderedPageAlert").prepend('<div class="alert alert-success">' +
                                       '<button type="button" class="close" data-dismiss="alert">×</button>' + result.message +
-                                      '</div>')
+                                      '</div>');
     }
     else
     {

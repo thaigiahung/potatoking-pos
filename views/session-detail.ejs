@@ -45,53 +45,38 @@
 </div>
 
 <!-- Model Checkout -->
-<div class="modal hide fade" id="modalCheckout">
+<div class="modal hide fade" id="modalCheckout" data-backdrop="static" data-keyboard="false">
 	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal">×</button>
+		<!-- <button type="button" class="close" data-dismiss="modal">×</button> -->
 		<h3>Thanh toán</h3>
 	</div>
 	<div class="modal-body" id="modalCheckoutBody">
+		<div id="modalCheckoutBodyAlert"></div>
 		<table>
 			<tr>
 				<td>Tổng tiền</td>
 				<td>
 					<input type="hidden" id="hdSessionId" value="<%= session.id %>">
-					<input type="text" id="total" value="<%= session.total %>" readonly>
+					<input type="number" id="total" value="<%= session.total %>" readonly>
 				</td>
 			</tr>
 			<tr>
 				<td>Nhận</td>
 				<td>
-					<input type="text" id="receive" autofocus>
+					<input type="number" id="receive" autofocus>
 				</td>
 			</tr>
 			<tr>
 				<td>Thối</td>
 				<td>
-					<input type="text" id="change" readonly>
+					<input type="number" id="change" readonly>
 				</td>
 			</tr>
 		</table>
 	</div>
-	<div class="modal-footer">
+	<div class="modal-footer" id="modalCheckoutFooter">
 		<button id="btnCheckout" class="btn btn-success">Thanh toán</button>
 		<button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
 	</div>
 </div>
 <!-- End - Model Checkout -->
-
-
-<!-- Model Checkout Result -->
-<div class="modal hide fade" id="modalCheckoutResult">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h3>Thanh toán</h3>
-	</div>
-	<div class="modal-body" id="modalCheckoutResultBody">
-		
-	</div>
-	<div class="modal-footer">
-		<a href="/ordered/overview" class="btn btn-default">Ok</a>
-	</div>
-</div>
-<!-- End - Model Checkout Result -->
