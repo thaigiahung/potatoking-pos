@@ -702,6 +702,45 @@ function unblockTable (table) {
   });
 };
 
+function mergeAndOpenTable (argument) 
+{
+  console.log("A")
+  console.log($("input:checkbox[name=chkSelectTable]:checked"))
+  var arrSelectedTable = [];
+  $("input:checkbox[name=chkSelectTable]:checked").each(function(){
+      arrSelectedTable.push($(this).val());
+  });
+
+  var selectedMergeTable = $('input[name=rdoMergeTable]:checked').val();
+  io.socket.post('/table/openAndOpen', {
+                                        arrSelectedTable: JSON.stringify(arrSelectedTable), 
+                                        selectedMergeTable: selectedMergeTable
+  }, function (data) {
+    if(data.status == 1) //Success
+    {
+      //Uncheck & disable all checkbox
+      $("input:checkbox[name=chkSelectTable]:checked").each(function(){
+        $(this).prop('checked', false);
+        $(this).prop('disabled', true);
+        $.uniform.update();
+      });
+      
+
+      //TODO: update style      
+      $("#divDeviceListAlert").prepend('<div class="alert alert-success">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
+                                      '</div>')
+    }
+    else //Fail
+    {
+      $("#divDeviceListAlert").prepend('<div class="alert alert-error">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
+                                      '</div>')
+    }
+    $('#mergeTableModal').modal('hide');
+  });
+}
+
 function reload () 
 {
   location.reload();
@@ -741,42 +780,6 @@ $("#btnSubscribe").click(function (event) {
 
   io.socket.post('/broadcast', data, function (data) {
     console.log(data)
-  });
-});
-
-$("#btnMergeAndOpenTable").click(function (event) {
-  var arrSelectedTable = [];
-  $("input:checkbox[name=chkSelectTable]:checked").each(function(){
-      arrSelectedTable.push($(this).val());
-  });
-
-  var selectedMergeTable = $('input[name=rdoMergeTable]:checked').val();
-  io.socket.post('/table/openAndOpen', {
-                                        arrSelectedTable: JSON.stringify(arrSelectedTable), 
-                                        selectedMergeTable: selectedMergeTable
-  }, function (data) {
-    if(data.status == 1) //Success
-    {
-      //Uncheck & disable all checkbox
-      $("input:checkbox[name=chkSelectTable]:checked").each(function(){
-        $(this).prop('checked', false);
-        $(this).prop('disabled', true);
-        $.uniform.update();
-      });
-      
-
-      //TODO: update style      
-      $("#divDeviceListAlert").prepend('<div class="alert alert-success">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
-                                      '</div>')
-    }
-    else //Fail
-    {
-      $("#divDeviceListAlert").prepend('<div class="alert alert-error">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
-                                      '</div>')
-    }
-    $('#mergeTableModal').modal('hide');
   });
 });
 
