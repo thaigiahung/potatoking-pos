@@ -1,0 +1,3 @@
+exports.vn = {
+    show: 'Hiện'
+}

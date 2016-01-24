@@ -197,8 +197,8 @@
             <% _.each(opened, function (obj) { %>
               <div>
                 <label class="label-list {{ closeTableCheckbox<%= obj.session %> ? 'select-device' : ''}}">
-                  <input type="radio" name="rdoOpenedTable" value="<%= obj.session %>"
-                  ng-model="closeTableCheckbox<%= obj.session %>"> Bàn <%= obj.tables %>
+                  <input hidden type="radio" name="rdoOpenedTable" value="<%= obj.session %>"
+                  ng-model="closeTableCheckbox<%= obj.session %>"> Bàn <%= obj.session %>
                 </label>              
               </div>
               

@@ -1,6 +1,7 @@
 (function() {
 	var app = angular.module('king', []);
 	var devicesViewPath = '/templates/devicesView/';
+	var dishesViewPath = '/templates/dishesView';
 
 	var devices = [
 		{ deviceIndex: 0, isSelected: false},
@@ -12,6 +13,7 @@
 		{ deviceIndex: 6, isSelected: false},
 		{ deviceIndex: 7, isSelected: false}
 	];
+
 
 	app.controller('allDevicesController', function(){
 		this.devices = devices;
@@ -62,6 +64,14 @@
 			controllerAs: 'mergeTable'
 		};
 	});
+
+	app.controller('dishManamentController', function() {
+		
+	});
+
+	var isInDishesManagement = function(view) {
+		return view == 'dishesManage';
+	};
 
 	var countSelection = function() {
 		var number = 0;

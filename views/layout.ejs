@@ -278,8 +278,8 @@
               </li>
               <!-- start: User Dropdown -->
               <li class="dropdown">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                  <i class="halflings-icon white user"></i> Łukasz Holeczek
+                <a class="btn dropdown-toggle userName" data-toggle="dropdown" href="#">
+                  <i class="halflings-icon white user"></i><%= deviceIp.type %> | <%= deviceIp.device.table %>
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -305,6 +305,7 @@
         <div id="sidebar-left" class="span1">
           <div class="nav-collapse sidebar-nav">
             <ul class="nav nav-tabs nav-stacked main-menu">
+              <% if(deviceIp !== undefined) { %>
               <% if(deviceIp.type == 'guest') { %>
                 <li><a href="/"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Thực Đơn</span></a></li>
                 <li>
@@ -322,7 +323,8 @@
                 <li><a href="/ordered/overview"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Bàn đang mở</span></a></li>
                 <li><a href="/kitchen/overview"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Nhà bếp</span></a></li>
                 <li><a href="/kitchen/dish"><i class="fa-icon-sitemap"></i><span class="hidden-tablet"> Món ăn</span></a></li>
-              <% } %>
+                <li><a href="/dish/manage"><i class="fa-icon-sitemap"></i><span class="hidden-tablet">Quản lý menu</span></a></li>
+              <% } } %>
             </ul>
           </div>
         </div>
@@ -608,6 +610,8 @@
     <script src="/js/pos.js"></script>
     <script src="/js/angular/angular.min.js"></script>
     <script src="/js/angular-modules/king.js"></script>
+    <script src="/js/angular-modules/dishManagement.js"></script>
+    
     <!-- end: JavaScript-->
 
   </body>
