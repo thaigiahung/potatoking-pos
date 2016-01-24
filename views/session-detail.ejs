@@ -39,7 +39,7 @@
 		<% if(deviceIp.type == "cashier") { %>
 			<div class="row-fluid device-list-footer">
 			  	<div class="device-list-footer-right">
-					<button class="btn btn-large btn-success" data-toggle="modal" data-target="#modalCheckout">Thanh toán</button>
+					<button onclick="blockTable(<%= session.table %>)" class="btn btn-large btn-success" data-toggle="modal" data-target="#modalCheckout">Thanh toán</button>
 			  	</div>
 			</div>
 		<% } %>
@@ -78,7 +78,7 @@
 	</div>
 	<div class="modal-footer" id="modalCheckoutFooter">
 		<button id="btnCheckout" class="btn btn-success">Thanh toán</button>
-		<button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+		<button onclick="unblockTable(<%= session.table %>)" type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
 	</div>
 </div>
 <!-- End - Model Checkout -->

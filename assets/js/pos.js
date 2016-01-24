@@ -355,8 +355,18 @@ io.socket.on('connect', function () {
 
       //Listen for event show dish
       io.socket.on('showDish', function (message) {
-      console.log("show")    
         $("#item"+message.dishId).show();
+      });
+
+      //Listen for event block table
+      io.socket.on('blockTable', function (message) {
+        $("#modalBlockTableBodyAlert"+message.msg);
+        $('#modalBlockTable').modal('show');
+      });
+
+      //Listen for event unblock table
+      io.socket.on('unblockTable', function (message) {
+        $('#modalBlockTable').modal('hide');
       });
     }
 
@@ -488,6 +498,17 @@ io.socket.on('connect', function () {
         });
 
         $("#tdSessionDetail"+result.sessionDetailId).text(msg.message);
+      });
+
+      //Listen for event block table
+      io.socket.on('blockTable', function (message) {
+        $("#modalBlockTableBodyAlert").text(message.msg);
+        $('#modalBlockTable').modal('show');
+      });
+
+      //Listen for event unblock table
+      io.socket.on('unblockTable', function (message) {
+        $('#modalBlockTable').modal('hide');
       });
     }
   });
@@ -655,6 +676,28 @@ function showDish (dishId) {
                                       result.message +
                                     '</div>');
     }
+  });
+};
+
+//Block Table
+function blockTable (table) {
+  var data = {
+    table: table
+  }
+
+  io.socket.post('/blockTable', data, function (result) {
+    //Do nothing because backend's broadcasted to all table
+  });
+};
+
+//Unblock Table
+function unblockTable (table) {
+  var data = {
+    table: table
+  }
+
+  io.socket.post('/unblockTable', data, function (result) {
+    //Do nothing because backend's broadcasted to all table
   });
 };
 

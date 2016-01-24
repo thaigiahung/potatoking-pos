@@ -73,4 +73,6 @@ module.exports.routes = {
   'POST /finalCheckout': 'SessionController.finalCheckout',
   'POST /hideDish': 'DishController.hideDish',
   'POST /showDish': 'DishController.showDish',
+  'POST /blockTable': 'SessionController.blockTable',
+  'POST /unblockTable': 'SessionController.unblockTable',
 };

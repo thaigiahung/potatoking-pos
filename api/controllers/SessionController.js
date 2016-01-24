@@ -732,5 +732,15 @@ module.exports = {
       }
     });
   },
+
+  blockTable: function(req, res) {
+    var table = req.body.table;
+    sails.sockets.broadcast('table'+table, 'blockTable', { msg: "Bàn của quý khách đang được thanh toán!" });
+  },
+
+  unblockTable: function(req, res) {
+    var table = req.body.table;
+    sails.sockets.broadcast('table'+table, 'unblockTable', { msg: "Bàn của quý khách đã được mở lại!" });
+  },
 };
 
