@@ -54,6 +54,7 @@ module.exports.routes = {
   'GET /ordered/detail/:id': 'SessionDetailController.detail',
   'GET /kitchen/overview': 'SessionController.kitchenOverview',
   'GET /kitchen/dish': 'DishController.kitchenDish',
+  'GET /dish/manage' : 'DishController.manage',
 
   //API
   'GET /subscribe/:roomName': 'DeviceController.subscribe',

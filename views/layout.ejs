@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="king">
 <head>
 
   <!-- start: Meta -->
@@ -17,6 +17,7 @@
   <!-- start: CSS -->
   <link href="/css/bootstrap.min.css" rel="stylesheet">
   <link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link href="/css/my-style.css" rel="stylesheet">
   <link href="/css/style.min.css" rel="stylesheet">
   <link href="/css/style-responsive.min.css" rel="stylesheet">
   <link href="/css/retina.css" rel="stylesheet">
@@ -277,8 +278,11 @@
               </li>
               <!-- start: User Dropdown -->
               <li class="dropdown">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                  <i class="halflings-icon white user"></i> Łukasz Holeczek
+                <a class="btn dropdown-toggle userName" data-toggle="dropdown" href="#">
+                  <i class="halflings-icon white user"></i>
+                  <% if(typeof deviceIp !== 'undefined') { %>
+                    <%= deviceIp.type %> | <%= deviceIp.device.table %>
+                  <% } %>
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -536,13 +540,6 @@
 
       <div class="clearfix"></div>
 
-      <footer>
-        <p>
-          <span style="text-align:left;float:left">&copy; 2013 <a href="http://bootstrapmaster.com" alt="Bootstrap Themes">creativeLabs</a></span>
-          <span class="hidden-phone" style="text-align:right;float:right">Powered by: <a href="http://admintemplates.co" alt="Bootstrap Admin Templates">ACME Dashboard</a></span>
-        </p>
-      </footer>
-
     </div><!--/.fluid-container-->
 
     <!-- Modal Block Table -->
@@ -626,6 +623,10 @@
     <script src="/js/dependencies/sails.io.js"></script>
     <script src="/js/moment.js"></script>
     <script src="/js/pos.js"></script>
+    <script src="/js/angular/angular.min.js"></script>
+    <script src="/js/angular-modules/king.js"></script>
+    <script src="/js/angular-modules/dishManagement.js"></script>
+    
     <!-- end: JavaScript-->
 
   </body>

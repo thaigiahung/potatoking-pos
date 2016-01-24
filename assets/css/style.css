@@ -3103,3 +3103,8 @@ ul.progress-bars li .percent {
   right: 0px;
   font-weight: bold;
 }
+
+.device-table {
+  background-color:red;
+  border: 1px solid black;
+}

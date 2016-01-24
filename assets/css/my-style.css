@@ -1,0 +1,109 @@
+.device-table {
+	height:50px;
+	border: 1px solid black;
+	border-radius: 5px;    
+	text-align: center;
+    /*line-height: 45px;*/
+    font-weight: 900;
+    font-size: 30px;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px #888888;
+    background-color: #333;
+    color:white;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.text-align-center{
+    display:table!important;
+}
+
+.text-align-center>.child-container {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.device-table:active {
+	-webkit-transform: translateX(2px)  translateY(2px);
+	-moz-transform: translateX(2px)  translateY(2px);
+	-o-transform: translateX(2px)  translateY(2px);
+	-ms-transform: translateX(2px)  translateY(2px);
+	box-shadow:none;
+    opacity:0.9;
+}
+
+.checker {
+	width: 20px;
+	height:20px;
+}
+
+.device-status-img{
+	width: 20px;
+	height:20px;
+    margin-top: -4px;
+}
+
+.device-table>input {    
+    margin-top: -3px;
+}
+
+.disabled-table {
+	opacity:0.5;
+    background-color: #333;
+	pointer-events:none;
+}
+
+.label-list {
+	height: 40px;
+    border: 1px solid black;
+    border-radius: 5px;
+    line-height:45px;
+    text-align: center;
+    background-color: #333;
+    color:white;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.select-device {
+	border-color: green;
+	color: rgb(255,243,250);
+	background-color: rgba(0,120,50,0.9);
+}
+
+.open-table:hover,
+.close-table:hover {
+    text-decoration: none;
+    color:white;
+}
+
+.open-table,
+.close-table { 
+    /*height:5px;*/
+    padding:5px;
+    border-radius: 5px;    
+    text-align: center;
+    font-size: 20px;
+    box-shadow: 2px 2px 5px #888888;
+
+    color: white;
+}
+
+.open-table {
+    border-color: green;
+    background-color: rgba(0,120,50,0.9);
+}
+
+.close-table {
+    border-color: red;
+    background-color: rgba(255,120,50,0.9);
+}
+
+.userName {
+    text-transform: uppercase;
+}

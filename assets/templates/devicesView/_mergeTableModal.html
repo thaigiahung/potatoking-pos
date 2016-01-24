@@ -1,0 +1,29 @@
+
+<!-- Model Merge Table -->
+<div class="modal hide fade" id="mergeTableModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Vui lòng chọn bàn để ghép</h3>
+  </div>
+  <div class="modal-body">
+    <div class="control-group">
+      <div class="controls">
+          <label class="label-list {{ mergeTable.selectedDevice == device.deviceIndex ? 'select-device' : '' }}"
+          ng-repeat="device in mergeTable.devices | filter:{isSelected: true}"
+          ng-init="mergeTable.selectedDevice = mergeTable.firstSelection()">
+            <input
+            hidden
+            ng-checked="mergeTable.isSelected(device.deviceIndex)"
+            type="radio"  name="rdoMergeTable" 
+            value="{{device.deviceIndex}}"
+            ng-click="mergeTable.changeDevice(device.deviceIndex)">Bàn {{device.deviceIndex + 1}}
+          </label>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button id="btnMergeAndOpenTable" class="btn btn-success" data-toggle="modal">Ghép & Mở bàn</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+  </div>
+</div>
+<!-- End - Model Merge Table -->
