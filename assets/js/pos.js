@@ -510,6 +510,13 @@ io.socket.on('connect', function () {
       io.socket.on('unblockTable', function (message) {
         $('#modalBlockTable').modal('hide');
       });
+
+      //Listen for event checkout
+      io.socket.on('checkout', function (message) {
+        $("#divOrderedPageAlert").prepend('<div class="alert alert-success">' +
+                                        '<button type="button" class="close" data-dismiss="alert">×</button>' + message.msg +
+                                        '</div>');
+      });
     }
   });
 });
@@ -614,13 +621,7 @@ function checkout (sessionId)
   }
 
   io.socket.post('/checkout', data, function (result) {
-    if(result.status == 1)
-    {
-      $("#divOrderedPageAlert").prepend('<div class="alert alert-success">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' + result.message +
-                                      '</div>');
-    }
-    else
+    if(result.status == 0)
     {
       $("#divOrderedPageAlert").prepend('<div class="alert alert-error">' +
                                       '<button type="button" class="close" data-dismiss="alert">×</button>' +

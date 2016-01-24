@@ -664,6 +664,8 @@ module.exports = {
             sails.sockets.broadcast('device', 'checkout', { session: session });
             sails.sockets.broadcast('device', 'receive-message', { table: session.table, sessionId: session.id, message: 'Thanh toán. <a href="/ordered/detail/'+session.id+'">Xem chi tiết</a>' });
 
+            sails.sockets.broadcast('table'+session.table, 'checkout', { msg: 'Nhân viên sẽ liên hệ với bạn ngay!' });
+
             return res.json({
               status: 1,
               message: 'Nhân viên sẽ liên hệ với bạn ngay!'
