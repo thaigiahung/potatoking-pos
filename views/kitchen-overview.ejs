@@ -19,7 +19,7 @@
 			  	</thead>   
 			  	<tbody id="kitchenOverview">
 	  		  		<% _.each(sessionDetails, function (item) { %>
-	  		  			<tr id="sessionDetail<%= item.id %>">
+	  		  			<tr id="sessionDetail<%= item.id %>" class="session-<%= item.session %>">
 	  		  				<td>
 	  		  					<%= item.id %>
 	  		  				</td>

@@ -68,6 +68,7 @@ module.exports.routes = {
   'POST /removeItem': 'SessionController.removeItem',
   'POST /removeOrderedItem': 'SessionController.removeOrderedItem',
   'POST /cancelTable': 'SessionController.cancelTable',
+  'POST /cancelAll': 'SessionController.cancelAll',
   'POST /order': 'SessionController.order',
   'POST /checkout': 'SessionController.checkout',
   'POST /deliver': 'SessionDetailController.deliver',

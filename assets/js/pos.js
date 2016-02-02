@@ -222,6 +222,16 @@ io.socket.on('connect', function () {
           );
         }        
       });
+
+      //Listen for event cancel all remaining items
+      io.socket.on('cancelAll', function (message) {
+        $('.session-'+message.sessionId).remove();
+      });
+
+      //Listen for event checkout (Highlight row)
+      io.socket.on('checkout', function (message) {
+        $("session-"+message.session).addClass('row-warning')
+      });
     }
 
     //Page: Kitchen Dish
@@ -740,6 +750,30 @@ function mergeAndOpenTable (argument)
     $('#mergeTableModal').modal('hide');
   });
 }
+
+function cancelAll (sessionId) {
+  var data = {
+    sessionId: sessionId
+  }
+
+  io.socket.post('/cancelAll', data, function (result) {
+    if(result.status == 1)
+    {
+      $("#remainingItems").prepend('<div class="alert alert-success">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' + result.message +
+                                      '</div>');
+      //Remove all remaining item
+      $("#remainingItems").remove();
+    }
+    else
+    {
+      $("#remainingItems").prepend('<div class="alert alert-error">' +
+                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
+                                      result.message +
+                                    '</div>');
+    }
+  });
+};
 
 function reload () 
 {

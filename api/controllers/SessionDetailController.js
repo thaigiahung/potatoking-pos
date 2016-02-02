@@ -78,24 +78,37 @@
 
  		    	Session.findOne({
  		    		id: sessionId,
- 		    	}).exec(function (err, session) {
- 		    		if(err || !session)
+ 		    	}).exec(function (err1, session) {
+ 		    		if(err1 || !session)
  		    		{
- 		    			return res.view('session-detail',{status: 0, datas: [], session: {}, deviceIp: deviceIp});
+ 		    			return res.view('session-detail',{status: 0, datas: [], session: {}, deviceIp: deviceIp, remainings: []});
  		    		}
  		    		else
  		    		{
  		    			SessionDetail.find({
  		    				session: sessionId,
  		    				status: 'delivered'
- 		    			}).populate('dish').exec(function (err, sessionDetails) {
- 		    				if(err || !sessionDetails || sessionDetails.length <= 0)
+ 		    			}).populate('dish').exec(function (err2, sessionDetails) {
+ 		    				if(err2 || !sessionDetails || sessionDetails.length <= 0)
  		    				{
- 		    					return res.view('session-detail',{status: 1, datas: [], session: session, deviceIp: deviceIp});
+ 		    					return res.view('session-detail',{status: 1, datas: [], session: session, deviceIp: deviceIp, remainings: []});
  		    				}
  		    				else
  		    				{
- 		    					return res.view('session-detail',{status: 1, datas: sessionDetails, session: session, deviceIp: deviceIp});
+ 		    					SessionDetail.find({
+ 		    						session: sessionId,
+ 		    						status: 'added'
+ 		    					}).populate('dish').exec(function (err3, remainings) {
+ 		    						if(err3 || !sessionDetails || sessionDetails.length <= 0)
+ 		    						{
+ 		    							return res.view('session-detail',{status: 1, datas: sessionDetails, session: session, deviceIp: deviceIp, remainings: []});
+ 		    						}
+ 		    						else
+ 		    						{
+ 		    							return res.view('session-detail',{status: 1, datas: sessionDetails, session: session, deviceIp: deviceIp, remainings: remainings});
+ 		    						}
+ 		    					});
+ 		    					
  		    				}
  		    			});
  		    		}
