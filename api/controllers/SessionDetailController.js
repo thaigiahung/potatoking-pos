@@ -97,7 +97,7 @@
  		    				{
  		    					SessionDetail.find({
  		    						session: sessionId,
- 		    						status: 'added'
+ 		    						status: 'ordered'
  		    					}).populate('dish').exec(function (err3, remainings) {
  		    						if(err3 || !sessionDetails || sessionDetails.length <= 0)
  		    						{

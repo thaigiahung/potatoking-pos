@@ -447,8 +447,8 @@ module.exports = {
   cancelAll: function(req, res) {
     var sessionId = JSON.parse(req.body.sessionId);
 
-    User.update(
-      {session: sessionId, status: 'added'},
+    SessionDetail.update(
+      {session: sessionId, status: 'ordered'},
       {status:'cancelled'}
     ).exec(function (err, updated){
       if(err || !updated)

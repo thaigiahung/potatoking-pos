@@ -82,7 +82,7 @@ io.socket.on('connect', function () {
               openedData.session.status +
             '</td>' +
             '<td>' +
-              moment(openedData.session.startTime).format("DD/MM/YYYY hh:mm:ss a") +
+              moment(openedData.session.startTime).format("hh:mm:ss a") +
             '</td>' +
           '</tr>'
         );
@@ -201,7 +201,7 @@ io.socket.on('connect', function () {
         {
           var item = result[i];
           $('#kitchenOverview').append(
-            '<tr id="sessionDetail'+item.id+'">' +
+            '<tr id="sessionDetail'+item.id+'"  class="session-'+item.session.id+'">' +
               '<td>' +
                 item.id +
               '</td>' +
@@ -230,7 +230,7 @@ io.socket.on('connect', function () {
 
       //Listen for event checkout (Highlight row)
       io.socket.on('checkout', function (message) {
-        $("session-"+message.session).addClass('row-warning')
+        $(".session-"+message.session.id).addClass('row-warning')
       });
     }
 
@@ -763,7 +763,8 @@ function cancelAll (sessionId) {
                                       '<button type="button" class="close" data-dismiss="alert">×</button>' + result.message +
                                       '</div>');
       //Remove all remaining item
-      $("#remainingItems").remove();
+      // $("#remainingItems").remove();
+      reload();
     }
     else
     {
