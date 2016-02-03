@@ -249,20 +249,180 @@ module.exports = {
         this.deviceIp = DeviceIp;
 
         function callback(deviceIp) {
-            Dish.find().exec(function(err, found) {
-              if(err) {
-                res.json(err);
-              }
-              else {
-                res.json(found);
-              }              
+            Dish.find()
+            .populate('images')
+            .populate('category')
+            .sort('status DESC')
+            .exec(function(err, found) {
+                if(err) {
+                  return Authorize.NotFound(res);
+                }
+
+                Category.find()
+                .exec(function(err, categories) {
+                    if(err) {
+                        return Authorize.NotFound(res);
+                    }
+
+                    return res.view('dishManagement', { status: 0, 
+                        categories: categories,
+                        dishes: found, 
+                      deviceIp: deviceIp });
+                    // });
+                });
             });
-            
-            // return res.view('dishManagement', { status: 0, dishes: [], session: {}, 
-            //   added: [], deviceIp: deviceIp });
         };
 
         return Authorize.apply(this, callback);
     },
 
+    editDish: function(req, res) {
+        this.authorizeRoles = ['chief-cook'];
+        this.req = req;
+        this.res = res;
+        this.deviceIp = DeviceIp;
+
+        function callback(deviceIp) {
+            var data = req.body;
+
+            Category.findOne({id: data.category.id})
+            .exec(function(err, foundCate) {
+                if(err || foundCate.length == 0) {
+                    return res.json({
+                        status: Enum.StatusCode.NotFoundObject,
+                        message:  Message.vn.CategoryNotExists
+                    })
+                }
+
+                Dish
+                .update({id: data.id},
+                {
+                    name: data.name,
+                    price: data.price,
+                    description: data.description,
+                    category: foundCate
+                })
+                .exec(function(err, updatedDish) {
+                    if(err || updatedDish.length == 0) {
+                        return res.json({
+                            status: Enum.StatusCode.NotFoundObject,
+                            message:  Message.vn.DishNotExists
+                        })
+                    }
+
+                    return res.json({
+                        status: Enum.StatusCode.Success
+                    })
+                });
+            })
+
+        }
+
+        return Authorize.apply(this, callback);
+    },
+
+    enableDish: function(req, res) {
+        this.authorizeRoles = ['chief-cook'];
+        this.req = req;
+        this.res = res;
+        this.deviceIp = DeviceIp;
+
+        function callback(deviceIp) {
+            data = req.body;
+            Dish.update({id: data.dishId}, {status: 'enable'})
+            .exec(function(err, updatedDish) {
+                if(err || updatedDish.length == 0) {
+                    return res.json({
+                        status: Enum.StatusCode.NotFoundObject,
+                        message:  Message.vn.DishNotExists
+                    })
+                }
+
+                return res.json({
+                    status: Enum.StatusCode.Success
+                });
+            });
+        };
+
+        return Authorize.apply(this, callback);
+    },
+
+    disableDish: function(req, res) {
+        this.authorizeRoles = ['chief-cook'];
+        this.req = req;
+        this.res = res;
+        this.deviceIp = DeviceIp;
+
+        function callback(deviceIp) {
+            data = req.body;
+            Dish.update({id: data.dishId}, {status: 'disable'})
+            .exec(function(err, updatedDish) {
+                if(err || updatedDish.length == 0) {
+                    return res.json({
+                        status: Enum.StatusCode.NotFoundObject,
+                        message:  Message.vn.DishNotExists
+                    })
+                }
+
+                return res.json({
+                    status: Enum.StatusCode.Success
+                });
+            });
+        };
+
+        return Authorize.apply(this, callback);
+    },
+
+    deleteDish: function(req, res) {
+        this.authorizeRoles = ['chief-cook'];
+        this.req = req;
+        this.res = res;
+        this.deviceIp = DeviceIp;
+
+        function callback(deviceIp) {
+            var data = req.body;
+            Dish.destroy({id: data.dishId})
+            .exec(function(err, deletedDish) {
+                if(err || deletedDish.length == 0) {
+                    return res.json({
+                        status: Enum.StatusCode.NotFoundObject,
+                        message:  Message.vn.DishNotExists
+                    });
+                }
+
+                return res.json({
+                    status: Enum.StatusCode.Success
+                });
+            });
+        };
+
+        return Authorize.apply(this, callback);
+    },
+
+    deleteImage: function(req, res) {
+        this.authorizeRoles = ['chief-cook'];
+        this.req = req;
+        this.res = res;
+        this.deviceIp = DeviceIp;
+
+        function callback(deviceIp) {
+            var data = req.body;
+            DishImage.destroy({id: data.imageId})
+            .exec(function(err, deletedImage) {
+                if(err || deletedImage.length == 0) {
+                    return res.json({
+                        status: Enum.StatusCode.NotFoundObject,
+                        message:  Message.vn.ImageNotExists
+                    });
+                }
+
+                //TODO : Delete the actual file
+                return res.json({
+                    status: Enum.StatusCode.Success
+                });
+            });
+        };
+
+        return Authorize.apply(this, callback);
+    },
 };

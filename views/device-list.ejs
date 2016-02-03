@@ -146,8 +146,8 @@
       </div>
     </label>
   </div>
-
-  <% if(deviceIp.type == "cashier") { %>
+  
+  <% if(deviceIp.type == "cashier" || deviceIp.type == "chief-cook") { %>
     <div class="row-fluid device-list-footer">
       <div class="device-list-footer-left">
         <button class="btn btn-danger" data-toggle="modal" data-target="#closeTableModal"

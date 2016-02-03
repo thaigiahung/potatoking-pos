@@ -15,6 +15,10 @@ module.exports = {
     status: {
       type: 'string',
       enum: ['enable', 'disable']
+    },
+    images: {
+      collection: 'DishImage',
+      via: 'dish'
     }
   }
 };

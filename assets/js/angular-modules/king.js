@@ -20,7 +20,6 @@
 
 		this.changeStatus = function(index, status) {
 			this.devices[index].status = status;
-			console.log(index, status);
 		};
 
 		this.isAnyChecked = function() {
@@ -65,8 +64,258 @@
 		};
 	});
 
-	app.controller('dishManamentController', function() {
-		
+	app.controller('dishManamentController', function($scope) {
+		this.selectedDish = 0;
+		this.editable = false;
+		this.dishes = [];
+		this.selectOptions = [];
+		this.invalidInput = false;
+		this.dirty = false;
+		this.resetData = {};
+		this.selectedName = '';
+		this.countdownDuration = 3;
+		this.deleteCountdown = this.countdownDuration;
+		this.counting = false;
+		this.selectedImage = {};
+
+		var notificationLocation = 'top left';
+
+		var self = this;
+
+		this.turnOnDirty = function() {
+			this.dirty = true;
+		}
+
+		this.isDirty = function(index) {
+			if(this.selectedDish == index && this.dirty) {
+				return true;
+			}
+
+			return false;
+		}
+
+		function getImage(id) {
+			var currentDish = self.dishes[getCurrentDish()];
+			for(var i = 0 ; i < currentDish.images.length; i++ ) {
+				if(currentDish.images[i].id == id) {
+					return i;		
+				}
+			}
+		}
+
+		function delayTimeForDeleting(modal, button) {
+
+			self.deleteCountdown = self.countdownDuration;
+			self.counting = true;
+
+			var deleteBtnText = "Xóa ";
+
+			(function myLoop (duration) {          
+			   setTimeout(function () {  
+			   	  var textResult = self.deleteCountdown--;
+			   	  if(textResult>1) {
+			   	  	$(button).text(deleteBtnText + (textResult-1));
+			   	  }
+			   	  else {
+			   	  	self.counting = false;
+			   	  	$(button).text(deleteBtnText);
+					$(button).removeAttr('disabled');
+			   	  }
+
+			      if (--duration && self.counting) myLoop(duration);
+			   }, 1000)
+			})(self.deleteCountdown);
+
+	   	  	$(button).text(deleteBtnText + self.deleteCountdown);
+			$(button).attr('disabled', 'disabled');
+			$(modal).modal('show');
+		}
+
+		this.confirmDeleteImage = function(id) {			
+			var currentImage = this.dishes[getCurrentDish()];
+			this.selectedImage = this.dishes[getCurrentDish()].images[getImage(id)];
+
+			delayTimeForDeleting('#deleteImage', '#btnDeleteImage');
+		}
+
+		function getCurrentDish() {
+			for(var i = 0 ; i < self.dishes.length ; i++) {
+				dish = self.dishes[i];
+				if(dish.id == self.selectedDish) {
+					return i;
+				}
+			}
+		}
+
+		function getCurrentSelect(id) {
+			for(var i = 0 ; i < self.selectOptions.length ; i++) {
+				select = self.selectOptions[i];
+				if(select.id == id) {
+					return select.name;
+				}
+			}
+		}
+
+		this.enableDish = function() {
+			$.ajax({
+				method: 'POST',
+				url: '/dish/enableDish',
+				data: { 
+					dishId: this.selectedDish
+				}
+			}).done(function(data) {
+				if(data.status == 0) {
+					self.dishes[getCurrentDish()].status = 'enable';
+ 					$scope.$digest();
+					$.notify("Enable món " + self.dishes[getCurrentDish()].name + " thành công."
+						, { position: notificationLocation, className: 'success' });
+				}
+				else {
+					var message = "Enable món " + self.dishes[getCurrentDish()].name + " không thành công.";
+					$.notify( data.message ? data.message : message
+						, { position: notificationLocation, className: 'error' });
+				}
+			});
+		}
+
+		this.disableDish = function() {
+			$.ajax({
+				method: 'POST',
+				url: '/dish/disableDish',
+				data: { 
+					dishId: this.selectedDish
+				}
+			}).done(function(data) {
+				if(data.status == 0) {
+					self.dishes[getCurrentDish()].status = 'disable';
+ 					$scope.$digest();
+					$.notify("Disable món " + self.dishes[getCurrentDish()].name + " thành công."
+						, { position: notificationLocation, className: 'success' });
+				}
+				else {
+					var message = "Disable món " + self.dishes[getCurrentDish()].name + " không thành công.";
+					$.notify( data.message ? data.message : message
+						, { position: notificationLocation, className: 'error' });
+				}
+			});
+
+			$('#disableModal').modal('hide');
+		}
+
+		this.deleteImage = function(id) {
+			$.ajax({
+				method: 'POST',
+				url: '/dish/deleteImage',
+				data: {
+					imageId: id
+				}
+			}).done(function(data){
+				if(data.status == 0) {
+					var currentName = self.dishes[getCurrentDish()].name;
+					var currentDish = self.dishes[getCurrentDish()];
+					currentDish.images.splice(getImage(id),1);		
+
+ 					$scope.$digest();
+					$.notify("Xóa hình cho món " + currentName + " thành công."
+						, { position: notificationLocation, className: 'success' });
+				}
+				else {
+					var message = "Xóa hình cho món " + self.dishes[getCurrentDish()].name + " không thành công.";
+					$.notify( data.message ? data.message : message
+						, { position: notificationLocation, className: 'error' });
+				}
+			});
+
+			$('#deleteImage').modal('hide');
+		}
+
+		this.deleteDish = function() {
+			$.ajax({
+				method: 'POST',
+				url: '/dish/deleteDish',
+				data: { 
+					dishId: this.selectedDish
+				}
+			}).done(function(data) {
+				if(data.status == 0) {
+					var currentName = self.dishes[getCurrentDish()].name;
+					self.dishes.splice(getCurrentDish(),1);
+ 					$scope.$digest();
+					$.notify("Xóa món " + currentName + " thành công."
+						, { position: notificationLocation, className: 'success' });
+				}
+				else {
+					var message = "Xóa món " + self.dishes[getCurrentDish()].name + " không thành công.";
+					$.notify( data.message ? data.message : message
+						, { position: notificationLocation, className: 'error' });
+				}
+			});
+
+			$('#deleteModal').modal('hide');
+		}
+
+		this.confirmDisableDish = function() {
+			var currentDish = this.dishes[getCurrentDish()];
+			this.selectedName = currentDish.name;
+
+			$('#disableModal').modal('show');
+		}
+
+		this.resetDeleteCountdown = function() {
+			self.counting = false;
+		}
+
+		this.confirmDeleteDish = function() {
+			var currentDish = this.dishes[getCurrentDish()];
+			this.selectedName = currentDish.name;
+
+			delayTimeForDeleting('#deleteModal', '#btnDeleteDish');
+		}
+
+
+		this.selectName = function(id) {
+			return getCurrentSelect(id);
+		}
+
+		this.changeCate = function(dishId, cateId) {
+			this.dishes[dishId].category.id = cateId;
+		}
+
+		this.submitChange = function() {
+			if(this.dirty) {
+				var currentDish = getCurrentDish();
+				$.ajax({
+					method: 'POST',
+					url: '/dish/editDish',
+					data: this.dishes[currentDish]
+				}).done(function(data) {
+					console.log(data);
+				});
+			}
+
+			this.dirty = false;
+			this.editable = false;
+		}
+
+		this.changeDish = function(index) {
+			this.submitChange();
+			this.selectedDish = index;
+		}
+
+		this.toggleEditMode = function() {
+			this.editable = !this.editable;
+		}
+
+		this.edit = function() {
+			angular.copy(this.dishes[getCurrentDish()], this.resetData);
+			this.editable = true;
+		}
+
+		this.cancelEdit = function() {
+			angular.copy(this.resetData, this.dishes[getCurrentDish()]);
+			this.editable = false;
+			this.dirty = false;
+		}
 	});
 
 	var isInDishesManagement = function(view) {
@@ -86,47 +335,3 @@
 		return number;
 	};
 })();
-
-// (function() {
-
-// 	var app = angular.module('store-products', []);
-
-
-// 	app.controller('ReviewController', function() {
-// 	  this.review = {};
-
-// 	  this.addReview = function(product) {
-// 	    product.reviews.push(this.review);
-
-// 	    this.review = {};
-// 	  }
-// 	});
-
-// 	app.directive('productTitle', function() {
-// 	  return {
-// 	    restrict: 'A',
-// 	    templateUrl: '/templates/product-title.html'
-// 	  };
-// 	})
-
-// 	app.directive('productPanels', function() {
-// 	  return {
-// 	    restrict: 'E',
-// 	    templateUrl: '/templates/product-panels.html',
-// 	    controller: function() {
-// 	      this.tab = 1;
-
-// 	      this.selectTab = function(setTab) {
-// 	        this.tab = setTab;
-// 	      };
-
-// 	      this.isSelected = function(checkTab) {
-// 	        return this.tab === checkTab;
-// 	      };
-
-// 	    },
-// 	    controllerAs: 'panels'
-// 	  };
-// 	})
-
-// })();

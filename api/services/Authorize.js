@@ -42,21 +42,29 @@ exports.apply = function(context, callback) {
     }).populate('device').exec(function (err, deviceIp) {
 	  if(err || !deviceIp)
       {
-      	return return403(res);
+      	return HandleUnauthorized(res);
       }
       else if(!isExists(roles,deviceIp.type))
       {
-  		return return404(res);
+  		return HandleNotFound(res);
 	  }
       console.log("Authorized");
       callback(deviceIp);
 	});
 }
 
-function return404(res) {
+exports.NotFound = function(res) {
+  return HandleNotFound(res);
+}
+
+exports.Unauthorized = function(res) {
+  return HandleUnauthorized(res);
+}
+
+function HandleNotFound(res) {
     return res.view('404', {layout: false});;
 }
 
-function return403(res) {
+function HandleUnauthorized(res) {
     return res.view('403', {layout: false});;
 }
