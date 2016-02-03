@@ -36,15 +36,48 @@
 			  	</tbody>
 		  	</table>            
 		</div>
-		<% if(deviceIp.type == "cashier") { %>
-			<div class="row-fluid device-list-footer">
-			  	<div class="device-list-footer-right">
+		<% if(deviceIp.type == "cashier" && remainings.length == 0) { %>
+			<div class="row-fluid session-detail-footer">
+			  	<div class="session-detail-footer-right">
 					<button onclick="blockTable(<%= session.table %>)" class="btn btn-large btn-success" data-toggle="modal" data-target="#modalCheckout">Thanh toán</button>
 			  	</div>
 			</div>
 		<% } %>
 	</div>
 </div>
+
+<% if(remainings.length > 0) { %>
+	<div id="remainingItems" class="row-fluid">
+	  	<h1>Các món còn lại</h1>
+
+		<div class="box span11">
+			<div class="box-content">
+				<table class="table">
+				  	<thead>
+					  	<tr>
+						  	<th>Món</th>
+					  	</tr>
+				  	</thead>   
+				  	<tbody>
+				  		<% _.each(remainings, function (item) { %>
+				  			<tr>
+				  				<td>
+				  					<%= item.dish.name %>
+				  				</td>
+				  			</tr>
+				  		<% }) %>  		  		
+				  	</tbody>
+			  	</table>            
+			</div>
+			
+			<div class="row-fluid device-list-footer">
+			  	<div class="device-list-footer-right">
+					<button onclick="cancelAll(<%= session.id %>)" class="btn btn-large btn-danger">Hủy tất cả</button>
+			  	</div>
+			</div>
+		</div>
+	</div>
+<% } %>
 
 <!-- Model Checkout -->
 <div class="modal hide fade" id="modalCheckout" data-backdrop="static" data-keyboard="false">

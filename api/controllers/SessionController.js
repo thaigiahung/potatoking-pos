@@ -443,6 +443,33 @@ module.exports = {
       }
     });
   },
+
+  cancelAll: function(req, res) {
+    var sessionId = JSON.parse(req.body.sessionId);
+
+    SessionDetail.update(
+      {session: sessionId, status: 'ordered'},
+      {status:'cancelled'}
+    ).exec(function (err, updated){
+      if(err || !updated)
+      {
+        return res.json({
+          status: 0,
+          message: 'Không thể hủy món!'
+        });
+      }
+      else
+      {
+        //Broadcast to kitchen to remove these items
+        sails.sockets.broadcast('device', 'cancelAll', {sessionId: sessionId});
+
+        return res.json({
+          status: 1,
+          message: 'Thành công!'
+        });
+      }
+    });
+  },
   
   order: function(req, res) {
     var sessionId = req.body.sessionId;
