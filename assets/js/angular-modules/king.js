@@ -64,6 +64,20 @@
 		};
 	});
 
+	app.directive('myEnter', function () {
+	    return function (scope, element, attrs) {
+	        element.bind("keydown keypress", function (event) {
+	            if(event.which === 13) {
+	                scope.$apply(function (){
+	                    scope.$eval(attrs.myEnter);
+	                });
+
+	                event.preventDefault();
+	            }
+	        });
+	    };
+	});
+
 	app.controller('dishManamentController', function($scope) {
 		this.selectedDish = 0;
 		this.editable = false;
@@ -156,19 +170,19 @@
 				price: ''
 			};
 
-			doneAdd();
+			beginAdd();
 
 			self.dishes.push(newDish);
 			self.selectedDish = nexId;
 		}
 
-		function doneAdd(status) {
+		function beginAdd() {
 			self.adding = true;
 			self.dirty = true;
 			self.editable = true;
 		}
 
-		function cancelAdd() {
+		function finishAdd() {
 			self.adding = false;
 			self.dirty = false;
 			self.editable = false;
@@ -195,13 +209,14 @@
 					$.notify( data.message ? data.message : message
 						, { position: notificationLocation, className: 'error' });
 				}
+				// finishAdd();
 			});
 		}
 
 		this.cancelAddDish = function() {
 			var maxId = getMaxId();
 
-			cancelAdd();
+			finishAdd();
 			self.dishes.pop();
 			self.selectedDish = getMaxId(this.dishes);
 		}
@@ -413,7 +428,16 @@
 					url: '/dish/editDish',
 					data: this.dishes[currentDish]
 				}).done(function(data) {
-					console.log(data);
+					if(data.status == 0) {
+						var currentName = self.dishes[getCurrentDish()].name;
+						$.notify("Sửa món " + currentName + " thành công."
+							, { position: notificationLocation, className: 'success' });
+					}
+					else {
+						var message = "Sửa món " + self.dishes[getCurrentDish()].name + " không thành công.";
+						$.notify( data.message ? data.message : message
+							, { position: notificationLocation, className: 'error' });
+					}
 				});
 			}
 
