@@ -77,8 +77,11 @@ module.exports.routes = {
   'POST /showDish': 'DishController.showDish',
   'POST /blockTable': 'SessionController.blockTable',
   'POST /unblockTable': 'SessionController.unblockTable',
+
+  // Dish management
   'POST /dish/editDish': 'DishController.editDish',
   'POST /dish/enableDish': 'DishController.enableDish',
   'POST /dish/disableDish': 'DishController.disableDish',
   'POST /dish/deleteDish': 'DishController.deleteDish',
+  'POST /dish/addDish': 'DishController.addDish',
 };

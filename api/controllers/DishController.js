@@ -252,7 +252,6 @@ module.exports = {
             Dish.find()
             .populate('images')
             .populate('category')
-            .sort('status DESC')
             .exec(function(err, found) {
                 if(err) {
                   return Authorize.NotFound(res);
@@ -272,6 +271,46 @@ module.exports = {
                 });
             });
         };
+
+        return Authorize.apply(this, callback);
+    },
+
+
+    addDish: function(req, res) {
+        this.authorizeRoles = ['chief-cook'];
+        this.req = req;
+        this.res = res;
+        this.deviceIp = DeviceIp;
+
+        function callback(deviceIp) {
+            var data = req.body.dish;
+            console.log(data);
+            Category.findOne({id: data.category.id})
+            .exec(function(err, foundCate) {
+                if(err || foundCate.length == 0) {
+                    return res.json({
+                        status: Enum.StatusCode.NotFoundObject,
+                        message:  Message.vn.CategoryNotExists
+                    })
+                }
+
+                data.status = 'disable';
+
+                Dish.create(data)
+                .exec(function(err, created) {
+                    if(err || created.length == 0) {
+                        return res.json({
+                            status: Enum.StatusCode.CreatedFailed,
+                            message:  Message.vn.DishNotCreated
+                        })
+                    }
+                });
+
+                return res.json({
+                    status: Enum.StatusCode.Success
+                })
+            });
+        }
 
         return Authorize.apply(this, callback);
     },

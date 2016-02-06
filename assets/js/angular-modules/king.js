@@ -77,10 +77,134 @@
 		this.deleteCountdown = this.countdownDuration;
 		this.counting = false;
 		this.selectedImage = {};
+		this.adding = false;
 
 		var notificationLocation = 'top left';
 
 		var self = this;
+
+		this.selectFirstDish = function(id, isFirst) {
+			if(isFirst) {
+				self.selectedDish = id;
+			}
+		}
+
+		this.getFirstSelectedDish = function() {
+			if(self.dishes.length == 0) {
+				return null;
+			}
+
+			// var isDisable = false;
+			var isEnable = false;
+			var minPriceDisable = self.dishes[0].price;
+			var minPriceEnable = self.dishes[0].price;
+			var indexDisable = 0;
+			var indexEnable = 0;
+
+			for(var i = 0 ; i < self.dishes.length ; i ++ ) {
+
+				if(self.dishes[i].status == 'enable') {
+					isEnable = true;
+
+					if(self.dishes[i].price < minPriceEnable)  {
+						minPriceEnable = self.dishes[i].price;
+						indexEnable = i;
+					}
+
+				} else if(!isEnable) {
+					// isDisable = true;
+
+					if(self.dishes[i].price < minPriceDisable)  {
+						minPriceDisable = self.dishes[i].price;
+						indexDisable = i;
+					}
+				}
+			}
+
+			if(isEnable) {
+				console.log('selected enable' + indexEnable);
+				self.selectedDish = indexEnable;
+			}
+			else {
+				console.log('selected Disable' + indexDisable);
+				self.selectedDish = indexDisable;
+			}
+		}
+
+		function getMaxId() {
+			var dishes = self.dishes;
+			var maxId = -999;
+
+			for(var i = 0; i < dishes.length; i++ ){
+				maxId = dishes[i].id > maxId ? dishes[i].id : maxId;
+			}
+
+			return maxId;
+		}
+
+		function getNextId() {
+			return getMaxId() + 1;
+		}
+
+		this.addDish = function() {
+			var nexId = getNextId();
+			var newDish = {
+				id: nexId,
+				name: '',
+				description: '',
+				status: 'disable',
+				price: ''
+			};
+
+			doneAdd();
+
+			self.dishes.push(newDish);
+			self.selectedDish = nexId;
+		}
+
+		function doneAdd(status) {
+			self.adding = true;
+			self.dirty = true;
+			self.editable = true;
+		}
+
+		function cancelAdd() {
+			self.adding = false;
+			self.dirty = false;
+			self.editable = false;
+		}
+
+		this.submitAddDish = function(dish) {
+			// console.log('testing');
+			// console.log(dish);
+
+			$.ajax({
+				method: 'POST',
+				url: '/dish/addDish',
+				data: { 
+					dish: dish
+				}
+			}).done(function(data) {
+				if(data.status == 0) {
+ 					$scope.$digest();
+					$.notify("Tạo món " + self.dishes[getCurrentDish()].name + " thành công."
+						, { position: notificationLocation, className: 'success' });
+				}
+				else {
+					var message = "Tạo món " + self.dishes[getCurrentDish()].name + " không thành công.";
+					$.notify( data.message ? data.message : message
+						, { position: notificationLocation, className: 'error' });
+				}
+			});
+		}
+
+		this.cancelAddDish = function() {
+			var maxId = getMaxId();
+
+			cancelAdd();
+			self.dishes.pop();
+			self.selectedDish = getMaxId(this.dishes);
+		}
 
 		this.turnOnDirty = function() {
 			this.dirty = true;
@@ -312,9 +436,14 @@
 		}
 
 		this.cancelEdit = function() {
-			angular.copy(this.resetData, this.dishes[getCurrentDish()]);
+			if (!this.adding) {
+				angular.copy(this.resetData, this.dishes[getCurrentDish()]);
+			}
+
+			this.adding = false;
 			this.editable = false;
 			this.dirty = false;
+
 		}
 	});
 
