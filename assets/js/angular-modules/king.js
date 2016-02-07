@@ -199,17 +199,17 @@
 					dish: dish
 				}
 			}).done(function(data) {
+				finishAdd();
+
 				if(data.status == 0) {
  					$scope.$digest();
-					$.notify("Tạo món " + self.dishes[getCurrentDish()].name + " thành công."
-						, { position: notificationLocation, className: 'success' });
+ 					var message = "Tạo món " + self.dishes[getCurrentDish()].name + " thành công.";
+ 					successNotify(message);
 				}
 				else {
 					var message = "Tạo món " + self.dishes[getCurrentDish()].name + " không thành công.";
-					$.notify( data.message ? data.message : message
-						, { position: notificationLocation, className: 'error' });
+					failNotify(message);
 				}
-				// finishAdd();
 			});
 		}
 
@@ -306,13 +306,12 @@
 				if(data.status == 0) {
 					self.dishes[getCurrentDish()].status = 'enable';
  					$scope.$digest();
-					$.notify("Enable món " + self.dishes[getCurrentDish()].name + " thành công."
-						, { position: notificationLocation, className: 'success' });
+					var message = "Enable món " + self.dishes[getCurrentDish()].name + " thành công.";
+					successNotify(message);
 				}
 				else {
 					var message = "Enable món " + self.dishes[getCurrentDish()].name + " không thành công.";
-					$.notify( data.message ? data.message : message
-						, { position: notificationLocation, className: 'error' });
+					failNotify(message);
 				}
 			});
 		}
@@ -328,13 +327,12 @@
 				if(data.status == 0) {
 					self.dishes[getCurrentDish()].status = 'disable';
  					$scope.$digest();
-					$.notify("Disable món " + self.dishes[getCurrentDish()].name + " thành công."
-						, { position: notificationLocation, className: 'success' });
+ 					var message = "Disable món " + self.dishes[getCurrentDish()].name + " thành công.";
+ 					successNotify(message);
 				}
 				else {
 					var message = "Disable món " + self.dishes[getCurrentDish()].name + " không thành công.";
-					$.notify( data.message ? data.message : message
-						, { position: notificationLocation, className: 'error' });
+					failNotify(message);
 				}
 			});
 
@@ -355,13 +353,13 @@
 					currentDish.images.splice(getImage(id),1);		
 
  					$scope.$digest();
-					$.notify("Xóa hình cho món " + currentName + " thành công."
-						, { position: notificationLocation, className: 'success' });
+
+ 					var message = "Xóa hình cho món " + currentName + " thành công.";
+ 					successNotify(message);
 				}
 				else {
 					var message = "Xóa hình cho món " + self.dishes[getCurrentDish()].name + " không thành công.";
-					$.notify( data.message ? data.message : message
-						, { position: notificationLocation, className: 'error' });
+					failNotify(message);					
 				}
 			});
 
@@ -380,13 +378,12 @@
 					var currentName = self.dishes[getCurrentDish()].name;
 					self.dishes.splice(getCurrentDish(),1);
  					$scope.$digest();
-					$.notify("Xóa món " + currentName + " thành công."
-						, { position: notificationLocation, className: 'success' });
+ 					var message = "Xóa món " + currentName + " thành công.";
+ 					sucessNotify(message);
 				}
 				else {
 					var message = "Xóa món " + self.dishes[getCurrentDish()].name + " không thành công.";
-					$.notify( data.message ? data.message : message
-						, { position: notificationLocation, className: 'error' });
+					failNotify(message);
 				}
 			});
 
@@ -430,13 +427,12 @@
 				}).done(function(data) {
 					if(data.status == 0) {
 						var currentName = self.dishes[getCurrentDish()].name;
-						$.notify("Sửa món " + currentName + " thành công."
-							, { position: notificationLocation, className: 'success' });
+						var message = "Sửa món " + currentName + " thành công.";
+						successNotify(message);
 					}
 					else {
 						var message = "Sửa món " + self.dishes[getCurrentDish()].name + " không thành công.";
-						$.notify( data.message ? data.message : message
-							, { position: notificationLocation, className: 'error' });
+						failNotify(message);
 					}
 				});
 			}

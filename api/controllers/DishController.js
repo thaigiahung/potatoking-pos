@@ -284,7 +284,6 @@ module.exports = {
 
         function callback(deviceIp) {
             var data = req.body.dish;
-            console.log(data);
             Category.findOne({id: data.category.id})
             .exec(function(err, foundCate) {
                 if(err || foundCate.length == 0) {
