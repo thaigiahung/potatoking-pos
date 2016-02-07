@@ -1,7 +1,36 @@
 var counting = false;
 var countdownDuration = 3;
+
+
 var autoHideNotifyPosition = 'top left';
 var notifyPosition = 'top right';
+
+function startCountdown(btnId, duration) {
+	var targetButton = $('#'+btnId);
+	var targetText = targetButton.text() + ' ';
+	var originalText = targetButton.text();
+
+	$(targetButton).attr('disabled', 'disabled');
+	$(targetButton).text(targetText + duration);
+
+	(function myLoop (duration) {          
+	   setTimeout(function () {  
+	   	  var textResult = duration;
+
+	   	  console.log(duration);
+
+	   	  if(textResult>1) {
+	   	  	$(targetButton).text(targetText + (textResult-1));
+	   	  }
+	   	  else {
+	   	  	$(targetButton).text(originalText);
+			$(targetButton).removeAttr('disabled');
+	   	  }
+
+	      if (--duration) myLoop(duration);
+	   }, 1000)
+	})(duration);
+}
 
 function beginCountdown(target) {
 	var counting = true;
@@ -45,7 +74,7 @@ var failNotify = function(message) {
 	});
 }
 
-var errorNotify = function(message) {
+var persistNotify = function(message) {
 	$.notify( message, {
 		position: notifyPosition,
 		className: 'error',

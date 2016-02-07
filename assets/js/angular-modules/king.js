@@ -189,9 +189,6 @@
 		}
 
 		this.submitAddDish = function(dish) {
-			// console.log('testing');
-			// console.log(dish);
-
 			$.ajax({
 				method: 'POST',
 				url: '/dish/addDish',
