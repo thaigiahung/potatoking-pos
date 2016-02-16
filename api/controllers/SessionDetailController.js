@@ -45,7 +45,13 @@
  							else
  							{
  								sails.sockets.broadcast('device', 'removeKitchenOverview', { sessionDetailId: sessionDetailId });
- 								sails.sockets.broadcast('table'+sessionDetail.session.table, 'item-delivered', {sessionDetailId: sessionDetailId, dishName: sessionDetail.dish.name, message: 'Đã giao' });
+ 								sails.sockets.broadcast('table'+sessionDetail.session.table, 'item-delivered', 
+ 								{
+ 									sessionDetailId: sessionDetailId, 
+ 									dishName: sessionDetail.dish.name, 
+ 									type: 1, //Đã giao
+ 									message: 'Đã giao' 
+								});
 
  								return res.json({
  									status: 1,

@@ -302,7 +302,7 @@
 }
 
 html {
-    overflow:hidden;
+    /*overflow:hidden;*/
 }
 
 input[type="text"].dishName{

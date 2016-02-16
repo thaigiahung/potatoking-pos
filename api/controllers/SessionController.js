@@ -373,7 +373,13 @@ module.exports = {
           else
           {
             sails.sockets.broadcast('device', 'removeKitchenOverview', { sessionDetailId: id });
-            sails.sockets.broadcast('table'+sessionDetail.session.table, 'item-delivered', {sessionDetailId: id, dishName: sessionDetail.dish.name, message: 'Đã hủy' });
+            sails.sockets.broadcast('table'+sessionDetail.session.table, 'item-delivered', 
+            {
+              sessionDetailId: id, 
+              dishName: sessionDetail.dish.name, 
+              type: 2, //Đã hủy
+              message: 'Đã hủy' 
+            });
             return res.json({
               status: 1,
               message: 'Thành công!'

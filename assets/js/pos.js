@@ -98,14 +98,15 @@ io.socket.on('connect', function () {
 
       //http://www.jqueryscript.net/other/Classic-Growl-like-Notification-Plugin-For-jQuery-Gritter.html
       io.socket.on('receive-message', function (msg) {
-        $.gritter.add({
+        /*$.gritter.add({
           // (string | mandatory) the heading of the notification
           title: 'Bàn ' + msg.table,
           // (string | mandatory) the text inside the notification
           text: msg.message,
           sticky: true,
           fade_out_speed: 100
-        });
+        });*/
+        persistNotify('[Bàn ' + msg.table + '] ' + msg.message);
       });
     }
 
@@ -138,9 +139,7 @@ io.socket.on('connect', function () {
           var change = $("#change").val();
           if(change < 0)
           {
-            $("#modalCheckoutBodyAlert").prepend('<div class="alert alert-error">' +
-                                                  'Vui lòng kiểm tra lại số tiền!' +
-                                                '</div>');
+            failNotify('Vui lòng kiểm tra lại số tiền!');
           }
           else
           {
@@ -153,9 +152,7 @@ io.socket.on('connect', function () {
             io.socket.post('/finalCheckout', data, function (result) {
               if(result.status == 1)
               {
-                $("#modalCheckoutBodyAlert").html('<div class="alert alert-success">' + 
-                                                  result.message +
-                                                '</div>');
+                successNotify(result.message);
 
                 $("#receive").prop('disabled', true);
 
@@ -164,9 +161,7 @@ io.socket.on('connect', function () {
               }
               else
               {
-                $("#modalCheckoutBodyAlert").append('<div class="alert alert-error">' +
-                                                  result.message +
-                                                '</div>');
+                failNotify(result.message);
               }
             });
           }          
@@ -174,14 +169,15 @@ io.socket.on('connect', function () {
 
         //http://www.jqueryscript.net/other/Classic-Growl-like-Notification-Plugin-For-jQuery-Gritter.html
         io.socket.on('receive-message', function (msg) {
-          $.gritter.add({
+          /*$.gritter.add({
             // (string | mandatory) the heading of the notification
             title: 'Bàn ' + msg.table,
             // (string | mandatory) the text inside the notification
             text: msg.message,
             sticky: true,
             fade_out_speed: 100
-          });
+          });*/
+          persistNotify('[Bàn ' + msg.table + '] ' + msg.message);
         });
       });
     }
@@ -212,7 +208,7 @@ io.socket.on('connect', function () {
                 item.dish.name +
               '</td>' +
               '<td>' +
-                moment(item.updatedAt).format("DD/MM/YYYY hh:mm:ss a") +
+                moment(item.updatedAt).format("hh:mm:ss a") +
               '</td>' +
               '<td>' +
                 '<button class="btn btn-large btn-success" onclick="deliver('+item.id+')">Giao</button> ' +
@@ -347,14 +343,22 @@ io.socket.on('connect', function () {
       });
 
       io.socket.on('item-delivered', function (msg) {
-        $.gritter.add({
+        /*$.gritter.add({
           // (string | mandatory) the heading of the notification
           title: 'Món ' + msg.dishName,
           // (string | mandatory) the text inside the notification
           text: msg.message,
           sticky: true,
           fade_out_speed: 100
-        });
+        });*/
+        if(msg.type == 1)
+        {
+          successNotify('Món ' + msg.dishName + ': ' + msg.message);
+        }
+        else
+        {
+          failNotify('Món ' + msg.dishName + ': ' + msg.message);
+        }
       });
 
       //Listen for event hide dish
@@ -485,14 +489,23 @@ io.socket.on('connect', function () {
       });
 
       io.socket.on('item-delivered', function (msg) {
-        $.gritter.add({
+        /*$.gritter.add({
           // (string | mandatory) the heading of the notification
           title: 'Món ' + msg.dishName,
           // (string | mandatory) the text inside the notification
           text: msg.message,
           sticky: true,
           fade_out_speed: 100
-        });
+        });*/
+
+        if(msg.type == 1)
+        {
+          successNotify('Món ' + msg.dishName + ': ' + msg.message);
+        }
+        else
+        {
+          failNotify('Món ' + msg.dishName + ': ' + msg.message);
+        }
 
         $("#tdSessionDetail"+msg.sessionDetailId).text(msg.message);
       });
@@ -523,9 +536,7 @@ io.socket.on('connect', function () {
 
       //Listen for event checkout
       io.socket.on('checkout', function (message) {
-        $("#divOrderedPageAlert").prepend('<div class="alert alert-success">' +
-                                        '<button type="button" class="close" data-dismiss="alert">×</button>' + message.msg +
-                                        '</div>');
+        persistNotify(message.msg);
       });
     }
   });
@@ -561,10 +572,7 @@ function addItem (id, name) {
   io.socket.post('/addItem', data, function (result) {
     if(result.status == 0)
     {
-      $("#divDishPageAlert").prepend('<div class="alert alert-error">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
-                                      result.message +
-                                    '</div>');
+      failNotify(result.message);
     }
   });
 }
@@ -583,10 +591,7 @@ function removeItem (id) {
   io.socket.post('/removeItem', data, function (result) {
     if(result.status == 0)
     {
-      $("#divDishPageAlert").prepend('<div class="alert alert-error">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
-                                      result.message +
-                                    '</div>');
+      failNotify(result.message);
     }
   });
 };
@@ -599,10 +604,7 @@ function removeOrderedItem (id) {
   io.socket.post('/removeOrderedItem', data, function (result) {
     if(result.status == 0)
     {
-      $("#divKitchenOverviewPageAlert").prepend('<div class="alert alert-error">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
-                                      result.message +
-                                    '</div>');
+      failNotify(result.message);
     }
   });
 };
@@ -617,13 +619,9 @@ function order (sessionId)
     if(result.status == 0)
     {
       failNotify(result.message);
-      // $("#divDishPageAlert").prepend('<div class="alert alert-error">' +
-      //                                 '<button type="button" class="close" data-dismiss="alert">×</button>' +
-      //                                 result.message +
-      //                               '</div>');
     }
     else {
-      successNotify("Order món thành công");
+      successNotify("Đặt món thành công");
     }
   });
 }
@@ -641,9 +639,6 @@ function checkout (sessionId)
     {
       failNotify(result.message);
     }
-    else {
-      successNotify("Order món thành công");
-    }
   });
 }
 
@@ -657,10 +652,6 @@ function deliver (sessionDetailId)
     if(result.status == 0)
     {
       failNotify(result.message);
-      // $("#divKitchenOverviewPageAlert").prepend('<div class="alert alert-error">' +
-      //                                 '<button type="button" class="close" data-dismiss="alert">×</button>' +
-      //                                 result.message +
-      //                               '</div>');
     }
     else {
       // successNotify("")
@@ -719,8 +710,6 @@ function unblockTable (table) {
 
 function mergeAndOpenTable (argument) 
 {
-  console.log("A")
-  console.log($("input:checkbox[name=chkSelectTable]:checked"))
   var arrSelectedTable = [];
   $("input:checkbox[name=chkSelectTable]:checked").each(function(){
       arrSelectedTable.push($(this).val());
@@ -740,17 +729,11 @@ function mergeAndOpenTable (argument)
         $.uniform.update();
       });
       
-
-      //TODO: update style      
-      $("#divDeviceListAlert").prepend('<div class="alert alert-success">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
-                                      '</div>')
+      successNotify(data.message);
     }
     else //Fail
     {
-      $("#divDeviceListAlert").prepend('<div class="alert alert-error">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
-                                      '</div>')
+      failNotify(data.message);
     }
     $('#mergeTableModal').modal('hide');
   });
@@ -764,19 +747,15 @@ function cancelAll (sessionId) {
   io.socket.post('/cancelAll', data, function (result) {
     if(result.status == 1)
     {
-      $("#remainingItems").prepend('<div class="alert alert-success">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' + result.message +
-                                      '</div>');
+      successNotify(result.message);
+
       //Remove all remaining item
       // $("#remainingItems").remove();
       reload();
     }
     else
     {
-      $("#remainingItems").prepend('<div class="alert alert-error">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
-                                      result.message +
-                                    '</div>');
+      failNotify(result.message);
     }
   });
 };
@@ -834,16 +813,11 @@ $("#btnOpenTable").click(function (event) {
         $(_this).prop('disabled', true);
         $.uniform.update();
 
-        //TODO: update style
-        $("#divDeviceListAlert").prepend('<div class="alert alert-success">' +
-                                        '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
-                                        '</div>')
+        successNotify(data.message);
       }
       else //Fail
       {
-        $("#divDeviceListAlert").prepend('<div class="alert alert-error">' +
-                                        '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
-                                        '</div>')
+        failNotify(data.message);
       }
       
     });
@@ -860,9 +834,7 @@ $("#confirmCloseTableModal").click(function (event) {
     }
     else
     {
-      $("#divOpenedTable").prepend('<div class="alert alert-error">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' + data.message +
-                                      '</div>');
+      failNotify(data.message);
     }
   });
 });
