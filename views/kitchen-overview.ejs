@@ -19,7 +19,7 @@
 			  	</thead>   
 			  	<tbody id="kitchenOverview">
 	  		  		<% _.each(sessionDetails, function (item) { %>
-	  		  			<tr id="sessionDetail<%= item.id %>">
+	  		  			<tr id="sessionDetail<%= item.id %>" class="session-<%= item.session.id %> <% if(item.session.paymentStatus == 'checkout') { %> row-warning <% } %>">
 	  		  				<td>
 	  		  					<%= item.id %>
 	  		  				</td>
@@ -30,7 +30,7 @@
 	  		  					<%= item.dish.name %>
 	  		  				</td>
 	  		  				<td>
-	  		  					<%= moment(item.updatedAt).format("DD/MM/YYYY hh:mm:ss a") %>
+	  		  					<%= moment(item.updatedAt).format("hh:mm:ss a") %>
 	  		  				</td>
 	  		  				<td>
 	  		  					<button class="btn btn-large btn-success" onclick="deliver(<%= item.id %>)">Giao</button>
