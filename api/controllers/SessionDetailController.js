@@ -5,9 +5,13 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+ var fs = require('fs');
+
  module.exports = {
  	deliver: function(req, res) {
  		var sessionDetailId = req.body.sessionDetailId;
+ 		var trainId = req.body.trainId;
+ 		var fullFilePath = './assets/order.dat';
 
  		SessionDetail.findOne({
  			id: sessionDetailId,
@@ -17,7 +21,7 @@
  			{
  				return res.json({
  					status: 0,
- 					message: 'Không thể giao hàng!'
+ 					message: 'Không tìm thấy chi tiết đơn hàng!'
  				});
  			}
  			else
@@ -28,35 +32,71 @@
  					{
  						return res.json({
  							status: 0,
- 							message: 'Không thể giao hàng!'
+ 							message: 'Không thể lưu đơn hàng!'
  						});
  					}
  					else
  					{
- 						sessionDetail.status = 'delivered';
- 						sessionDetail.save(function(err3, savedSessionDetail){
- 							if(err3 || !savedSessionDetail)
+ 						fs.readFile(fullFilePath, 'utf8', function read(err3, data) { 							
+ 							if(err3 || !data)
  							{
  								return res.json({
  									status: 0,
- 									message: 'Không thể giao hàng!'
+ 									message: 'Không thể đọc file!'
  								});
  							}
  							else
  							{
- 								sails.sockets.broadcast('device', 'removeKitchenOverview', { sessionDetailId: sessionDetailId });
- 								sails.sockets.broadcast('table'+sessionDetail.session.table, 'item-delivered', 
+ 								var arr = data.split("\n");
+ 								if(arr[0] == 1) //Train is currently at station
  								{
- 									sessionDetailId: sessionDetailId, 
- 									dishName: sessionDetail.dish.name, 
- 									type: 1, //Đã giao
- 									message: 'Đã giao' 
-								});
+ 									var newStr = "2\n" + sessionDetail.session.table + "\n" + trainId;
+ 									fs.writeFile(fullFilePath, newStr, 'utf8', function (err4) {
+ 										if(err4)
+ 										{
+ 											return res.json({
+ 												status: 0,
+ 												message: 'Không thể ghi file!'
+ 											});
+ 										}
+ 										else
+ 										{
+					 						sessionDetail.status = 'delivered';
+					 						sessionDetail.save(function(err5, savedSessionDetail){
+					 							if(err5 || !savedSessionDetail)
+					 							{
+					 								return res.json({
+					 									status: 0,
+					 									message: 'Không thể giao hàng!'
+					 								});
+					 							}
+					 							else
+					 							{
+					 								sails.sockets.broadcast('device', 'removeKitchenOverview', { sessionDetailId: sessionDetailId });
+					 								sails.sockets.broadcast('table'+sessionDetail.session.table, 'item-delivered', 
+					 								{
+					 									sessionDetailId: sessionDetailId, 
+					 									dishName: sessionDetail.dish.name, 
+					 									type: 1, //Đã giao
+					 									message: 'Đã giao' 
+													});
 
- 								return res.json({
- 									status: 1,
- 									message: 'Thành công!'
- 								});
+					 								return res.json({
+					 									status: 1,
+					 									message: 'Thành công!'
+					 								});
+					 							}
+					 						});
+ 										}
+ 									});
+ 								}
+ 								else
+ 								{
+ 									return res.json({
+ 										status: 0,
+ 										message: 'Xe không sẵn sàng!'
+ 									});
+ 								}
  							}
  						});
  					}
