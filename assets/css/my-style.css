@@ -315,9 +315,12 @@ input[type="text"].dishName{
     content: ' *';
 }
 
-input[type="number"].ng-invalid-required,
-input[type="number"].ng-invalid{
+select.ng-invalid-required,
+select.ng-invalid,
+input[type].ng-invalid-required,
+input[type].ng-invalid{
     border-color:red!important;
+    box-shadow: 0px 0px 5px red;
 }
 
 .disableTab {
@@ -331,8 +334,15 @@ div.listPrice.ng-invalid{
     border-color: red;
 }
 
+input[type=text]::-webkit-inner-spin-button, 
+input[type=text]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
   -webkit-appearance: none; 
   margin: 0; 
+}
+
+.addingSection {
+    text-align:right;
+    margin-top: 10px;
 }

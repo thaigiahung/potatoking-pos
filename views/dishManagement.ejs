@@ -1,10 +1,10 @@
 <div class="row-fluid" 
 ng-controller="dishManamentController as dishes"
 ng-init="dishes.selectOptions = <%= JSON.stringify(categories) %>; 
-dishes.dishes = <%= JSON.stringify(dishes) %>;
-dishes.selectedDish = dishes.dishes[0].id">
+dishes.dishes = <%= JSON.stringify(dishes) %>;">
     <div class="span3">
-        <div class="row-fluid listDishContainer" ng-repeat="dish in dishes.dishes">
+            <div class="row-fluid listDishContainer" ng-repeat="dish in dishes.dishes | orderBy : ['-status', 'price']"
+            ng-init="dishes.selectFirstDish(dish.id, $first)">
             <div class="span3 listPrice" ng-model="dish.price" min="0" max="999999999" required 
             ng-class="[
                 {enableDish: dish.status == 'enable'},
@@ -13,7 +13,6 @@ dishes.selectedDish = dishes.dishes[0].id">
                 <span>{{dish.price | currency : '' : 0}}</span>
             </div>
             <div class="span9 listDish listAnimate1"
-            tabindex="{{dish.id}}"
 
             ng-click="dishes.changeDish(dish.id)"
             ng-class="[
@@ -22,6 +21,12 @@ dishes.selectedDish = dishes.dishes[0].id">
             ]">
                 <span ng-class="[
                 {listEdited: dishes.isDirty(dish.id) }]">{{dish.name}}</span>
+            </div>
+        </div>
+
+        <div class="addingSection">
+            <div class="btn btn-large btn-info" ng-click="dishes.addDish()"
+            ng-hide="dishes.editable"> Add
             </div>
         </div>
     </div>
@@ -40,7 +45,8 @@ dishes.selectedDish = dishes.dishes[0].id">
                 ng-click="dishes.edit()">{{dish.name}}</h1>
                 <input ng-show="dishes.editable" class="span12 dishName" type="text" ng-model="dish.name"
                 ng-change="dishes.turnOnDirty()" 
-                maxlength="100">
+                maxlength="100" required
+                my-enter="dishes.submitChange(dish.id)">
             </div>
 
 
@@ -54,7 +60,7 @@ dishes.selectedDish = dishes.dishes[0].id">
                                 <div ng-hide="dishes.editable" 
                                 ng-model="dish.price"
                                 ng-click="dishes.edit()" >{{dish.price | currency : '' : 0}}</div>
-                    <input ng-show="dishes.editable" type="number" value="dish.price" ng-model="dish.price" min="0" max="999999999" required ng-change="dishes.turnOnDirty()">
+                    <input ng-show="dishes.editable" type="number" value="dish.price" ng-model="dish.price" min="0" max="999999999" required ng-change="dishes.turnOnDirty()" my-enter="dishes.submitChange(dish.id)">
                             </div>
                         </div>
                         <div class="row-fluid">
@@ -66,7 +72,7 @@ dishes.selectedDish = dishes.dishes[0].id">
                             <!-- <select ng-show="dishes.editable"> -->
                             <select ng-show="dishes.editable"
                             ng-model="dish.category.id"
-                            ng-options="cate.id as cate.name for cate in dishes.selectOptions" ng-change="dishes.turnOnDirty()">
+                            ng-options="cate.id as cate.name for cate in dishes.selectOptions" ng-change="dishes.turnOnDirty()" required my-enter="dishes.submitChange(dish.id)">
                             </select>
                             </div>
                         </div>
@@ -78,8 +84,11 @@ dishes.selectedDish = dishes.dishes[0].id">
                                 <div ng-hide="dishes.editable" ng-click="dishes.edit()">{{ dish.description }}</div>
                                 <textarea ng-show="dishes.editable"
                                 ng-model="dish.description" ng-change="dishes.turnOnDirty()" 
-                                maxlength="2000">{{ dish.description }}</textarea>
+                                maxlength="2000" my-enter="dishes.submitChange(dish.id)">{{ dish.description }}</textarea>
                             </div>
+                        </div>
+
+                        <div class="row-fluid">
                         </div>
 
                         <div class="dishActionBar">
@@ -100,14 +109,25 @@ dishes.selectedDish = dishes.dishes[0].id">
                             </div>
 
                             <div class="btn btn-large btn-inverse" ng-click="dishes.cancelEdit(dish.id)"
-                            ng-show="dishes.editable"> Cancel
+                            ng-show="dishes.editable && !dishes.adding"> Cancel
+                            </div>
+
+                            <div class="btn btn-large btn-inverse" ng-click="dishes.cancelAddDish()"
+                            ng-show="dishes.editable && dishes.adding"> Cancel
                             </div>
 
                             <div class="btn btn-large btn-success" ng-click="dishes.submitChange(dish.id)"
-                            ng-show="dishes.editable"
+                            ng-show="dishes.editable && !dishes.adding"
                             ng-class="[
                             {disableTab: !form.$valid}
                             ]"> Save
+                            </div>                            
+
+                            <div class="btn btn-large btn-success" ng-click="dishes.submitAddDish(dish)"
+                            ng-show="dishes.adding"
+                            ng-class="[
+                            {disableTab: !form.$valid}
+                            ]"> Add
                             </div>
 
                         </div>
@@ -115,12 +135,12 @@ dishes.selectedDish = dishes.dishes[0].id">
                     <div class="span2">
 
                         <div ng-repeat="image in dish.images">
-                        <div class="imageWrap">
-                            <span class="imageDelete"
-                            ng-click="dishes.confirmDeleteImage(image.id)">&times;</span>
-                            <img class="dishImage" src="{{ image.url }}">
-                            <img class="dishImageFull" src="{{ image.url }}">
-                        </div>
+                            <div class="imageWrap">
+                                <span class="imageDelete"
+                                ng-click="dishes.confirmDeleteImage(image.id)">&times;</span>
+                                <img class="dishImage" ng-src="{{ image.url }}">
+                                <img class="dishImageFull" ng-src="{{ image.url }}">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -134,7 +154,7 @@ dishes.selectedDish = dishes.dishes[0].id">
         <button type="button" class="close" data-dismiss="modal">×</button>
         <h1>Bạn có chắc muốn xóa hình này:</h1>
 
-        <img class="previewImage" src="{{dishes.selectedImage.url}}">
+        <img class="previewImage" ng-src="{{dishes.selectedImage.url}}">
       </div>
       <div class="modal-footer">
         <button class="btn btn-warning" data-toggle="modal"

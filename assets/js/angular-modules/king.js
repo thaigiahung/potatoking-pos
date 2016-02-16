@@ -64,6 +64,20 @@
 		};
 	});
 
+	app.directive('myEnter', function () {
+	    return function (scope, element, attrs) {
+	        element.bind("keydown keypress", function (event) {
+	            if(event.which === 13) {
+	                scope.$apply(function (){
+	                    scope.$eval(attrs.myEnter);
+	                });
+
+	                event.preventDefault();
+	            }
+	        });
+	    };
+	});
+
 	app.controller('dishManamentController', function($scope) {
 		this.selectedDish = 0;
 		this.editable = false;
@@ -77,10 +91,132 @@
 		this.deleteCountdown = this.countdownDuration;
 		this.counting = false;
 		this.selectedImage = {};
+		this.adding = false;
 
 		var notificationLocation = 'top left';
 
 		var self = this;
+
+		this.selectFirstDish = function(id, isFirst) {
+			if(isFirst) {
+				self.selectedDish = id;
+			}
+		}
+
+		this.getFirstSelectedDish = function() {
+			if(self.dishes.length == 0) {
+				return null;
+			}
+
+			// var isDisable = false;
+			var isEnable = false;
+			var minPriceDisable = self.dishes[0].price;
+			var minPriceEnable = self.dishes[0].price;
+			var indexDisable = 0;
+			var indexEnable = 0;
+
+			for(var i = 0 ; i < self.dishes.length ; i ++ ) {
+
+				if(self.dishes[i].status == 'enable') {
+					isEnable = true;
+
+					if(self.dishes[i].price < minPriceEnable)  {
+						minPriceEnable = self.dishes[i].price;
+						indexEnable = i;
+					}
+
+				} else if(!isEnable) {
+					// isDisable = true;
+
+					if(self.dishes[i].price < minPriceDisable)  {
+						minPriceDisable = self.dishes[i].price;
+						indexDisable = i;
+					}
+				}
+			}
+
+			if(isEnable) {
+				console.log('selected enable' + indexEnable);
+				self.selectedDish = indexEnable;
+			}
+			else {
+				console.log('selected Disable' + indexDisable);
+				self.selectedDish = indexDisable;
+			}
+		}
+
+		function getMaxId() {
+			var dishes = self.dishes;
+			var maxId = -999;
+
+			for(var i = 0; i < dishes.length; i++ ){
+				maxId = dishes[i].id > maxId ? dishes[i].id : maxId;
+			}
+
+			return maxId;
+		}
+
+		function getNextId() {
+			return getMaxId() + 1;
+		}
+
+		this.addDish = function() {
+			var nexId = getNextId();
+			var newDish = {
+				id: nexId,
+				name: '',
+				description: '',
+				status: 'disable',
+				price: ''
+			};
+
+			beginAdd();
+
+			self.dishes.push(newDish);
+			self.selectedDish = nexId;
+		}
+
+		function beginAdd() {
+			self.adding = true;
+			self.dirty = true;
+			self.editable = true;
+		}
+
+		function finishAdd() {
+			self.adding = false;
+			self.dirty = false;
+			self.editable = false;
+		}
+
+		this.submitAddDish = function(dish) {
+			$.ajax({
+				method: 'POST',
+				url: '/dish/addDish',
+				data: { 
+					dish: dish
+				}
+			}).done(function(data) {
+				finishAdd();
+
+				if(data.status == 0) {
+ 					$scope.$digest();
+ 					var message = "Tạo món " + self.dishes[getCurrentDish()].name + " thành công.";
+ 					successNotify(message);
+				}
+				else {
+					var message = "Tạo món " + self.dishes[getCurrentDish()].name + " không thành công.";
+					failNotify(message);
+				}
+			});
+		}
+
+		this.cancelAddDish = function() {
+			var maxId = getMaxId();
+
+			finishAdd();
+			self.dishes.pop();
+			self.selectedDish = getMaxId(this.dishes);
+		}
 
 		this.turnOnDirty = function() {
 			this.dirty = true;
@@ -167,13 +303,12 @@
 				if(data.status == 0) {
 					self.dishes[getCurrentDish()].status = 'enable';
  					$scope.$digest();
-					$.notify("Enable món " + self.dishes[getCurrentDish()].name + " thành công."
-						, { position: notificationLocation, className: 'success' });
+					var message = "Enable món " + self.dishes[getCurrentDish()].name + " thành công.";
+					successNotify(message);
 				}
 				else {
 					var message = "Enable món " + self.dishes[getCurrentDish()].name + " không thành công.";
-					$.notify( data.message ? data.message : message
-						, { position: notificationLocation, className: 'error' });
+					failNotify(message);
 				}
 			});
 		}
@@ -189,13 +324,12 @@
 				if(data.status == 0) {
 					self.dishes[getCurrentDish()].status = 'disable';
  					$scope.$digest();
-					$.notify("Disable món " + self.dishes[getCurrentDish()].name + " thành công."
-						, { position: notificationLocation, className: 'success' });
+ 					var message = "Disable món " + self.dishes[getCurrentDish()].name + " thành công.";
+ 					successNotify(message);
 				}
 				else {
 					var message = "Disable món " + self.dishes[getCurrentDish()].name + " không thành công.";
-					$.notify( data.message ? data.message : message
-						, { position: notificationLocation, className: 'error' });
+					failNotify(message);
 				}
 			});
 
@@ -216,13 +350,13 @@
 					currentDish.images.splice(getImage(id),1);		
 
  					$scope.$digest();
-					$.notify("Xóa hình cho món " + currentName + " thành công."
-						, { position: notificationLocation, className: 'success' });
+
+ 					var message = "Xóa hình cho món " + currentName + " thành công.";
+ 					successNotify(message);
 				}
 				else {
 					var message = "Xóa hình cho món " + self.dishes[getCurrentDish()].name + " không thành công.";
-					$.notify( data.message ? data.message : message
-						, { position: notificationLocation, className: 'error' });
+					failNotify(message);					
 				}
 			});
 
@@ -241,13 +375,12 @@
 					var currentName = self.dishes[getCurrentDish()].name;
 					self.dishes.splice(getCurrentDish(),1);
  					$scope.$digest();
-					$.notify("Xóa món " + currentName + " thành công."
-						, { position: notificationLocation, className: 'success' });
+ 					var message = "Xóa món " + currentName + " thành công.";
+ 					sucessNotify(message);
 				}
 				else {
 					var message = "Xóa món " + self.dishes[getCurrentDish()].name + " không thành công.";
-					$.notify( data.message ? data.message : message
-						, { position: notificationLocation, className: 'error' });
+					failNotify(message);
 				}
 			});
 
@@ -289,7 +422,15 @@
 					url: '/dish/editDish',
 					data: this.dishes[currentDish]
 				}).done(function(data) {
-					console.log(data);
+					if(data.status == 0) {
+						var currentName = self.dishes[getCurrentDish()].name;
+						var message = "Sửa món " + currentName + " thành công.";
+						successNotify(message);
+					}
+					else {
+						var message = "Sửa món " + self.dishes[getCurrentDish()].name + " không thành công.";
+						failNotify(message);
+					}
 				});
 			}
 
@@ -312,9 +453,14 @@
 		}
 
 		this.cancelEdit = function() {
-			angular.copy(this.resetData, this.dishes[getCurrentDish()]);
+			if (!this.adding) {
+				angular.copy(this.resetData, this.dishes[getCurrentDish()]);
+			}
+
+			this.adding = false;
 			this.editable = false;
 			this.dirty = false;
+
 		}
 	});
 

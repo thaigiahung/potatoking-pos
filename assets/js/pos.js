@@ -616,16 +616,22 @@ function order (sessionId)
   io.socket.post('/order', data, function (result) {
     if(result.status == 0)
     {
-      $("#divDishPageAlert").prepend('<div class="alert alert-error">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
-                                      result.message +
-                                    '</div>');
+      failNotify(result.message);
+      // $("#divDishPageAlert").prepend('<div class="alert alert-error">' +
+      //                                 '<button type="button" class="close" data-dismiss="alert">×</button>' +
+      //                                 result.message +
+      //                               '</div>');
+    }
+    else {
+      successNotify("Order món thành công");
     }
   });
 }
 
 function checkout (sessionId) 
 {
+  startCountdown('btnCheckout', 60);
+
   var data = {
     sessionId: sessionId
   }
@@ -633,10 +639,10 @@ function checkout (sessionId)
   io.socket.post('/checkout', data, function (result) {
     if(result.status == 0)
     {
-      $("#divOrderedPageAlert").prepend('<div class="alert alert-error">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
-                                      result.message +
-                                    '</div>');
+      failNotify(result.message);
+    }
+    else {
+      successNotify("Order món thành công");
     }
   });
 }
@@ -650,10 +656,15 @@ function deliver (sessionDetailId)
   io.socket.post('/deliver', data, function (result) {
     if(result.status == 0)
     {
-      $("#divKitchenOverviewPageAlert").prepend('<div class="alert alert-error">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
-                                      result.message +
-                                    '</div>');
+      failNotify(result.message);
+      // $("#divKitchenOverviewPageAlert").prepend('<div class="alert alert-error">' +
+      //                                 '<button type="button" class="close" data-dismiss="alert">×</button>' +
+      //                                 result.message +
+      //                               '</div>');
+    }
+    else {
+      // successNotify("")
+      //TODO: Deliver món thành công
     }
   });
 }
@@ -666,10 +677,7 @@ function hideDish (dishId) {
   io.socket.post('/hideDish', data, function (result) {
     if(result.status == 0)
     {
-      $("#divKitchenDishPageAlert").prepend('<div class="alert alert-error">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
-                                      result.message +
-                                    '</div>');
+      failNotify(result.message);
     }
   });
 };
@@ -682,10 +690,7 @@ function showDish (dishId) {
   io.socket.post('/showDish', data, function (result) {
     if(result.status == 0)
     {
-      $("#divKitchenDishPageAlert").prepend('<div class="alert alert-error">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
-                                      result.message +
-                                    '</div>');
+      failNotify(result.message);
     }
   });
 };
