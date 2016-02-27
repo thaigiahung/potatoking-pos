@@ -378,7 +378,7 @@ module.exports = {
               sessionDetailId: id, 
               dishName: sessionDetail.dish.name, 
               type: 2, //Đã hủy
-              message: 'Đã hủy' 
+              message: 'Nhà bếp đã hủy' 
             });
             return res.json({
               status: 1,
