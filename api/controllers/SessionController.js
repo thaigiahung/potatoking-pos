@@ -515,7 +515,7 @@ module.exports = {
               }
               else
               {
-                sails.sockets.broadcast('table'+session.table, 'ordered', { msg: '/ordered' });
+                sails.sockets.broadcast('table'+session.table, 'ordered', { msg: '/menu' });
 
                 return res.json({
                   status: 1,
