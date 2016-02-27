@@ -81,3 +81,11 @@ var persistNotify = function(message) {
 		autoHide: false
 	});
 }
+
+var infoNotify = function(message) {
+	$.notify( message, {
+		position: notifyPosition,
+		className: 'info',
+		autoHide: false
+	});
+}
