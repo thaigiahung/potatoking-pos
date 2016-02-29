@@ -196,7 +196,7 @@ io.socket.on('connect', function () {
         for(var i = 0; i < result.length; i++)
         {
           var item = result[i];
-          $('#kitchenOverview').append(
+          /*$('#kitchenOverview').append(
             '<tr id="sessionDetail'+item.id+'"  class="session-'+item.session.id+'">' +
               '<td>' +
                 item.id +
@@ -215,7 +215,18 @@ io.socket.on('connect', function () {
                 '<input type="button" class="btn btn-large btn-danger" onclick="removeOrderedItem('+item.id+')" value="Hủy"' +
               '</td>' +
             '</tr>'
-          );
+          );*/
+          
+          var table = $('#kitchenOverviewTable').DataTable();
+          var rowNode = table.row.add([
+            item.id, 
+            item.session.table, 
+            item.dish.name,
+            moment(item.updatedAt).format("hh:mm:ss a"),
+            '<button class="btn btn-large btn-success" onclick="deliver('+item.id+')">Giao</button> <input type="button" class="btn btn-large btn-danger" onclick="removeOrderedItem('+item.id+')" value="Hủy">'
+          ]).draw().node();
+
+          $(rowNode).addClass('session-'+item.session.id).attr('id', 'sessionDetail'+item.id);
         }        
       });
 
