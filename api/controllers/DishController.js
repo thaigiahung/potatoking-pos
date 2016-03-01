@@ -110,6 +110,61 @@ module.exports = {
     });
   },
 
+    cashierMenu: function(req, res) {
+      var ip = req.ip;
+      ip = ip.substring(ip.lastIndexOf(":") + 1, ip.length);
+      
+      DeviceIp.findOne({
+        ip: ip
+      }).populate('device').exec(function (err, deviceIp) {
+        if(err || !deviceIp)
+        {
+          return res.view('403', {layout: false});
+        }
+        else
+        {
+          if(deviceIp.type == 'cashier')
+          {
+            device = deviceIp.device;
+
+            Dish.find().exec(function (err, dishes) {
+                if (err || !dishes) {
+                    return res.view('cashier-dish', { status: 0, dishes: [], session: {}, added: [], deviceIp: deviceIp });
+                }
+                else {
+                    var query = "SELECT s.* FROM session s JOIN sessiondevice sd ON sd.session = s.id WHERE s.status = 'open' AND sd.device = " + device.id;
+                    Session.query(query, function (err, session) {
+                        if (err || !session || session.length == 0) {
+                            return res.view('dish', { status: 0, dishes: dishes, session: {}, added: [], deviceIp: deviceIp });
+                        }
+                        else {
+                            session = session[0];
+                            SessionDetail.find({
+                                where: {
+                                    session: session.id
+                                },
+                                sort: 'id DESC'
+                            }).populate('dish').exec(function (err, added) {
+                                if (err) {
+                                    return res.view('cashier-dish', { status: 0, dishes: dishes, session: session, added: [], deviceIp: deviceIp });
+                                }
+                                else {
+                                    return res.view('cashier-dish', { status: 1, dishes: dishes, session: session, added: added, deviceIp: deviceIp });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+          }
+          else
+          {
+            return res.view('403', {layout: false});
+          }
+        }
+      });
+    },
+
     kitchenDish: function (req, res) {
         var ip = req.ip;
         ip = ip.substring(ip.lastIndexOf(":") + 1, ip.length);

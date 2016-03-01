@@ -40,6 +40,7 @@ module.exports = {
               device: device.id,
               table: device.table,
               status: 'open',
+              deliveryType: 'dine-in',
               startTime: new Date(),
               endTime: new Date()
             }).exec(function (err2, createdSession){
@@ -143,6 +144,7 @@ module.exports = {
         Session.create({
           table: selectedMergeTable,
           status: 'open',
+          deliveryType: 'dine-in',
           startTime: new Date(),
           endTime: new Date()
         }).exec(function (err, createdSession){

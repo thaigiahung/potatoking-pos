@@ -1,0 +1,59 @@
+<div id="divDishPageAlert">  
+  
+</div><!--/row-->
+
+<div id="dishesPage" class="row-fluid">
+  <h1>Danh sách món ăn</h1>  
+</div>
+
+<hr>
+
+<!-- <div class="row-fluid"> -->
+<% _.each(dishes, function (dish) { %>
+	<div class="span3" <%if(dish.status=='disable') {%>style="display: none;"<%}%> id="item<%= dish.id %>">
+		<button onclick="addItem(<%= dish.id %>, '<%= dish.name %>')"><%= dish.name %></button>
+	</div>
+<% }) %>
+<!-- </div> -->
+
+<div class="row-fluid"></div>
+
+<hr>
+
+<div id="dishesPage" class="row-fluid">
+  	<h1>Các món đã chọn</h1>
+
+	<div class="box span11">
+		<div class="box-content">
+			<table class="table">
+			  	<thead>
+				  	<tr>
+					  	<th>Món</th>
+					  	<th></th>
+				  	</tr>
+			  	</thead>   
+			  	<tbody id="addedItemTableBody">
+	  		  		<% _.each(added, function (item) { %>
+	  		  			<% if(item.status == 'added') { %>
+		  			  		<tr class="dish<%= item.dish.id %>">
+		  			  			<td>
+		  			  				<%= item.dish.name %>
+		  			  			</td>
+		  			  			<td>
+		  			  				<input type="button" class="btn btn-danger" onclick="removeItem(<%= item.id %>)" value="Hủy"
+		  			  			</td>
+		  			  		</tr>
+	  			  		<% } %>
+	  		  		<% }) %>
+			  	</tbody>
+		  	</table>            
+		</div>
+		<div class="row-fluid device-list-footer">
+		  <div class="device-list-footer-right">
+		    <button onclick="order(<%= session.id %>)" class="btn btn-large btn-success" data-toggle="modal">Đặt món</button>
+		  </div>
+		</div>
+	</div>
+	
+	
+</div>
