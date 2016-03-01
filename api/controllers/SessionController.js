@@ -499,7 +499,7 @@ module.exports = {
           if(!err1 && sessionDetails.length > 0)
           {
             //Broadcast to view Kitchen Overview
-            sails.sockets.broadcast('device', 'newOrderAdded', { msg: JSON.stringify(sessionDetails) });
+            sails.sockets.broadcast('device', 'newOrderAdded', { type: 'dine-in', sessionDetails: JSON.stringify(sessionDetails) });
 
             //Change status to ordered
             SessionDetail.update(

@@ -20,6 +20,11 @@ module.exports = {
       type: 'string',
       enum: ['checkout', 'paid', 'cancelled']
     },
+    deliveryType: {
+      type: 'string',
+      enum: ['dine-in', 'to-go', 'delivery'],
+      defaultsTo: 'dine-in'
+    },
     startTime: {type: 'datetime'},
     endTime: {type: 'datetime'}
   }

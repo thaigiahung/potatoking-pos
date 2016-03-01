@@ -192,32 +192,23 @@ io.socket.on('connect', function () {
       });
 
       io.socket.on('newOrderAdded', function (result) {
-        result = JSON.parse(result.msg);
-        for(var i = 0; i < result.length; i++)
+        var sessionDetails = JSON.parse(result.sessionDetails);
+        var type = result.type;
+        var tableId = '';
+        if(type == 'dine-in')
         {
-          var item = result[i];
-          /*$('#kitchenOverview').append(
-            '<tr id="sessionDetail'+item.id+'"  class="session-'+item.session.id+'">' +
-              '<td>' +
-                item.id +
-              '</td>' +
-              '<td>' +
-                item.session.table +
-              '</td>' +
-              '<td>' +
-                item.dish.name +
-              '</td>' +
-              '<td>' +
-                moment(item.updatedAt).format("hh:mm:ss a") +
-              '</td>' +
-              '<td>' +
-                '<button class="btn btn-large btn-success" onclick="deliver('+item.id+')">Giao</button> ' +
-                '<input type="button" class="btn btn-large btn-danger" onclick="removeOrderedItem('+item.id+')" value="Hủy"' +
-              '</td>' +
-            '</tr>'
-          );*/
+          tableId = '#kitchenOverviewDineInTable';
+        }
+        else if(type = 'to-go')
+        {
+          tableId = '#kitchenOverviewToGoTable';
+        }
+
+        for(var i = 0; i < sessionDetails.length; i++)
+        {
+          var item = sessionDetails[i];
           
-          var table = $('#kitchenOverviewTable').DataTable();
+          var table = $(tableId).DataTable();
           var rowNode = table.row.add([
             item.id, 
             item.session.table, 

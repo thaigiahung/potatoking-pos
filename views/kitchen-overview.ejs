@@ -2,52 +2,98 @@
   
 </div><!--/row-->
 
-<div id="kitchenOverviewPage" class="row-fluid">
-  	<h1>Danh sách đặt món</h1>
+<div id="kitchenOverviewPage" class="box">
+	<div class="box-header">
+		<h2><i class="fa fa-th"></i><span class="break"></span>Danh sách đặt món</h2>
+	</div>
+	<div class="box-content">
+		<ul class="nav tab-menu nav-tabs" id="myTab">
+			<li class="active"><a href="ui-elements.html#dine-in">Tại chỗ</a></li>
+			<li class=""><a href="ui-elements.html#to-go">Mang về</a></li>
+		</ul>
 
-	<div class="box span11">
-		<div class="box-content">
-			<table class="table" id="kitchenOverviewTable">
-			  	<thead>
-				  	<tr>
-				  		<th>Mã số</th>
-					  	<th>Bàn</th>
-					  	<th>Món</th>
-					  	<th>Giờ đặt món</th>
-					  	<th>&nbsp;</th>
-				  	</tr>
-			  	</thead>   
-			  	<tbody id="kitchenOverview">
-	  		  		<% _.each(sessionDetails, function (item) { %>
-	  		  			<tr id="sessionDetail<%= item.id %>" class="session-<%= item.session.id %> <% if(item.session.paymentStatus == 'checkout') { %> row-warning <% } %>">
-	  		  				<td>
-	  		  					<%= item.id %>
-	  		  				</td>
-	  		  				<td>
-	  		  					<%= item.session.table %>
-	  		  				</td>
-	  		  				<td>
-	  		  					<%= item.dish.name %>
-	  		  				</td>
-	  		  				<td>
-	  		  					<%= moment(item.updatedAt).format("hh:mm:ss a") %>
-	  		  				</td>
-	  		  				<td>
-	  		  					<button class="btn btn-large btn-success" onclick="deliver(<%= item.id %>)">Giao</button>
-	  		  					<input type="button" class="btn btn-large btn-danger" onclick="removeOrderedItem(<%= item.id %>)" value="Hủy">
-	  		  				</td>
-	  		  			</tr>
-	  		  		<% }) %>
-			  	</tbody>
-		  	</table>            
+		<div id="kitchenOverviewTab" class="tab-content">
+			<div class="tab-pane active" id="dine-in">
+				<table class="table" id="kitchenOverviewDineInTable">
+				  	<thead>
+					  	<tr>
+					  		<th>Mã số</th>
+						  	<th>Bàn</th>
+						  	<th>Món</th>
+						  	<th>Giờ đặt món</th>
+						  	<th>&nbsp;</th>
+					  	</tr>
+				  	</thead>   
+				  	<tbody>
+		  		  		<% _.each(sessionDetails, function (item) { %>
+		  		  			<% if(item.session.deliveryType == 'dine-in') {%>
+								<tr id="sessionDetail<%= item.id %>" class="session-<%= item.session.id %> <% if(item.session.paymentStatus == 'checkout') { %> row-warning <% } %>">
+									<td>
+										<%= item.id %>
+									</td>
+									<td>
+										<%= item.session.table %>
+									</td>
+									<td>
+										<%= item.dish.name %>
+									</td>
+									<td>
+										<%= moment(item.updatedAt).format("hh:mm:ss a") %>
+									</td>
+									<td>
+										<button class="btn btn-large btn-success" onclick="deliver(<%= item.id %>)">Giao</button>
+										<input type="button" class="btn btn-large btn-danger" onclick="removeOrderedItem(<%= item.id %>)" value="Hủy">
+									</td>
+								</tr>
+		  		  			<% } %>
+		  		  		<% }) %>
+				  	</tbody>
+			  	</table>
+			</div>
+			<div class="tab-pane" id="to-go">
+				<table class="table" id="kitchenOverviewToGoTable" style="width: 100%;">
+				  	<thead>
+					  	<tr>
+					  		<th>Mã số</th>
+						  	<th>Bàn</th>
+						  	<th>Món</th>
+						  	<th>Giờ đặt món</th>
+						  	<th>&nbsp;</th>
+					  	</tr>
+				  	</thead>   
+				  	<tbody>
+		  		  		<% _.each(sessionDetails, function (item) { %>
+		  		  			<% if(item.session.deliveryType == 'to-go') {%>
+								<tr id="sessionDetail<%= item.id %>" class="session-<%= item.session.id %> <% if(item.session.paymentStatus == 'checkout') { %> row-warning <% } %>">
+									<td>
+										<%= item.id %>
+									</td>
+									<td>
+										<%= item.session.table %>
+									</td>
+									<td>
+										<%= item.dish.name %>
+									</td>
+									<td>
+										<%= moment(item.updatedAt).format("hh:mm:ss a") %>
+									</td>
+									<td>
+										<button class="btn btn-large btn-success" onclick="deliver(<%= item.id %>)">Giao</button>
+										<input type="button" class="btn btn-large btn-danger" onclick="removeOrderedItem(<%= item.id %>)" value="Hủy">
+									</td>
+								</tr>
+		  		  			<% } %>
+		  		  		<% }) %>
+				  	</tbody>
+			  	</table>
+			</div>			
 		</div>
 	</div>
-	
-	
 </div>
 
 <script>
 	$(document).ready(function(){
-	    var table = $('#kitchenOverviewTable').DataTable();
+	    $('#kitchenOverviewDineInTable').DataTable();
+	    $('#kitchenOverviewToGoTable').DataTable();
 	});
 </script>
