@@ -762,6 +762,20 @@ function cancelAll (sessionId) {
   });
 };
 
+function cashierAddItem (id, name, price) 
+{
+  $('#btnDish'+id).attr('disabled', true);
+  $('#cashierMenuPageTableBody').append(
+    '<tr>' +
+      '<td>' + name + '</td>' +
+      '<td>' + price + '</td>' +
+      '<td><input type="text" price="'+price+'" value="1"></td>' +
+      '<td>' + price + '</td>' +
+      '<td><button onclick="removeCashierAddedItem(this, '+id+')">Hủy</button></td>' +
+    '</tr>'
+  );
+}
+
 function reload () 
 {
   location.reload();

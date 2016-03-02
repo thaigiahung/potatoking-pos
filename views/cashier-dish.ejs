@@ -13,14 +13,14 @@
 			<% }) %>
 		</ul>
 
-		<div id="kitchenOverviewTab" class="tab-content">
+		<div class="tab-content">
 			<% _.each(categories, function (category) { %>
 				<div class="tab-pane" id="cat-<%= category.id %>">
 					<div class="row-fluid">
 						<% _.each(dishes, function (dish) { %>
 							<% if(dish.category.id == category.id) { %> 
 								<div class="span3">
-									<button onclick="addItem(<%= dish.id %>, '<%= dish.name %>')"><%= dish.name %></button>
+									<button id="btnDish<%= dish.id %>" onclick="cashierAddItem(<%= dish.id %>, '<%= dish.name %>', <%= dish.price %>)"><%= dish.name %></button>
 								</div>
 							<% } %>
 						<% }) %>
@@ -31,7 +31,7 @@
 	</div>
 </div>
 
-<div id="dishesPage" class="row-fluid">
+<div id="cashierMenuPage" class="row-fluid">
   	<h1>Các món đã chọn</h1>
 
 	<div class="box span11">
@@ -40,10 +40,12 @@
 			  	<thead>
 				  	<tr>
 					  	<th>Món</th>
-					  	<th></th>
+					  	<th>Giá</th>
+					  	<th>Số lượng</th>
+					  	<th>Thành tiền</th>
 				  	</tr>
 			  	</thead>   
-			  	<tbody id="addedItemTableBody">
+			  	<tbody id="cashierMenuPageTableBody">
 	  		  		
 			  	</tbody>
 		  	</table>            
