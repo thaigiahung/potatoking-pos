@@ -127,31 +127,19 @@ module.exports = {
           {
             device = deviceIp.device;
 
-            Dish.find().exec(function (err, dishes) {
-                if (err || !dishes) {
-                    return res.view('cashier-dish', { status: 0, dishes: [], session: {}, added: [], deviceIp: deviceIp });
+            Category.find({'status' : 'enable'}).exec(function (err, categories) {
+                if (err || !categories) {
+                    return res.view('cashier-dish', { status: 0, dishes: [], categories: [], deviceIp: deviceIp });
                 }
-                else {
-                    var query = "SELECT s.* FROM session s JOIN sessiondevice sd ON sd.session = s.id WHERE s.status = 'open' AND sd.device = " + device.id;
-                    Session.query(query, function (err, session) {
-                        if (err || !session || session.length == 0) {
-                            return res.view('dish', { status: 0, dishes: dishes, session: {}, added: [], deviceIp: deviceIp });
+                else 
+                {
+                    Dish.find({'status' : 'enable'}).populate('category').exec(function (err, dishes) {
+                        if (err || !dishes) {
+                            return res.view('cashier-dish', { status: 0, dishes: [], categories: categories, deviceIp: deviceIp });
                         }
-                        else {
-                            session = session[0];
-                            SessionDetail.find({
-                                where: {
-                                    session: session.id
-                                },
-                                sort: 'id DESC'
-                            }).populate('dish').exec(function (err, added) {
-                                if (err) {
-                                    return res.view('cashier-dish', { status: 0, dishes: dishes, session: session, added: [], deviceIp: deviceIp });
-                                }
-                                else {
-                                    return res.view('cashier-dish', { status: 1, dishes: dishes, session: session, added: added, deviceIp: deviceIp });
-                                }
-                            });
+                        else 
+                        {
+                            return res.view('cashier-dish', { status: 0, dishes: dishes, categories: categories, deviceIp: deviceIp });
                         }
                     });
                 }
