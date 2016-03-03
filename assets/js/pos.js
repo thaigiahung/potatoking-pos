@@ -1,5 +1,9 @@
 $( document ).ready(function() {
-  // $('#addedItemTable').DataTable();  
+  // $('#addedItemTable').DataTable();
+  if($('#divCashierMenuAlert').length > 0)
+  {
+    localStorage.setItem("cashierAddedItems", JSON.stringify([]));
+  }
 });
 
 
@@ -764,6 +768,38 @@ function cancelAll (sessionId) {
 
 function cashierAddItem (id, name, price) 
 {
+  //Get variable cashierAddedItems from localStorage
+  var cashierAddedItems = localStorage.getItem("cashierAddedItems");
+  cashierAddedItems = JSON.parse(cashierAddedItems);
+
+  var newItem = {
+    [id]: {
+      id: id,
+      quantity: 1,
+      price: price
+    }
+  };
+
+  //Push it to cashierAddedItems
+  cashierAddedItems.push(newItem);
+
+  //Store it in localStorage again
+  localStorage.setItem("cashierAddedItems", JSON.stringify(cashierAddedItems));
+
+  //Calculate total
+  var total = 0;
+  for(var i = 0; i < cashierAddedItems.length; i++)
+  {
+    var items = cashierAddedItems[i];
+    for(var value in items)
+    {
+      var item = items[value];
+      total += (item.quantity * item.price);
+    }
+  }
+  localStorage.setItem("cashierAddedItemsTotalPrice", total);
+  
+  
   $('#btnDish'+id).attr('disabled', true);
   $('#cashierMenuPageTableBody').append(
     '<tr>' +
