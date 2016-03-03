@@ -805,7 +805,7 @@ function cashierAddItem (id, name, price)
     '<tr>' +
       '<td>' + name + '</td>' +
       '<td>' + price + '</td>' +
-      '<td><input type="text" price="'+price+'" value="1"></td>' +
+      '<td><input type="text" class="input-quantity" price="'+price+'" value="1"></td>' +
       '<td>' + price + '</td>' +
       '<td><button onclick="removeCashierAddedItem(this, '+id+')">Hủy</button></td>' +
     '</tr>'
@@ -891,6 +891,23 @@ $("#confirmCloseTableModal").click(function (event) {
   });
 });
 
+/*$( ".input-quantity" ).change(function() {
+  console.log($(this))
+})*/
+
+$(document).on('change', '.input-quantity', function() {
+  var total = 0;
+  if($(this).val() < 0)
+  {
+    $(this).val(0);
+  }
+  else
+  {
+    total = $(this).val() * $(this).attr("price");
+  }
+  
+  $(this).parent().parent().children().eq(3).text(total);
+});
 
 
 
