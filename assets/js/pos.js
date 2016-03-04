@@ -4,6 +4,25 @@ $( document ).ready(function() {
   {
     localStorage.setItem("cashierAddedItems", JSON.stringify([]));
   }
+
+  
+
+  //Calculate change
+  $( "#receive" ).keyup(function() {
+    var total = $("#total").val();
+    var receive = $("#receive").val();
+    change = receive - total;
+    $("#change").val(change);
+
+    if(change < 0)
+    {
+      $("#change").addClass("change-warning");
+    }
+    else
+    {
+      $("#change").removeClass("change-warning");
+    }
+  });
 });
 
 
@@ -119,24 +138,6 @@ io.socket.on('connect', function () {
     {      
       $( document ).ready(function() {
         io.socket.get('/subscribe/device', function (message) {});
-
-        var total = $("#total").val();
-
-        //Calculate change
-        $( "#receive" ).keyup(function() {
-          var receive = $("#receive").val();
-          change = receive - total;
-          $("#change").val(change);
-
-          if(change < 0)
-          {
-            $("#change").addClass("change-warning");
-          }
-          else
-          {
-            $("#change").removeClass("change-warning");
-          }
-        });  
 
         //Call API checkout
         $("#btnCheckout").click(function () {
@@ -805,11 +806,60 @@ function cashierAddItem (id, name, price)
     '<tr>' +
       '<td>' + name + '</td>' +
       '<td>' + price + '</td>' +
-      '<td><input type="text" class="input-quantity" price="'+price+'" value="1"></td>' +
+      '<td><input type="number" class="input-quantity" price="'+price+'" value="1"></td>' +
       '<td>' + price + '</td>' +
-      '<td><button onclick="removeCashierAddedItem(this, '+id+')">Hủy</button></td>' +
+      '<td><button class="btn btn-large btn-danger" onclick="cashierRemoveAddedItem(this, '+id+')">Hủy</button></td>' +
     '</tr>'
   );
+
+  //Set total to table footer
+  setTotalAddedItem();
+}
+
+function cashierRemoveAddedItem (element, itemId) 
+{
+  $(element).parent().parent().remove();
+  $('#btnDish' + itemId).attr('disabled', false);
+
+  //Set total to table footer
+  setTotalAddedItem();
+}
+
+function cashierCheckout () 
+{
+  var change = $("#change").val();
+  if(change < 0)
+  {
+    failNotify('Vui lòng kiểm tra lại số tiền!');
+  }
+  else
+  {
+    //TODO: call api
+  }
+}
+
+function setTotalAddedItem () 
+{
+  var total = 0;
+
+  //Find all tr of cashierMenuPageTableBody
+  var trs = $('#cashierMenuPageTableBody > tr');
+  for(var i = 0; i < trs.length; i++)
+  {
+    var tr = trs[i];
+
+    //Get amount of each row (cot Thanh tien)
+    var amount = $(tr).children().eq(3).text();
+
+    //Add it to total
+    total += parseInt(amount);
+  }
+
+  //Set total to table footer
+  $('#thTotal').text(total);
+
+  //Set total to input total in modal checkout
+  $('#total').attr('value', total);
 }
 
 function reload () 
@@ -891,22 +941,22 @@ $("#confirmCloseTableModal").click(function (event) {
   });
 });
 
-/*$( ".input-quantity" ).change(function() {
-  console.log($(this))
-})*/
-
 $(document).on('change', '.input-quantity', function() {
-  var total = 0;
+  var amount = 0;
   if($(this).val() < 0)
   {
     $(this).val(0);
   }
   else
   {
-    total = $(this).val() * $(this).attr("price");
+    amount = $(this).val() * $(this).attr("price");
   }
   
-  $(this).parent().parent().children().eq(3).text(total);
+  //Calculate amount of the current row
+  $(this).parent().parent().children().eq(3).text(amount);
+
+  //Set total to table footer
+  setTotalAddedItem();
 });
 
 
