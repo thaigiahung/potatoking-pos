@@ -78,6 +78,7 @@ module.exports.routes = {
   'POST /showDish': 'DishController.showDish',
   'POST /blockTable': 'SessionController.blockTable',
   'POST /unblockTable': 'SessionController.unblockTable',
+  'POST /cashier/order': 'SessionController.cashierOrder',
 
   // Dish management
   'POST /dish/editDish': 'DishController.editDish',

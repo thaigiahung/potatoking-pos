@@ -9,7 +9,7 @@
 	<div class="box-content">
 		<ul class="nav tab-menu nav-tabs" id="myTab">
 			<% _.each(categories, function (category) { %>
-				<li><a href="ui-elements.html#cat-<%= category.id %>"><%= category.name  %></a></li>
+				<li><a href="#cat-<%= category.id %>"><%= category.name  %></a></li>
 			<% }) %>
 		</ul>
 
@@ -96,7 +96,7 @@
 	</div>
 	<div class="modal-footer" id="modalCheckoutFooter">
 		<button onclick="cashierCheckout()" class="btn btn-success">Thanh toán</button>
-		<button type="button">Thoát</button>
+		<button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
 	</div>
 </div>
 <!-- End - Model Checkout -->

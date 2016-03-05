@@ -193,7 +193,25 @@ io.socket.on('connect', function () {
       io.socket.get('/subscribe/device', function (message) {});
 
       io.socket.on('removeKitchenOverview', function (result) {
-        $("#sessionDetail"+result.sessionDetailId).remove();
+        // $("#sessionDetail"+result.sessionDetailId).remove();
+
+        var type = result.deliveryType;
+
+        var tableId = '';
+        if(type == 'dine-in')
+        {
+          tableId = '#kitchenOverviewDineInTable';
+        }
+        else if(type = 'to-go')
+        {
+          tableId = '#kitchenOverviewToGoTable';
+        }
+
+        var table = $(tableId).DataTable();
+         table
+            .row( $("#sessionDetail"+result.sessionDetailId) )
+            .remove()
+            .draw();
       });
 
       io.socket.on('newOrderAdded', function (result) {
@@ -806,7 +824,7 @@ function cashierAddItem (id, name, price)
     '<tr>' +
       '<td>' + name + '</td>' +
       '<td>' + price + '</td>' +
-      '<td><input type="number" class="input-quantity" price="'+price+'" value="1"></td>' +
+      '<td><input type="number" class="input-quantity" item-id="'+id+'" price="'+price+'" value="1"></td>' +
       '<td>' + price + '</td>' +
       '<td><button class="btn btn-large btn-danger" onclick="cashierRemoveAddedItem(this, '+id+')">Hủy</button></td>' +
     '</tr>'
@@ -834,7 +852,53 @@ function cashierCheckout ()
   }
   else
   {
-    //TODO: call api
+    var trs = $('#cashierMenuPageTableBody > tr');
+    var items = [];
+    var total = 0;
+    for(var i = 0; i < trs.length; i++)
+    {
+      var tr = trs[i];
+      var inputQuantity = $(tr).children().eq(2).children().first();
+      var quantity = inputQuantity.val();
+      var id = inputQuantity.attr('item-id');
+      var price = inputQuantity.attr('price');
+
+      total += (quantity * price);
+
+      for(var j = 0; j < quantity;  j++)
+      {
+        items.push({
+          id: id,
+          price: price 
+        });
+      }
+    }
+
+    if(parseInt($('#total').val()) !== total)
+    {
+      failNotify('Vui lòng kiểm tra lại số tiền!');
+    }
+    else
+    {
+      var data = {
+        data: items,
+        total: total,
+        receive: $('#receive').val(),
+        change: $('#change').val()
+      }
+      
+      io.socket.post('/cashier/order', data, function (result) {
+        if(result.status == 1)
+        {
+          successNotify(result.message);
+          reload();
+        }
+        else
+        {
+          failNotify(result.message);
+        }
+      });
+    }
   }
 }
 

@@ -37,7 +37,6 @@ module.exports = {
           {
             //Update table Session
             Session.create({
-              device: device.id,
               table: device.table,
               status: 'open',
               deliveryType: 'dine-in',
@@ -374,7 +373,7 @@ module.exports = {
           }
           else
           {
-            sails.sockets.broadcast('device', 'removeKitchenOverview', { sessionDetailId: id });
+            sails.sockets.broadcast('device', 'removeKitchenOverview', { deliveryType: sessionDetail.session.deliveryType, sessionDetailId: id });
             sails.sockets.broadcast('table'+sessionDetail.session.table, 'item-delivered', 
             {
               sessionDetailId: id, 
@@ -768,6 +767,110 @@ module.exports = {
         });        
       }
     });
+  },
+
+  cashierOrder: function(req, res) {
+    var data = req.body.data;
+    var total = req.body.total;
+    var receive = req.body.receive;
+    var change = req.body.change;
+
+    var ip = req.ip;
+    ip = ip.substring(ip.lastIndexOf(":")+1, ip.length);
+
+    if(data.length > 0)
+    {
+      DeviceIp.findOne({
+        ip: ip
+      }).populate('device').exec(function (err, deviceIp) {
+        if(err || !deviceIp)
+        {
+          return res.view('404', {layout: false});
+        }
+        else
+        {
+          if(deviceIp.type == 'cashier')
+          {
+            device = deviceIp.device;
+
+            Session.create({
+              table: device.table,
+              status: 'close',
+              paymentStatus: 'paid',
+              deliveryType: 'to-go',
+              receive: receive,
+              change: change,
+              total: total,
+              startTime: new Date(),
+              endTime: new Date()
+            }).exec(function (err, createdSession){
+              if(err || !createdSession)
+              {
+                return res.json({
+                  status: 0,
+                  message: 'Không thể đặt món!'
+                });
+              }
+              else
+              {
+                var sessionDetails = [];
+                async.forEachOfSeries(data, function (item, index, callback) {
+                  //Create Session Detail
+                  SessionDetail.create({
+                    session: createdSession.id,
+                    dish: item.id,
+                    price: item.price,
+                    status: 'ordered'
+                  }).exec(function (err1, createdSessionDetail){              
+                    if(err1 || !createdSessionDetail)
+                    {
+                      callback(err1);
+                    }
+                    else
+                    {
+                      callback();                     
+                    }
+                  });
+                }, function done(err) {
+                  if(err)
+                  {
+                    return res.json({
+                      status: 0,
+                      message: 'Không thể đặt món!'
+                    });
+                  }
+                  else
+                  {
+                    SessionDetail.find({
+                      session: createdSession.id,
+                      status: 'ordered'
+                    }).populate('session').populate('dish').exec(function (err, sessionDetails){
+                      if(!err && sessionDetails.length > 0)
+                      {
+                        //Broadcast to view Kitchen Overview
+                        sails.sockets.broadcast('device', 'newOrderAdded', { type: 'to-go', sessionDetails: JSON.stringify(sessionDetails) });
+                      }
+                    });
+
+                    return res.json({
+                      status: 1,
+                      message: 'Đặt món thành công!'
+                    });
+                  }                  
+                });
+              }
+            });
+          }
+        }
+      });
+    }
+    else
+    {
+      return res.json({
+        status: 0,
+        message: 'Vui lòng chọn món!'
+      });
+    }
   },
 
   blockTable: function(req, res) {
