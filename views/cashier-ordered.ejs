@@ -1,0 +1,55 @@
+<div id="divCashierOrderedPageAlert">  
+  
+</div><!--/row-->
+
+<div class="row-fluid">
+  	<h1>Các món đã đặt</h1>
+
+	<div class="box span11">
+		<div class="box-content">
+			<table class="table">
+			  	<thead>
+				  	<tr>
+				  		<th>Mã đơn hàng</th>
+					  	<th>Món</th>
+					  	<th>Trạng thái</th>
+				  	</tr>
+			  	</thead>   
+			  	<tbody id="orderedItemTableBody">
+	  		  		<% _.each(data, function (item) { %>
+	  		  			<tr class="session<%= item.id %>">
+	  		  				<td>
+	  		  					<%= item.id %>
+	  		  				</td>
+	  		  				<td>
+	  		  					<%= item.dish.name %>
+	  		  				</td>
+	  		  				<td id="tdSessionDetail<%= item.id %>">
+	  		  					<% if(item.status == 'added') { %>
+									Đã chọn
+								<% } else if(item.status == 'cancelled') { %>
+									Đã xóa
+	  		  					<% } else if(item.status == 'ordered') { %>
+									Đã đặt								
+								<% } else if(item.status == 'removed') { %>
+									Nhà bếp đã hủy
+								<% } else if(item.status == 'delivered') { %>
+									Đã giao
+	  		  					<% } else { %>
+									<%= item.status %>
+								<% } %>
+	  		  				</td>
+	  		  			</tr>
+	  		  		<% }) %>
+			  	</tbody>
+		  	</table>            
+		</div>
+		<div class="row-fluid device-list-footer">
+		  <div class="device-list-footer-right">
+		    <button id="btnCheckout" onclick="checkout(<%= session.id %>)" class="btn btn-large btn-success" data-toggle="modal">Thanh toán</button>
+		  </div>
+		</div>
+	</div>
+	
+	
+</div>

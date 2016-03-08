@@ -873,6 +873,42 @@ module.exports = {
     }
   },
 
+  cashierOrdered: function(req, res) {
+    var ip = req.ip;
+    ip = ip.substring(ip.lastIndexOf(":") + 1, ip.length);
+    
+    DeviceIp.findOne({
+      ip: ip
+    }).populate('device').exec(function (err, deviceIp) {
+      if(err || !deviceIp)
+      {
+        return res.view('403', {layout: false});
+      }
+      else
+      {
+        if(deviceIp.type == 'cashier')
+        {
+          Session.find({
+            deliveryType: 'to-go'
+          }).populate('sessionDetails').exec(function (err, sessions) {
+            if(err || !sessions)
+            {
+              return res.view('cashier-ordered', { status: 0, data: [] });
+            }
+            else
+            {
+              return res.view('cashier-ordered', { status: 1, data: sessions });
+            }
+          });
+        }
+        else
+        {
+          return res.view('403', {layout: false});
+        }
+      }
+    });
+  },
+
   blockTable: function(req, res) {
     var table = req.body.table;
     sails.sockets.broadcast('table'+table, 'blockTable', { msg: "Bàn của quý khách đang được thanh toán!" });
