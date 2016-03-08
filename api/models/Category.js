@@ -13,7 +13,11 @@ module.exports = {
     status: {
       type: 'string',
       enum: ['enable', 'disable']
-    }
+    },
+    dishes: {
+      collection: 'Dish',
+      via: 'category'
+    },
   }
 };
 

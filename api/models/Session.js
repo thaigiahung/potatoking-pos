@@ -25,6 +25,14 @@ module.exports = {
       enum: ['dine-in', 'to-go', 'delivery'],
       defaultsTo: 'dine-in'
     },
+    sessionDetails: {
+      collection: 'SessionDetail',
+      via: 'session'
+    },
+    sessionDevices: {
+      collection: 'SessionDevice',
+      via: 'session'
+    },
     startTime: {type: 'datetime'},
     endTime: {type: 'datetime'}
   }
