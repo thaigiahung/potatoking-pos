@@ -57,7 +57,7 @@ module.exports = {
         {
           device = deviceIp.device;
 
-          Dish.find().exec(function (err, dishes) {
+          Dish.find({status: 'enable'}).exec(function (err, dishes) {
             if(err || !dishes)
             {
               return res.view('dish', {status: 0, dishes: [], session: {}, added: [], deviceIp: deviceIp});

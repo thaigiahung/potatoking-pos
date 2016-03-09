@@ -17,37 +17,34 @@
 			  	</thead>   
 			  	<tbody id="orderedItemTableBody">
 	  		  		<% _.each(data, function (item) { %>
-	  		  			<tr class="session<%= item.id %>">
-	  		  				<td>
-	  		  					<%= item.id %>
-	  		  				</td>
-	  		  				<td>
-	  		  					<%= item.dish.name %>
-	  		  				</td>
-	  		  				<td id="tdSessionDetail<%= item.id %>">
-	  		  					<% if(item.status == 'added') { %>
-									Đã chọn
-								<% } else if(item.status == 'cancelled') { %>
-									Đã xóa
-	  		  					<% } else if(item.status == 'ordered') { %>
-									Đã đặt								
-								<% } else if(item.status == 'removed') { %>
-									Nhà bếp đã hủy
-								<% } else if(item.status == 'delivered') { %>
-									Đã giao
-	  		  					<% } else { %>
-									<%= item.status %>
-								<% } %>
-	  		  				</td>
-	  		  			</tr>
+	  		  			<% _.each(item.sessionDetails, function (detail) { %>
+		  		  			<tr class="session<%= item.id %>">
+		  		  				<td>
+		  		  					<%= item.id %>
+		  		  				</td>
+		  		  				<td>
+		  		  					<%= dishes[detail.dish] %>
+		  		  				</td>
+		  		  				<td id="tdSessionDetail<%= detail.id %>">
+		  		  					<% if(detail.status == 'added') { %>
+										Đã chọn
+									<% } else if(detail.status == 'cancelled') { %>
+										Đã xóa
+		  		  					<% } else if(detail.status == 'ordered') { %>
+										Đã đặt								
+									<% } else if(detail.status == 'removed') { %>
+										Nhà bếp đã hủy
+									<% } else if(detail.status == 'delivered') { %>
+										Đã giao
+		  		  					<% } else { %>
+										<%= detail.status %>
+									<% } %>
+		  		  				</td>
+		  		  			</tr>
+	  		  			<% }) %>
 	  		  		<% }) %>
 			  	</tbody>
 		  	</table>            
-		</div>
-		<div class="row-fluid device-list-footer">
-		  <div class="device-list-footer-right">
-		    <button id="btnCheckout" onclick="checkout(<%= session.id %>)" class="btn btn-large btn-success" data-toggle="modal">Thanh toán</button>
-		  </div>
 		</div>
 	</div>
 	

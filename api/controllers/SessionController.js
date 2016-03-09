@@ -891,13 +891,29 @@ module.exports = {
           Session.find({
             deliveryType: 'to-go'
           }).populate('sessionDetails').exec(function (err, sessions) {
+            var objDishes = {};
             if(err || !sessions)
             {
-              return res.view('cashier-ordered', { status: 0, data: [] });
+              return res.view('cashier-ordered', { status: 0, deviceIp: deviceIp, data: [], dishes: objDishes });
             }
             else
             {
-              return res.view('cashier-ordered', { status: 1, data: sessions });
+
+              Dish.find({status: 'enable'}).exec(function (err, dishes) {
+                if(err || !dishes)
+                {
+                  return res.view('cashier-ordered', { status: 0, deviceIp: deviceIp, data: sessions, dishes: objDishes });
+                }
+                else
+                {
+                  async.forEachOfSeries(dishes, function (dish, index, callback) {
+                    objDishes[dish.id] = dish.name;
+                    callback();
+                  }, function done() {
+                    return res.view('cashier-ordered', { status: 1, deviceIp: deviceIp, data: sessions, dishes: objDishes });
+                  });
+                }
+              });
             }
           });
         }
