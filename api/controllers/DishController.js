@@ -267,7 +267,6 @@ module.exports = {
                         categories: categories,
                         dishes: found, 
                       deviceIp: deviceIp });
-                    // });
                 });
             });
         };

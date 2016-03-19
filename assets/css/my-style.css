@@ -109,6 +109,7 @@
 }
 
 .dishNameArea,
+.listIp,
 .listDish, .listPrice{
     border: 3px solid #333;
     border-radius: 5px;
@@ -125,15 +126,36 @@
     text-align:center;
 }   
 
-.enableDish {
+.deviceLegends>div {
+    padding:2.5px;
+}
+
+.enableStatus {
     background-color : #67c2ef;
 }
 
-.disableDish {
+.disableStatus {
     background-color: #faa732;
 }
 
-.dishNameArea,
+.openingDevice {
+    background-color: green;   
+}
+
+.closedDevice {
+    background-color: black;
+}
+
+.connectingDevice {
+    background-color: red;
+}
+
+.disconnectedDevice {
+    background-color: yellow;
+}
+
+.dishNameArea, 
+.listIp,
 .listDish {
     position: relative;
 
@@ -151,8 +173,13 @@
     user-select: none;
 }
 
-.listDish {
+.listDish,
+.listIp {
     text-align: right;
+}
+
+.listIp {
+    margin-bottom:10px;
 }
     
 .dishNameArea {
@@ -178,15 +205,16 @@
     color:white;
 }
 
+.listAnimate1:focus::after {
+    left: 50%;
+    opacity:0.5;
+}
+
 .listAnimate1:hover::after {
     left: 80%;
     opacity:0.25;
 }
 
-.listAnimate1:focus::after {
-    left: 50%;
-    opacity:0.5;
-}
 
 .listAnimate1::after {
     position:absolute;
@@ -213,10 +241,6 @@
     min-height: 250px;
 }
 
-/*.dishImage:hover {
-    opacity:0.75;
-}*/
-
 .imageDelete:hover {
     background-color:white;
 }
@@ -240,7 +264,7 @@
     margin-top:10px;
 }
 
-.enableDish::before { 
+.enableStatus::before { 
 /*    content:'';
     background-color: rgb(0,200,100);
     box-shadow: 0px 5px 5px rgb(0,200,100);
@@ -345,4 +369,29 @@ input[type=number]::-webkit-outer-spin-button {
 .addingSection {
     text-align:right;
     margin-top: 10px;
+}
+
+.notifyjs-viewDetailNotify-base {
+    background-color: rgba(175,211,205,0.95)
+}
+
+.notifyjs-viewDetailNotify-base .title {
+    min-width: 50px;
+    max-width: 500px;
+    float: left;
+    margin: 10px 10px 0 10px;
+    text-align: right;
+}
+
+.notifyjs-viewDetailNotify-base .buttons {
+  width: 170px;
+  float: right;
+  font-size: 9px;
+}
+
+.notifyjs-viewDetailNotify-base button {
+    font-size: 10px;
+    padding: 5px;
+    margin: 2px;
+    width: 80px;
 }

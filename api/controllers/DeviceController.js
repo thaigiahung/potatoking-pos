@@ -8,6 +8,30 @@
 var async = require('async');
 
 module.exports = {
+  manage: function (req, res) {
+      this.authorizeRoles = ['chief-cook'];
+      this.req = req;
+      this.res = res;
+      this.deviceIp = DeviceIp;
+
+      function callback(deviceIp) {
+          Device.find()
+          .populate('deviceIp')
+          .exec(function(err, found) {
+              if(err) {
+                return Authorize.NotFound(res);
+              }
+              
+              return res.view('deviceManagement', { status: 0, 
+                  devices: found, 
+                  deviceStatus: Utilities.GetCollection(Device, 'status'),
+                  deviceType: Utilities.GetCollection(DeviceIp, 'type'),
+                deviceIp: deviceIp });
+          });
+      };
+      return Authorize.apply(this, callback);
+  },
+
   subscribe: function(req, res) {
     var roomName = req.params.roomName;
     sails.sockets.join(req.socket, roomName);

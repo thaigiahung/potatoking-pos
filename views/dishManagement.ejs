@@ -7,8 +7,8 @@ dishes.dishes = <%= JSON.stringify(dishes) %>;">
             ng-init="dishes.selectFirstDish(dish.id, $first)">
             <div class="span3 listPrice" ng-model="dish.price" min="0" max="999999999" required 
             ng-class="[
-                {enableDish: dish.status == 'enable'},
-                {disableDish: dish.status == 'disable'},
+                {enableStatus: dish.status == 'enable'},
+                {disableStatus: dish.status == 'disable'},
             ]">
                 <span>{{dish.price | currency : '' : 0}}</span>
             </div>

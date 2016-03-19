@@ -55,6 +55,7 @@ module.exports.routes = {
   'GET /kitchen/overview': 'SessionController.kitchenOverview',
   'GET /kitchen/dish': 'DishController.kitchenDish',
   'GET /dish/manage' : 'DishController.manage',
+  'GET /device/manage' : 'DeviceController.manage',
 
   //API
   'GET /subscribe/:roomName': 'DeviceController.subscribe',
@@ -84,4 +85,7 @@ module.exports.routes = {
   'POST /dish/disableDish': 'DishController.disableDish',
   'POST /dish/deleteDish': 'DishController.deleteDish',
   'POST /dish/addDish': 'DishController.addDish',
+
+  // Device management
+  
 };

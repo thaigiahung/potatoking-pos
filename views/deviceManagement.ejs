@@ -1,0 +1,232 @@
+<div class="row-fluid" 
+ng-controller="deviceManagementController as devices"
+ng-init="
+devices.statusOptions = <%= JSON.stringify(deviceStatus) %>; 
+devices.typeOptions = <%= JSON.stringify(deviceType) %>; 
+devices.devices = <%= JSON.stringify(devices) %>;">
+    <div class="span2">
+
+        <div class="deviceLegends">
+            <div class="enableStatus">Enabled - đã kích hoạt </div>
+            <div class="disableStatus">Disabled - chưa dc kích hoạt</div>
+            <br>
+            <div class="openingDevice">Opened - đang được mở</div>
+            <div class="closedDevice">Closed - đã tắt</div>
+            <br>
+            <div class="connectingDevice">Connecting - đang kết nối</div>
+            <div class="disconnectedDevice">Disconnected - ngắt kết nối</div>
+        </div>
+
+            <div class="row-fluid listDishContainer" ng-repeat="device in devices.devices | orderBy : ['-status']"
+            ng-init="devices.selectFirstDevice(device.id, $first)">
+
+            <div class="span2 listPrice"
+            ng-class="[
+                {enableStatus: device.status == 'enable'},
+                {disableStatus: device.status == 'disable'},
+            ]">
+                <span>{{ device.status == 'enable' ? 'E' : 'D'}}</span>
+            </div>
+
+            <div class="span2 listPrice"
+            ng-class="[
+                {openingDevice: device.opening },
+                {closedDevice: !device.opening },
+            ]">
+                <span>{{ device.opening ? 'O' : 'C'}}</span>
+            </div>
+
+            <div class="span2 listPrice"
+            ng-class="[
+                {openingDevice: device.connecting },
+                {disconnectedDevice: !device.connecting },
+            ]">
+                <span>{{ device.opening ? 'C' : 'D'}}</span>
+            </div>
+
+            <div class="span6 listDish listAnimate1"
+
+            ng-click="devices.changeDevice(device.id)"
+            ng-class="[
+                {selectedAnimate1: devices.selectedDevice == device.id},
+                {disableTab: devices.dirty},
+            ]">
+                <span ng-class="[
+                {listEdited: devices.isDirty(device.id) }]">{{device.id}}</span>
+            </div>
+        </div>
+
+
+        <div class="addingSection">
+            <div class="btn btn-large btn-info" ng-click="devices.addDevice()"
+            ng-hide="devices.editable"> Add 
+            </div>
+        </div>
+    </div>
+    
+    <div class="span10">
+        <form novalidate class="deviceForm" name="form">
+        <div class="row-fluid deviceContainer"
+        ng-repeat="device in devices.devices"
+        ng-show="devices.selectedDevice == device.id">
+
+            <div class="row-fluid">
+                <h1 ng-hide="devices.editable" ng-model="device.name"
+                ng-click="devices.edit()">{{device.name}}</h1>
+                <input ng-show="devices.editable" class="span12 deviceName" type="text" ng-model="device.name"
+                ng-change="devices.turnOnDirty()" 
+                maxlength="100" required
+                my-enter="devices.submitChange(device.id)">
+            </div>
+
+
+                <div class="row-fluid">
+                    <div class="span10">
+                        <div class="row-fluid">
+                            <div class="span3">
+                                Price:
+                            </div>
+                            <div class="span9">
+                                <div ng-hide="devices.editable" 
+                                ng-model="device.price"
+                                ng-click="devices.edit()" >{{device.price | currency : '' : 0}}</div>
+                    <input ng-show="devices.editable" type="number" value="device.price" ng-model="device.price" min="0" max="999999999" required ng-change="devices.turnOnDirty()" my-enter="devices.submitChange(device.id)">
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span3">
+                                Category: 
+                            </div>
+                            <div class="span9">
+                                <div ng-hide="devices.editable" ng-click="devices.edit()">{{ devices.selectName(device.category.id) }}</div>
+                            <!-- <select ng-show="devices.editable"> -->
+                            <select ng-show="devices.editable"
+                            ng-model="device.category.id"
+                            ng-options="cate.id as cate.name for cate in devices.selectOptions" ng-change="devices.turnOnDirty()" required my-enter="devices.submitChange(device.id)">
+                            </select>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span3">
+                                Description: 
+                            </div>
+                            <div class="span9">
+                                <div ng-hide="devices.editable" ng-click="devices.edit()">{{ device.description }}</div>
+                                <textarea ng-show="devices.editable"
+                                ng-model="device.description" ng-change="devices.turnOnDirty()" 
+                                maxlength="2000" my-enter="devices.submitChange(device.id)">{{ device.description }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                        </div>
+
+                        <div class="deviceActionBar">
+                            <div class="btn btn-large btn-success" ng-click="devices.edit()"
+                            ng-hide="devices.editable"> Edit
+                            </div>
+
+                            <div class="btn btn-large btn-warning" ng-click="devices.confirmDisableDevice()"
+                            ng-hide="devices.editable || device.status == 'disable'"> Disable
+                            </div>
+
+                            <div class="btn btn-large btn-info" ng-click="devices.enableDevice()"
+                            ng-hide="devices.editable || device.status == 'enable'"> Enable
+                            </div>
+
+                            <div class="btn btn-large btn-danger" ng-click="devices.confirmDeleteDevice()"
+                            ng-hide="devices.editable || device.status == 'enable'"> Delete
+                            </div>
+
+                            <div class="btn btn-large btn-inverse" ng-click="devices.cancelEdit(device.id)"
+                            ng-show="devices.editable && !devices.adding"> Cancel
+                            </div>
+
+                            <div class="btn btn-large btn-inverse" ng-click="devices.cancelAddDevice()"
+                            ng-show="devices.editable && devices.adding"> Cancel
+                            </div>
+
+                            <div class="btn btn-large btn-success" ng-click="devices.submitChange(device.id)"
+                            ng-show="devices.editable && !devices.adding"
+                            ng-class="[
+                            {disableTab: !form.$valid}
+                            ]"> Save
+                            </div>                            
+
+                            <div class="btn btn-large btn-success" ng-click="devices.submitAddDevice(device)"
+                            ng-show="devices.adding"
+                            ng-class="[
+                            {disableTab: !form.$valid}
+                            ]"> Add
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="span2">
+
+                        <div ng-repeat="image in device.images">
+                            <div class="imageWrap">
+                                <span class="imageDelete"
+                                ng-click="devices.confirmDeleteImage(image.id)">&times;</span>
+                                <img class="deviceImage" ng-src="{{ image.url }}">
+                                <img class="deviceImageFull" ng-src="{{ image.url }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        </form>
+    </div>
+
+    <!-- Model deleteImage -->
+    <div class="modal hide fade" id="deleteImage">
+      <div class="modal-header imagePreviewHeader">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h1>Bạn có chắc muốn xóa hình này:</h1>
+
+        <img class="previewImage" ng-src="{{devices.selectedImage.url}}">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-warning" data-toggle="modal"
+        id="btnDeleteImage"
+        ng-click="devices.deleteImage(devices.selectedImage.id)">Xóa</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="devices.resetDeleteCountdown()">Thoát</button>
+      </div>
+    </div>
+    <!-- End - Model deleteImage -->
+
+    <!-- Model Disable Device -->
+    <div class="modal hide fade" id="disableModal">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h1>Bạn có chắc muốn disable món:</h1>
+        <div class="deviceNameArea">{{devices.selectedName}}</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-warning" data-toggle="modal"
+        ng-click="devices.disableDevice()">Disable</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+      </div>
+    </div>
+    <!-- End - Model Disable Device -->
+
+
+    <!-- Model Delete Device -->
+    <div class="modal hide fade" id="deleteModal">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h1>Bạn có chắc muốn xóa món:</h1>
+        <div class="deviceNameArea">{{devices.selectedName}}</div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnDeleteDevice" 
+        class="btn btn-danger" 
+        data-toggle="modal"
+        ng-click="devices.deleteDevice()">Xóa</button>
+
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCancelDeleteDevice" ng-click="devices.resetDeleteCountdown()">Thoát</button>
+      </div>
+    </div>
+    <!-- End - Model Delete Device -->
+
+</div>

@@ -17,6 +17,10 @@ module.exports = {
       enum: ['enable', 'disable']
     },
     opening: {type: 'boolean'},
+    deviceIp: {
+      collection:'DeviceIp',
+      via: 'device'
+    }
   },
 };
 

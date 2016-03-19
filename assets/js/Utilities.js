@@ -2,7 +2,7 @@ var counting = false;
 var countdownDuration = 3;
 
 
-var autoHideNotifyPosition = 'top left';
+var autoHideNotifyPosition = 'top center';
 var notifyPosition = 'top right';
 
 function startCountdown(btnId, duration) {
@@ -81,3 +81,38 @@ var persistNotify = function(message) {
 		autoHide: false
 	});
 }
+
+var detailNotify = 'viewDetailNotify';
+
+var notifyRedirect = function(redirectTo) {
+	location.href = redirectTo;
+}
+
+var viewDetailNotify = function(message, redirectLocation) {
+	$.notify( {
+		title: message,
+		button: "<button class='ignoreNotify'>Cancel</button>"+
+		"<button class='yes' data-notify-text='button' onclick='notifyRedirect(\""+redirectLocation+"\")'>View Detail</button>"
+	}, {
+		position: notifyPosition,
+		className: 'info',
+		autoHide: false,
+  		clickToHide: false,
+		style: detailNotify
+	});
+}
+
+$.notify.addStyle(detailNotify, {
+	html: 
+    "<div>" +
+      "<div class='clearfix'>" +
+        "<div class='title' data-notify-html='title'/>" +
+        "<div class='buttons' data-notify-html='button'>" +
+        "</div>" +
+      "</div>" +
+    "</div>"
+});
+
+$(document).on('click', '.notifyjs-' + detailNotify + '-base button', function() {
+  $(this).trigger('notify-hide');
+});
