@@ -412,6 +412,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .filterButton {
+    width: 40px;
     text-align: center;
     border:1px solid black;
 }

@@ -86,7 +86,7 @@
         const numberOfTable = 8;
 
         for (var i = 0; i < numberOfTable; i++) {
-            this.filters.push({ index: i, value: 1 });
+            this.filters.push({ index: i, value: 1, selected: 0 });
         }
 
         var self = this;
@@ -107,6 +107,31 @@
             self.selectedItems = [];
             for(var i = 0 ; i < numberOfTable;i++) {
                 self.filters[i].value = 1;
+                self.filters[i].selected = 0;
+            }
+        }
+        
+        this.updateNumberOfSelectedPerTable = function() {
+            var temp = new Array();
+            
+            for(var i = 0 ; i < numberOfTable; i++) {
+                temp.push(0);   
+            }                
+            
+            for(var j = 0; j < self.selectedItems.length ; j++) {
+                temp[self.getTable(self.selectedItems[j]) - 1]++;
+            }
+            
+            for(var i = 0 ; i < numberOfTable; i++) {
+                self.filters[i].selected = temp[i];   
+            }
+        }
+        
+        this.getTable = function(id) {
+            for(var i = 0 ; i < self.items.length ; i ++ ) {
+                if(self.items[i].id == id) {
+                    return self.items[i].session.table;
+                }
             }
         }
         
@@ -131,6 +156,7 @@
                     self.items = data.sessionDetails;
                 }
             });
+            self.updateNumberOfSelectedPerTable();
         }
         
 // This function will be ran after the user click Giao in the kitchen-overview page
@@ -153,6 +179,7 @@
                     self.reInitKitchen(data.sessionDetails);
                 }
             });
+            self.updateNumberOfSelectedPerTable();
         }
         
         this.removeSelectedItems = function() {
@@ -197,6 +224,8 @@
                
                self.selectedItems.splice(index,1);
             }
+            
+            self.updateNumberOfSelectedPerTable();
         }
         
         this.isSelected = function(id) {

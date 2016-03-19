@@ -13,7 +13,7 @@ ng-init="kitchen.items = <%= JSON.stringify(sessionDetails) %>">
         ng-disabled="kitchen.numberOfSelected() == 0">Giao ({{kitchen.numberOfSelected()}})</button>
     </div>
 
-  	<h1>Danh sách đặt món    {{kitchen.testingVariable}}</h1>
+  	<h1>Danh sách đặt món</h1>
 
 	<div class="box span11">
 		<div class="box-content">
@@ -28,7 +28,7 @@ ng-init="kitchen.items = <%= JSON.stringify(sessionDetails) %>">
                             ng-click="kitchen.changeFilterStatus(filter.index)"
                             ng-class="[
                                 { filterButtonDisabled: !kitchen.isOn(filter.index) }
-                            ]">{{ filter.index + 1 }}</th>
+                            ]">{{ filter.index + 1 }} ({{filter.selected}})</th>
                           
 					  	<th>Món</th>
 					  	<th>Giờ đặt món</th>
