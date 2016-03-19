@@ -395,3 +395,63 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 2px;
     width: 80px;
 }
+
+.actionPanel {
+    position: absolute;
+    z-index: 999;
+    right:20px;
+    top:20px;
+}
+
+.invisible {
+    opacity:0;
+}
+
+.filterButtonDisabled {
+    opacity: 0.5;
+}
+
+.filterButton {
+    text-align: center;
+    border:1px solid black;
+}
+
+.tableColor1 {
+	background-color: rgb(0,0,0);
+    color:white;
+}
+
+.tableColor2 {
+	background-color: rgb(0,255,255);
+}
+
+.tableColor3 {
+	background-color: rgb(255,0,255);
+}
+
+.tableColor4 {
+	background-color: rgb(255,255,0);
+}
+
+.tableColor5 {
+	background-color: rgb(0,0,255);
+    color:white;
+}
+
+.tableColor6 {
+	background-color: rgb(255,0,0);
+    color:white;
+}
+
+.tableColor7 {
+	background-color: rgb(0,255,0)
+}
+
+.tableColor8 {
+	background-color: rgb(111,50,111);
+    color:white;
+}
+
+.selectedKitchenOrder{
+    background-color: rgb(50,230,150);
+}

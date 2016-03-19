@@ -2,8 +2,18 @@
   
 </div><!--/row-->
 
-<div id="kitchenOverviewPage" class="row-fluid">
-  	<h1>Danh sách đặt món</h1>
+
+<div id="kitchenOverviewPage" class="row-fluid"
+ng-controller="kitchenOverviewController as kitchen"
+ng-init="kitchen.items = <%= JSON.stringify(sessionDetails) %>">
+
+    <div class="actionPanel">
+        <button class="btn btn-large btn-success"
+        ng-click="kitchen.shipOrders()"
+        ng-disabled="kitchen.numberOfSelected() == 0">Giao ({{kitchen.numberOfSelected()}})</button>
+    </div>
+
+  	<h1>Danh sách đặt món    {{kitchen.testingVariable}}</h1>
 
 	<div class="box span11">
 		<div class="box-content">
@@ -11,37 +21,49 @@
 			  	<thead>
 				  	<tr>
 				  		<th>Mã số</th>
-					  	<th>Bàn</th>
+                          
+                        <th 
+                        ng-repeat="filter in kitchen.filters" 
+                        class="tableColor{{ filter.index + 1 }} filterButton" 
+                            ng-click="kitchen.changeFilterStatus(filter.index)"
+                            ng-class="[
+                                { filterButtonDisabled: !kitchen.isOn(filter.index) }
+                            ]">{{ filter.index + 1 }}</th>
+                          
 					  	<th>Món</th>
 					  	<th>Giờ đặt món</th>
 					  	<th>&nbsp;</th>
 				  	</tr>
 			  	</thead>   
 			  	<tbody id="kitchenOverview">
-	  		  		<% _.each(sessionDetails, function (item) { %>
-	  		  			<tr id="sessionDetail<%= item.id %>" class="session-<%= item.session.id %> <% if(item.session.paymentStatus == 'checkout') { %> row-warning <% } %>">
-	  		  				<td>
-	  		  					<%= item.id %>
-	  		  				</td>
-	  		  				<td>
-	  		  					<%= item.session.table %>
-	  		  				</td>
-	  		  				<td>
-	  		  					<%= item.dish.name %>
-	  		  				</td>
-	  		  				<td>
-	  		  					<%= moment(item.updatedAt).format("hh:mm:ss a") %>
-	  		  				</td>
-	  		  				<td>
-	  		  					<button class="btn btn-large btn-success" onclick="deliver(<%= item.id %>)">Giao</button>
-	  		  					<input type="button" class="btn btn-large btn-danger" onclick="removeOrderedItem(<%= item.id %>)" value="Hủy"
-	  		  				</td>
-	  		  			</tr>
-	  		  		<% }) %>
+                  <tr ng-repeat="item in kitchen.items | orderBy:'updatedAt'"
+                  ng-class="[
+                    {selectedKitchenOrder: kitchen.isSelected(item.id)}
+                  ]"
+                  ng-show="kitchen.canShow(item.session.table)"
+                  ng-click="kitchen.select(item.id)">
+                    <td>
+                        {{ item.id }}
+                    </td>
+                    <td 
+                        class='{{ item.session.table == (filter.index+1) ? "tableColor"+(filter.index+1) : ""  }}'
+                        ng-repeat="filter in kitchen.filters"> 
+                        {{ item.session.table == (filter.index+1) ? filter.index+1 : "" }}
+                    </td>
+                    <td>
+                        {{ item.dish.name }}
+                    </td>
+                    <td>
+                        {{ kitchen.convertDate(item.updatedAt) }}
+                    </td>
+                    <td>
+                        <input type="button" class="btn btn-large btn-danger" value="Hủy"
+                        ng-click="kitchen.removeOrder($event, item.id)">
+                    </td>
+                  </tr>
 			  	</tbody>
 		  	</table>            
 		</div>
 	</div>
-	
 	
 </div>
