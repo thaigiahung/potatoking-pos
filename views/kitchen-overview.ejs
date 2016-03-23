@@ -73,8 +73,8 @@
 				<table class="table" id="kitchenOverviewDineInTable">
 				  	<thead>
 					  	<tr>
-				  			<th>Mã số</th>
-	                        <th>Bo me no cai filter nay di</th>
+				  			<th>Mã chi tiết</th>
+	                        <th>Mã đơn hàng</th>
 						  	<th>Món</th>
 						  	<th>Giờ đặt món</th>
 						  	<th>&nbsp;</th>
@@ -92,7 +92,7 @@
 		                        {{ item.session.deliveryType }}
 		                    </td>
 		                    <td>
-		                        {{item.session.table}}
+		                        {{item.session.id}}
 		                    </td>
 		                    <td>
 		                        {{ item.dish.name }}

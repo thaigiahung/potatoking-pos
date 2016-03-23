@@ -648,7 +648,7 @@ module.exports = {
             where: { 
               status: 'ordered'
             },
-            sort: 'createdAt ASC'      
+            sort: 'id ASC'      
           }).populate('dish').populate('session').exec(function (err, sessionDetails) {
             if(err || !sessionDetails)
             {
