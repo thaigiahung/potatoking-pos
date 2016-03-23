@@ -35,10 +35,14 @@
 
             return result;
         }
+
+        this.reassignItems = function(newItems) {
+        	self.items=newItems;
+        }
         
         this.reInitKitchen = function(newItems) {
             if(newItems) {
-                self.items=newItems;   
+            		self.reassignItems(newItems);
             }
             
             self.selectedItems = [];
@@ -46,6 +50,8 @@
                 self.filters[i].value = 1;
                 self.filters[i].selected = 0;
             }
+
+        		$scope.$apply();
         }
         
         this.updateNumberOfSelectedPerTable = function() {
@@ -109,7 +115,7 @@
             }
 
             io.socket.post(url, data, function (result) {
-            	console.log(result);
+            	console.log(result.status)
               if(result.status == 0)
               {
                 failNotify(result.message);
