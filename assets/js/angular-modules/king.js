@@ -14,6 +14,168 @@
 		{ deviceIndex: 7, isSelected: false}
 	];
 
+  app.controller('kitchenOverviewController', function ($scope) {
+        this.items = [];
+        this.selectedItems = [];
+        this.filters = new Array();
+        this.testingVariable = 0;
+
+        const numberOfTable = 8;
+
+        for (var i = 0; i < numberOfTable; i++) {
+            this.filters.push({ index: i, value: 1, selected: 0 });
+        }
+
+        var self = this;
+
+        this.convertDate = function (input) {
+            var rawResult = input.match(/T.+Z$/);
+            var result = rawResult[0].replace(/^T/, "");
+            result = result.replace(/\.\d{3}Z$/, "");
+
+            return result;
+        }
+        
+        this.reInitKitchen = function(newItems) {
+            if(newItems) {
+                self.items=newItems;   
+            }
+            
+            self.selectedItems = [];
+            for(var i = 0 ; i < numberOfTable;i++) {
+                self.filters[i].value = 1;
+                self.filters[i].selected = 0;
+            }
+        }
+        
+        this.updateNumberOfSelectedPerTable = function() {
+            var temp = new Array();
+            
+            for(var i = 0 ; i < numberOfTable; i++) {
+                temp.push(0);   
+            }                
+            
+            for(var j = 0; j < self.selectedItems.length ; j++) {
+                temp[self.getTable(self.selectedItems[j]) - 1]++;
+            }
+            
+            for(var i = 0 ; i < numberOfTable; i++) {
+                self.filters[i].selected = temp[i];   
+            }
+        }
+        
+        this.getTable = function(id) {
+            for(var i = 0 ; i < self.items.length ; i ++ ) {
+                if(self.items[i].id == id) {
+                    return self.items[i].session.table;
+                }
+            }
+        }
+        
+// This function will be run after the user click Huy~ in the kitchen-overview page
+        this.removeOrder = function(e, id) {
+            e.stopPropagation();
+            self.removeItemById(id);
+            
+            //TODO: This code will be run before the server response
+            
+            $.ajax({
+                method: "POST",
+                url: "/removeItem",
+                data: id,
+                success: function(data) {
+                    // TODO: This code will be run after the server response
+                    
+                    /* In the object response from server
+                     , get all the sessionDetails and response to the client
+                     */
+                    
+                    self.items = data.sessionDetails;
+                }
+            });
+            self.updateNumberOfSelectedPerTable();
+        }
+        
+// This function will be ran after the user click Giao in the kitchen-overview page
+        this.shipOrders = function(url) {
+            self.removeSelectedItems();
+            
+            //TODO: This code will be run before the server response
+
+            console.log(url, self.selectedItems);
+            
+            // $.ajax({
+            //     method: "POST",
+            //     url: url,
+            //     data: self.selectedItems,
+            //     success: function(data) {
+            //         // TODO: This code will be run after the server response
+                    
+            //         /* In the object response from server
+            //          , get all the sessionDetails and response to the client
+            //          */
+                    
+            //         self.reInitKitchen(data.sessionDetails);
+            //     }
+            // });
+
+            self.updateNumberOfSelectedPerTable();
+        }
+        
+        this.removeSelectedItems = function() {
+            for(var i = self.items.length-1 ; i >= 0 ; i --) {
+                if(self.selectedItems.indexOf(self.items[i].id) != -1) {
+                    self.items.splice(i, 1);
+                }
+            }
+        }
+        
+        this.removeItemById = function(id) {
+            for(var i = 0 ; i < self.items.length ; i++) {
+                if(self.items[i].id == id) {
+                    self.items.splice(i,1);
+                    
+                    if(self.selectedItems.indexOf(id) != -1) {
+                        self.selectedItems.splice(self.selectedItems.indexOf(id),1);
+                    }
+                }
+            }
+        }
+        
+
+        this.isOn = function (index) {
+            return self.filters[index].value == 1;
+        }
+        
+        this.canShow = function(table) {
+            return self.filters[table - 1].value == 1;
+        }
+        
+        this.numberOfSelected = function() {
+            return self.selectedItems.length;
+        }
+        
+        this.select = function (id) {
+            if(!self.isSelected(id)) {
+                self.selectedItems.push(id);
+            }
+            else {
+               var index = self.selectedItems.indexOf(id);
+               
+               self.selectedItems.splice(index,1);
+            }
+            
+            self.updateNumberOfSelectedPerTable();
+        }
+        
+        this.isSelected = function(id) {
+            return self.selectedItems.indexOf(id) != -1;
+        }
+
+        this.changeFilterStatus = function (index) {
+            self.filters[index].value = !self.filters[index].value;
+        }
+    });
 
 	app.controller('allDevicesController', function(){
 		this.devices = devices;

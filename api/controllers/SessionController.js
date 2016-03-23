@@ -656,7 +656,26 @@ module.exports = {
             }
             else
             {
-              return res.view('kitchen-overview', {status: 1, moment: moment, sessionDetails: sessionDetails, deviceIp: deviceIp});
+              var sessionDetailsDineIn = [];
+              var sessionDetailsTogo = [];
+
+              for(var i = 0 ; i < sessionDetails.length; i++) {
+                var currentSession = sessionDetails[i];
+
+                if(currentSession.session.deliveryType == 'dine-in') {
+                  sessionDetailsDineIn.push(currentSession);
+                }
+                else if(currentSession.session.deliveryType == 'to-go') {
+                  sessionDetailsTogo.push(currentSession);
+                }
+              }
+
+              return res.view('kitchen-overview', {status: 1
+                , moment: moment
+                , dineInList: sessionDetailsDineIn
+                , toGoList: sessionDetailsTogo
+                , sessionDetails: sessionDetails
+                , deviceIp: deviceIp});
             }
           });
         }

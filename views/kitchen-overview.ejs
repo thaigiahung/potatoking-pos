@@ -2,7 +2,7 @@
   
 </div><!--/row-->
 
-<div id="kitchenOverviewPage" class="box">
+<div id="kitchenOverviewPage" class="box row-fluid">
 	<div class="box-header">
 		<h2><i class="fa fa-th"></i><span class="break"></span>Danh sách đặt món</h2>
 	</div>
@@ -13,87 +13,108 @@
 		</ul>
 
 		<div id="kitchenOverviewTab" class="tab-content">
-			<div class="tab-pane active" id="dine-in">
+			<div class="tab-pane active" id="dine-in"
+					ng-controller="kitchenOverviewController as kitchen"
+					ng-init="kitchen.items = <%= JSON.stringify(dineInList) %>">
+					<button ng-click="kitchen.shipOrders('test')">bbb</button>
 				<table class="table" id="kitchenOverviewDineInTable">
 				  	<thead>
 					  	<tr>
-					  		<th>Mã số</th>
-						  	<th>Bàn</th>
+				  			<th>Mã số</th>
+	                        <th 
+	                        ng-repeat="filter in kitchen.filters" 
+	                        class="tableColor{{ filter.index + 1 }} filterButton" 
+	                            ng-click="kitchen.changeFilterStatus(filter.index)"
+	                            ng-class="[
+	                                { filterButtonDisabled: !kitchen.isOn(filter.index) }
+	                            ]">{{ filter.index + 1 }} ({{filter.selected}})</th>
 						  	<th>Món</th>
 						  	<th>Giờ đặt món</th>
 						  	<th>&nbsp;</th>
 					  	</tr>
 				  	</thead>   
 				  	<tbody>
-		  		  		<% _.each(sessionDetails, function (item) { %>
-		  		  			<% if(item.session.deliveryType == 'dine-in') {%>
-								<tr id="sessionDetail<%= item.id %>" class="session-<%= item.session.id %> <% if(item.session.paymentStatus == 'checkout') { %> row-warning <% } %>">
-									<td>
-										<%= item.id %>
-									</td>
-									<td>
-										<%= item.session.table %>
-									</td>
-									<td>
-										<%= item.dish.name %>
-									</td>
-									<td>
-										<%= moment(item.updatedAt).format("hh:mm:ss a") %>
-									</td>
-									<td>
-										<button class="btn btn-large btn-success" onclick="deliver(<%= item.id %>)">Giao</button>
-										<input type="button" class="btn btn-large btn-danger" onclick="removeOrderedItem(<%= item.id %>)" value="Hủy">
-									</td>
-								</tr>
-		  		  			<% } %>
-		  		  		<% }) %>
+		  		  		<tr ng-repeat="item in kitchen.items 
+		  		  		| orderBy:'updatedAt'" 
+		                  ng-class="[
+		                    {selectedKitchenOrder: kitchen.isSelected(item.id)}
+		                  ]"
+		                  ng-show="kitchen.canShow(item.session.table)"
+		                  ng-click="kitchen.select(item.id)">
+		                    <td>
+		                        {{ item.id }}
+		                        {{ item.session.deliveryType }}
+		                    </td>
+		                    <td 
+		                        class='{{ item.session.table == (filter.index+1) ? "tableColor"+(filter.index+1) : ""  }}'
+		                        ng-repeat="filter in kitchen.filters"> 
+		                        {{ item.session.table == (filter.index+1) ? filter.index+1 : "" }}
+		                    </td>
+		                    <td>
+		                        {{ item.dish.name }}
+		                    </td>
+		                    <td>
+		                        {{ kitchen.convertDate(item.updatedAt) }}
+		                    </td>
+		                    <td>
+		                        <input type="button" class="btn btn-large btn-danger" value="Hủy"
+		                        ng-click="kitchen.removeOrder($event, item.id)">
+		                    </td>
+		                  </tr>
 				  	</tbody>
 			  	</table>
 			</div>
-			<div class="tab-pane" id="to-go">
-				<table class="table" id="kitchenOverviewToGoTable" style="width: 100%;">
+			<div class="tab-pane" id="to-go"
+					ng-controller="kitchenOverviewController as kitchen"
+					ng-init="kitchen.items = <%= JSON.stringify(toGoList) %>">
+					<button ng-click="kitchen.shipOrders('aaa')">aaa</button>
+				<table class="table" id="kitchenOverviewDineInTable">
 				  	<thead>
 					  	<tr>
-					  		<th>Mã số</th>
-						  	<th>Bàn</th>
+				  			<th>Mã số</th>
+	                        <th 
+	                        ng-repeat="filter in kitchen.filters" 
+	                        class="tableColor{{ filter.index + 1 }} filterButton" 
+	                            ng-click="kitchen.changeFilterStatus(filter.index)"
+	                            ng-class="[
+	                                { filterButtonDisabled: !kitchen.isOn(filter.index) }
+	                            ]">{{ filter.index + 1 }} ({{filter.selected}})</th>
 						  	<th>Món</th>
 						  	<th>Giờ đặt món</th>
 						  	<th>&nbsp;</th>
 					  	</tr>
 				  	</thead>   
 				  	<tbody>
-		  		  		<% _.each(sessionDetails, function (item) { %>
-		  		  			<% if(item.session.deliveryType == 'to-go') {%>
-								<tr id="sessionDetail<%= item.id %>" class="session-<%= item.session.id %> <% if(item.session.paymentStatus == 'checkout') { %> row-warning <% } %>">
-									<td>
-										<%= item.id %>
-									</td>
-									<td>
-										<%= item.session.table %>
-									</td>
-									<td>
-										<%= item.dish.name %>
-									</td>
-									<td>
-										<%= moment(item.updatedAt).format("hh:mm:ss a") %>
-									</td>
-									<td>
-										<button class="btn btn-large btn-success" onclick="deliver(<%= item.id %>)">Giao</button>
-										<input type="button" class="btn btn-large btn-danger" onclick="removeOrderedItem(<%= item.id %>)" value="Hủy">
-									</td>
-								</tr>
-		  		  			<% } %>
-		  		  		<% }) %>
+		  		  		<tr ng-repeat="item in kitchen.items 
+		  		  		| orderBy:'updatedAt'" 
+		                  ng-class="[
+		                    {selectedKitchenOrder: kitchen.isSelected(item.id)}
+		                  ]"
+		                  ng-show="kitchen.canShow(item.session.table)"
+		                  ng-click="kitchen.select(item.id)">
+		                    <td>
+		                        {{ item.id }}
+		                        {{ item.session.deliveryType }}
+		                    </td>
+		                    <td 
+		                        class='{{ item.session.table == (filter.index+1) ? "tableColor"+(filter.index+1) : ""  }}'
+		                        ng-repeat="filter in kitchen.filters"> 
+		                        {{ item.session.table == (filter.index+1) ? filter.index+1 : "" }}
+		                    </td>
+		                    <td>
+		                        {{ item.dish.name }}
+		                    </td>
+		                    <td>
+		                        {{ kitchen.convertDate(item.updatedAt) }}
+		                    </td>
+		                    <td>
+		                        <input type="button" class="btn btn-large btn-danger" value="Hủy"
+		                        ng-click="kitchen.removeOrder($event, item.id)">
+		                    </td>
+		                  </tr>
 				  	</tbody>
 			  	</table>
 			</div>			
 		</div>
 	</div>
 </div>
-
-<script>
-	$(document).ready(function(){
-	    $('#kitchenOverviewDineInTable').DataTable();
-	    $('#kitchenOverviewToGoTable').DataTable();
-	});
-</script>
