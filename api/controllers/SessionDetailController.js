@@ -290,7 +290,7 @@
 			        sessionDetailsToGo.push(currentSessionDetail);
 			      }
 			    }
-			    console.log(sessionDetailsTogo)
+			    
 				  return res.json({
 						status: 1,
 						message: 'Giao hàng thành công!',
