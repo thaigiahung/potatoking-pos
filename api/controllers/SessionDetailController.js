@@ -200,7 +200,7 @@
    							        sessionDetailsDineIn.push(currentSessionDetail);
    							      }
    							    }
-   							    
+
      							  return res.json({
     	  							status: 1,
     	  							message: 'Giao hàng thành công!',
@@ -220,6 +220,84 @@
  					});
  				}
  			}
+ 		});
+	},
+
+ 	batchDeliverToGo: function(req, res) {
+ 		var arrSessionDetailId = req.body.arrSessionDetailId;
+
+ 		async.forEachOfSeries(arrSessionDetailId, function (sessionDetailId, index, callback) {
+		 		SessionDetail.findOne({
+		 			id: sessionDetailId,
+		 			status: 'ordered'
+		 		}).populate('session').populate('dish').exec(function (err, sessionDetail) {
+		 			if(err || !sessionDetail)
+		 			{
+		 				callback("Không tìm thấy chi tiết đơn hàng!");
+		 			}
+		 			else
+		 			{
+		 				sessionDetail.session.total += sessionDetail.price;
+		 				sessionDetail.session.save(function(err2, savedSession){
+		 					if(err2 || !savedSession)
+		 					{
+		 						callback("Không thể lưu đơn hàng!");
+		 					}
+		 					else
+		 					{
+		 						sessionDetail.status = 'delivered';
+		 						sessionDetail.save(function(err5, savedSessionDetail){
+		 							if(err5 || !savedSessionDetail)
+		 							{
+										callback("Không thể cập nhật đơn hàng!");
+		 							}
+		 							else
+		 							{
+		 								sails.sockets.broadcast('device', 'removeKitchenOverview', { sessionDetailId: sessionDetailId });
+		 								sails.sockets.broadcast('table'+sessionDetail.session.table, 'item-delivered', 
+		 								{
+		 									sessionDetailId: sessionDetailId, 
+		 									dishName: sessionDetail.dish.name, 
+		 									type: 1, //Đã giao
+		 									message: 'Đã giao' 
+										});
+
+										//Set table
+										table = sessionDetail.session.table;
+
+										callback();
+		 							}
+		 						});
+		 					}
+		 				});
+		 			}
+		 		});
+ 		}, function (err) {
+			var sessionDetailsToGo = [];
+
+			SessionDetail.find({
+			  where: { 
+			    status: 'ordered'
+			  },
+			  sort: 'createdAt ASC'      
+			}).populate('dish').populate('session').exec(function (err, sessionDetails) {
+			  if(!err && sessionDetails)
+			  {
+			    for(var i = 0 ; i < sessionDetails.length; i++) {
+			      var currentSessionDetail = sessionDetails[i];
+
+			      if(currentSessionDetail.session.deliveryType == 'dine-in') {
+			        sessionDetailsToGo.push(currentSessionDetail);
+			      }
+			    }
+			    console.log(sessionDetailsTogo)
+				  return res.json({
+						status: 1,
+						message: 'Giao hàng thành công!',
+						sessionDetails: sessionDetailsToGo
+					});
+			  }
+			});
  		});
 	},
 

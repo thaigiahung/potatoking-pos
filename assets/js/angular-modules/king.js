@@ -109,6 +109,7 @@
             }
 
             io.socket.post(url, data, function (result) {
+            	console.log(result);
               if(result.status == 0)
               {
                 failNotify(result.message);

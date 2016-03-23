@@ -17,7 +17,7 @@
 					ng-controller="kitchenOverviewController as kitchen"
 					ng-init="kitchen.items = <%= JSON.stringify(dineInList) %>">
 					<button ng-click="kitchen.shipOrders('/batchDeliverDineIn')"
-					ng-disabled="kitchen.numberOfSelected() == 0">bbb {{kitchen.numberOfSelected()}}</button>
+					ng-disabled="kitchen.numberOfSelected() == 0" class="btn btn-large btn-success">Giao hàng {{kitchen.numberOfSelected()}}</button>
 				<table class="table" id="kitchenOverviewDineInTable">
 				  	<thead>
 					  	<tr>
@@ -68,8 +68,8 @@
 			<div class="tab-pane" id="to-go"
 					ng-controller="kitchenOverviewController as kitchen"
 					ng-init="kitchen.items = <%= JSON.stringify(toGoList) %>">
-					<button ng-click="kitchen.shipOrders('aaa')"
-					ng-disabled="kitchen.numberOfSelected() == 0">aaa {{kitchen.numberOfSelected()}}</button>
+					<button ng-click="kitchen.shipOrders('/batchDeliverToGo')"
+					ng-disabled="kitchen.numberOfSelected() == 0" class="btn btn-large btn-success">Giao hàng {{kitchen.numberOfSelected()}}</button>
 				<table class="table" id="kitchenOverviewDineInTable">
 				  	<thead>
 					  	<tr>
