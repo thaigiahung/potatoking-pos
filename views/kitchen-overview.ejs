@@ -16,7 +16,8 @@
 			<div class="tab-pane active" id="dine-in"
 					ng-controller="kitchenOverviewController as kitchen"
 					ng-init="kitchen.items = <%= JSON.stringify(dineInList) %>">
-					<button ng-click="kitchen.shipOrders('test')">bbb</button>
+					<button ng-click="kitchen.shipOrders('test')"
+					ng-disabled="kitchen.numberOfSelected() == 0">bbb {{kitchen.numberOfSelected()}}</button>
 				<table class="table" id="kitchenOverviewDineInTable">
 				  	<thead>
 					  	<tr>
@@ -67,18 +68,13 @@
 			<div class="tab-pane" id="to-go"
 					ng-controller="kitchenOverviewController as kitchen"
 					ng-init="kitchen.items = <%= JSON.stringify(toGoList) %>">
-					<button ng-click="kitchen.shipOrders('aaa')">aaa</button>
+					<button ng-click="kitchen.shipOrders('aaa')"
+					ng-disabled="kitchen.numberOfSelected() == 0">aaa {{kitchen.numberOfSelected()}}</button>
 				<table class="table" id="kitchenOverviewDineInTable">
 				  	<thead>
 					  	<tr>
 				  			<th>Mã số</th>
-	                        <th 
-	                        ng-repeat="filter in kitchen.filters" 
-	                        class="tableColor{{ filter.index + 1 }} filterButton" 
-	                            ng-click="kitchen.changeFilterStatus(filter.index)"
-	                            ng-class="[
-	                                { filterButtonDisabled: !kitchen.isOn(filter.index) }
-	                            ]">{{ filter.index + 1 }} ({{filter.selected}})</th>
+	                        <th>Bo me no cai filter nay di</th>
 						  	<th>Món</th>
 						  	<th>Giờ đặt món</th>
 						  	<th>&nbsp;</th>
@@ -90,16 +86,13 @@
 		                  ng-class="[
 		                    {selectedKitchenOrder: kitchen.isSelected(item.id)}
 		                  ]"
-		                  ng-show="kitchen.canShow(item.session.table)"
 		                  ng-click="kitchen.select(item.id)">
 		                    <td>
 		                        {{ item.id }}
 		                        {{ item.session.deliveryType }}
 		                    </td>
-		                    <td 
-		                        class='{{ item.session.table == (filter.index+1) ? "tableColor"+(filter.index+1) : ""  }}'
-		                        ng-repeat="filter in kitchen.filters"> 
-		                        {{ item.session.table == (filter.index+1) ? filter.index+1 : "" }}
+		                    <td>
+		                        {{item.session.table}}
 		                    </td>
 		                    <td>
 		                        {{ item.dish.name }}

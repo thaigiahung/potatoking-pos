@@ -118,6 +118,7 @@
               {
               	console.log("removeSelectedItems");
               	self.removeSelectedItems();
+            		self.reInitKitchen(data.sessionDetails);
               }
             });
             
