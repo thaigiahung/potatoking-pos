@@ -103,6 +103,14 @@
             //TODO: This code will be run before the server response
 
             console.log(url, self.selectedItems);
+
+            io.socket.post('/batchDeliver', data, function (result) {
+            	console.log(result)
+              if(result.status == 0)
+              {
+                failNotify(result.message);
+              }
+            });
             
             // $.ajax({
             //     method: "POST",
