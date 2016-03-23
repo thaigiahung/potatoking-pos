@@ -79,25 +79,25 @@
         }
         
 // This function will be run after the user click Huy~ in the kitchen-overview page
-        this.removeOrder = function(e, id) {
+        this.removeOrderedItem = function(e, id) {
             e.stopPropagation();
             self.removeItemById(id);
             
             //TODO: This code will be run before the server response
-            
-            $.ajax({
-                method: "POST",
-                url: "/removeItem",
-                data: id,
-                success: function(data) {
-                    // TODO: This code will be run after the server response
-                    
-                    /* In the object response from server
-                     , get all the sessionDetails and response to the client
-                     */
-                    
-                    self.items = data.sessionDetails;
-                }
+
+            var data = {
+              id: id
+            }
+
+            io.socket.post('/removeOrderedItem', data, function (result) {
+              if(result.status == 0)
+              {
+                failNotify(result.message);
+              }
+              else
+              {
+              	self.items = result.sessionDetails;
+              }
             });
             self.updateNumberOfSelectedPerTable();
         }
