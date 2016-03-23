@@ -16,7 +16,7 @@
 			<div class="tab-pane active" id="dine-in"
 					ng-controller="kitchenOverviewController as kitchen"
 					ng-init="kitchen.items = <%= JSON.stringify(dineInList) %>">
-					<button ng-click="kitchen.shipOrders('test')"
+					<button ng-click="kitchen.shipOrders('/batchDeliverDineIn')"
 					ng-disabled="kitchen.numberOfSelected() == 0">bbb {{kitchen.numberOfSelected()}}</button>
 				<table class="table" id="kitchenOverviewDineInTable">
 				  	<thead>

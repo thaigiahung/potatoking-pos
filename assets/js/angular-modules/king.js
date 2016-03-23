@@ -108,17 +108,15 @@
             	trainId: 1
             }
 
-            io.socket.post('/batchDeliver', data, function (result) {
-            	console.log(result)
+            io.socket.post(url, data, function (result) {
               if(result.status == 0)
               {
                 failNotify(result.message);
               }
               else
               {
-              	console.log("removeSelectedItems");
               	self.removeSelectedItems();
-            		self.reInitKitchen(data.sessionDetails);
+            		self.reInitKitchen(result.sessionDetails);
               }
             });
             

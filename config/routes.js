@@ -74,7 +74,7 @@ module.exports.routes = {
   'POST /order': 'SessionController.order',
   'POST /checkout': 'SessionController.checkout',
   'POST /deliver': 'SessionDetailController.deliver',
-  'POST /batchDeliver': 'SessionDetailController.batchDeliver',
+  'POST /batchDeliverDineIn': 'SessionDetailController.batchDeliverDineIn',
   'POST /finalCheckout': 'SessionController.finalCheckout',
   'POST /hideDish': 'DishController.hideDish',
   'POST /showDish': 'DishController.showDish',

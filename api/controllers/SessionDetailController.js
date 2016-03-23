@@ -106,7 +106,7 @@
  		});
 	},
 
- 	batchDeliver: function(req, res) {
+ 	batchDeliverDineIn: function(req, res) {
  		var arrSessionDetailId = req.body.arrSessionDetailId;
  		var trainId = req.body.trainId;
  		var fullFilePath = './assets/order.dat';
@@ -124,60 +124,54 @@
  				var arr = data.split("\n");
  				if(arr[0] == 1) //Train is currently at station
  				{
+ 					var table = 0;
 			 		async.forEachOfSeries(arrSessionDetailId, function (sessionDetailId, index, callback) {
-			   		SessionDetail.findOne({
-			   			id: sessionDetailId,
-			   			status: 'ordered'
-			   		}).populate('session').populate('dish').exec(function (err, sessionDetail) {
-			   			if(err || !sessionDetail)
-			   			{
-			   				return res.json({
-			   					status: 0,
-			   					message: 'Không tìm thấy chi tiết đơn hàng!'
-			   				});
-			   			}
-			   			else
-			   			{
-			   				sessionDetail.session.total += sessionDetail.price;
-			   				sessionDetail.session.save(function(err2, savedSession){
-			   					if(err2 || !savedSession)
-			   					{
-			   						return res.json({
-			   							status: 0,
-			   							message: 'Không thể lưu đơn hàng!'
-			   						});
-			   					}
-			   					else
-			   					{
-				 						sessionDetail.status = 'delivered';
-				 						sessionDetail.save(function(err5, savedSessionDetail){
-				 							if(err5 || !savedSessionDetail)
-				 							{
-												callback(err5);
-				 							}
-				 							else
-				 							{
-				 								sails.sockets.broadcast('device', 'removeKitchenOverview', { sessionDetailId: sessionDetailId });
-				 								sails.sockets.broadcast('table'+sessionDetail.session.table, 'item-delivered', 
-				 								{
-				 									sessionDetailId: sessionDetailId, 
-				 									dishName: sessionDetail.dish.name, 
-				 									type: 1, //Đã giao
-				 									message: 'Đã giao' 
-												});
+ 				 		SessionDetail.findOne({
+ 				 			id: sessionDetailId,
+ 				 			status: 'ordered'
+ 				 		}).populate('session').populate('dish').exec(function (err, sessionDetail) {
+ 				 			if(err || !sessionDetail)
+ 				 			{
+ 				 				callback("Không tìm thấy chi tiết đơn hàng!");
+ 				 			}
+ 				 			else
+ 				 			{
+ 				 				sessionDetail.session.total += sessionDetail.price;
+ 				 				sessionDetail.session.save(function(err2, savedSession){
+ 				 					if(err2 || !savedSession)
+ 				 					{
+ 				 						callback("Không thể lưu đơn hàng!");
+ 				 					}
+ 				 					else
+ 				 					{
+ 				 						sessionDetail.status = 'delivered';
+ 				 						sessionDetail.save(function(err5, savedSessionDetail){
+ 				 							if(err5 || !savedSessionDetail)
+ 				 							{
+ 												callback("Không thể cập nhật đơn hàng!");
+ 				 							}
+ 				 							else
+ 				 							{
+ 				 								sails.sockets.broadcast('device', 'removeKitchenOverview', { sessionDetailId: sessionDetailId });
+ 				 								sails.sockets.broadcast('table'+sessionDetail.session.table, 'item-delivered', 
+ 				 								{
+ 				 									sessionDetailId: sessionDetailId, 
+ 				 									dishName: sessionDetail.dish.name, 
+ 				 									type: 1, //Đã giao
+ 				 									message: 'Đã giao' 
+ 												});
 
-												console.log("index: " + index);
-												console.log("table: " + sessionDetail.session.table)
-												table = sessionDetail.session.table;
-				 							}
-				 						});
-			   					}
-			   				});
-			   			}
-			   		});
-			 		}, function done(err, table) {
-			 			console.log(err);
-			 			console.log("Table: " + table);
+ 												//Set table
+ 												table = sessionDetail.session.table;
+
+ 												callback();
+ 				 							}
+ 				 						});
+ 				 					}
+ 				 				});
+ 				 			}
+ 				 		});
+			 		}, function (err) {
    					var newStr = "2\n" + table + "\n" + trainId;
    					fs.writeFile(fullFilePath, newStr, 'utf8', function (err4) {
    						if(err4)
@@ -189,10 +183,31 @@
    						}
    						else
    						{
-  					 		return res.json({
-  							status: 1,
-  							message: 'Giao hàng thành công!'
-  						});
+   							var sessionDetailsDineIn = [];
+
+   							SessionDetail.find({
+   							  where: { 
+   							    status: 'ordered'
+   							  },
+   							  sort: 'createdAt ASC'      
+   							}).populate('dish').populate('session').exec(function (err, sessionDetails) {
+   							  if(!err && sessionDetails)
+   							  {
+   							    for(var i = 0 ; i < sessionDetails.length; i++) {
+   							      var currentSessionDetail = sessionDetails[i];
+
+   							      if(currentSessionDetail.session.deliveryType == 'dine-in') {
+   							        sessionDetailsDineIn.push(currentSessionDetail);
+   							      }
+   							    }
+   							    
+     							  return res.json({
+    	  							status: 1,
+    	  							message: 'Giao hàng thành công!',
+    	  							sessionDetails: sessionDetailsDineIn
+    	  						});
+   							  }
+   							});
    						}
    					});
 			 		});
