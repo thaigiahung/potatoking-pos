@@ -98,17 +98,26 @@
         
 // This function will be ran after the user click Giao in the kitchen-overview page
         this.shipOrders = function(url) {
-            self.removeSelectedItems();
             
             //TODO: This code will be run before the server response
 
             console.log(url, self.selectedItems);
+
+            var data = {
+            	arrSessionDetailId: self.selectedItems,
+            	trainId: 1
+            }
 
             io.socket.post('/batchDeliver', data, function (result) {
             	console.log(result)
               if(result.status == 0)
               {
                 failNotify(result.message);
+              }
+              else
+              {
+              	console.log("removeSelectedItems");
+              	self.removeSelectedItems();
               }
             });
             
