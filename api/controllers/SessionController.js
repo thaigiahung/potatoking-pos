@@ -558,7 +558,7 @@ module.exports = {
           Session.query(query, function(err, session) {
             if(err || !session || session.length == 0)
             {
-              return res.view('ordered', {status: 0, session: session, ordered: [], deviceIp: deviceIp});
+              return res.view('ordered', {layout: 'layout-user', status: 0, session: session, ordered: [], deviceIp: deviceIp});
             }
             else
             {
@@ -572,11 +572,11 @@ module.exports = {
               }).populate('dish').exec(function (err, ordered) {
                 if(err || !ordered)
                 {
-                  return res.view('ordered', {status: 0, session: session, ordered: [], deviceIp: deviceIp});
+                  return res.view('ordered', {layout: 'layout-user', status: 0, session: session, ordered: [], deviceIp: deviceIp});
                 }
                 else
                 {
-                  return res.view('ordered', {status: 1, session: session, ordered: ordered, deviceIp: deviceIp});
+                  return res.view('ordered', {layout: 'layout-user', status: 1, session: session, ordered: ordered, deviceIp: deviceIp});
                 }
               });
             }

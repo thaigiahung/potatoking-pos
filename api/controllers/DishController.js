@@ -60,7 +60,7 @@ module.exports = {
           Dish.find({status: 'enable'}).exec(function (err, dishes) {
             if(err || !dishes)
             {
-              return res.view('dish', {status: 0, dishes: [], session: {}, added: [], deviceIp: deviceIp});
+              return res.view('dish', {layout: 'layout-user', status: 0, dishes: [], session: {}, added: [], deviceIp: deviceIp});
             }
             else {
                 if (deviceIp.type == 'guest' || deviceIp.type == 'chief-cook') {
@@ -68,13 +68,13 @@ module.exports = {
 
                     Dish.find().exec(function (err, dishes) {
                         if (err || !dishes) {
-                            return res.view('dish', { status: 0, dishes: [], session: {}, added: [], deviceIp: deviceIp });
+                            return res.view('dish', {layout: 'layout-user', status: 0, dishes: [], session: {}, added: [], deviceIp: deviceIp });
                         }
                         else {
                             var query = "SELECT s.* FROM session s JOIN sessiondevice sd ON sd.session = s.id WHERE s.status = 'open' AND sd.device = " + device.id;
                             Session.query(query, function (err, session) {
                                 if (err || !session || session.length == 0) {
-                                    return res.view('dish', { status: 0, dishes: dishes, session: {}, added: [], deviceIp: deviceIp });
+                                    return res.view('dish', {layout: 'layout-user', status: 0, dishes: dishes, session: {}, added: [], deviceIp: deviceIp });
                                 }
                                 else {
                                     session = session[0];
@@ -85,10 +85,10 @@ module.exports = {
                                         sort: 'id DESC'
                                     }).populate('dish').exec(function (err, added) {
                                         if (err) {
-                                            return res.view('dish', { status: 0, dishes: dishes, session: session, added: [], deviceIp: deviceIp });
+                                            return res.view('dish', {layout: 'layout-user', status: 0, dishes: dishes, session: session, added: [], deviceIp: deviceIp });
                                         }
                                         else {
-                                            return res.view('dish', { status: 1, dishes: dishes, session: session, added: added, deviceIp: deviceIp });
+                                            return res.view('dish', {layout: 'layout-user', status: 1, dishes: dishes, session: session, added: added, deviceIp: deviceIp });
                                         }
                                     });
                                 }

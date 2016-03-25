@@ -1,0 +1,71 @@
+@font-face {
+	font-family: 'VNI-Awchon';
+	src: url('/font/VNI-Awchon.eot');
+	src: local('☺'), url('/font/VNI-Awchon.woff') format('woff'), url('/font/VNI-Awchon.TTF') format('truetype'), url('/font/VNI-Awchon.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'VNI-Swiss-Condense';
+	src: url('/font/VNI-Swiss-Condense.eot');
+	src: local('☺'), url('/font/VNI-Swiss-Condense.woff') format('woff'), url('/font/VNI-Swiss-Condense.TTF') format('truetype'), url('/font/VNI-Swiss-Condense.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'VNI-Park';
+	src: url('/font/VNI-Park.eot');
+	src: local('☺'), url('/font/VNI-Park.woff') format('woff'), url('/font/VNI-Park.TTF') format('truetype'), url('/font/VNI-Park.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+
+body {
+	background-color: #FDC71C;
+}
+
+#content {
+	background-image: url('/img/template/BG.jpg');
+	border: 0px;
+}
+
+.page-title {
+	text-align: center;
+}
+
+.table-header {
+	font-family:'VNI-Swiss-Condense',Sans-Serif;
+	color: #FDC71C;
+	font-size: 20px;
+}
+
+.table td {
+	border-top: 2px solid #fff;
+}
+
+.item-name-vn {
+	font-family:'VNI-Awchon',Sans-Serif;
+	color: #fff;
+	font-size: 24px;
+}
+
+.item-name-en {	
+	font-family:'VNI-Park',Sans-Serif;
+	color: #fff;
+	font-size: 18px;
+}
+
+.item-price {
+	font-family:'VNI-Park',Sans-Serif;
+	color: #fff;
+	font-size: 24px;
+}
+
+.item-status {
+	font-family:'VNI-Swiss-Condense',Sans-Serif;
+	color: #FE7900;
+	font-size: 20px;
+}
