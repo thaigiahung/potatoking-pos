@@ -198,6 +198,7 @@ io.socket.on('connect', function () {
         var type = result.deliveryType;
 
         var tableId = '';
+
         if(type == 'dine-in')
         {
           tableId = '#kitchenOverviewDineInTable';
@@ -207,17 +208,19 @@ io.socket.on('connect', function () {
           tableId = '#kitchenOverviewToGoTable';
         }
 
-        var table = $(tableId).DataTable();
-         table
-            .row( $("#sessionDetail"+result.sessionDetailId) )
-            .remove()
-            .draw();
+        var appElement = document.querySelector(tableId);
+        var $scope = angular.element(appElement).scope();
+
+        $scope.$apply(function() {
+          $scope.kitchen.removeItemById(result.sessionDetailId);
+        });
       });
 
       io.socket.on('newOrderAdded', function (result) {
         var sessionDetails = JSON.parse(result.sessionDetails);
         var type = result.type;
         var tableId = '';
+
         if(type == 'dine-in')
         {
           tableId = '#kitchenOverviewDineInTable';
@@ -227,21 +230,31 @@ io.socket.on('connect', function () {
           tableId = '#kitchenOverviewToGoTable';
         }
 
-        for(var i = 0; i < sessionDetails.length; i++)
-        {
-          var item = sessionDetails[i];
-          
-          var table = $(tableId).DataTable();
-          var rowNode = table.row.add([
-            item.id, 
-            item.session.table, 
-            item.dish.name,
-            moment(item.updatedAt).format("hh:mm:ss a"),
-            '<button class="btn btn-large btn-success" onclick="deliver('+item.id+')">Giao</button> <input type="button" class="btn btn-large btn-danger" onclick="removeOrderedItem('+item.id+')" value="Hủy">'
-          ]).draw().node();
+        var appElement = document.querySelector(tableId);
+        var $scope = angular.element(appElement).scope();
 
-          $(rowNode).addClass('session-'+item.session.id).attr('id', 'sessionDetail'+item.id);
-        }        
+        $scope.$apply(function() {
+          for(var i = 0 ; i < sessionDetails.length; i ++ ) {
+            var item = sessionDetails[i];
+            $scope.kitchen.items.push(item);
+          }
+        });
+
+        // for(var i = 0; i < sessionDetails.length; i++)
+        // {
+        //   var item = sessionDetails[i];
+          
+        //   var table = $(tableId).DataTable();
+        //   var rowNode = table.row.add([
+        //     item.id, 
+        //     item.session.table, 
+        //     item.dish.name,
+        //     moment(item.updatedAt).format("hh:mm:ss a"),
+        //     '<button class="btn btn-large btn-success" onclick="deliver('+item.id+')">Giao</button> <input type="button" class="btn btn-large btn-danger" onclick="removeOrderedItem('+item.id+')" value="Hủy">'
+        //   ]).draw().node();
+
+        //   $(rowNode).addClass('session-'+item.session.id).attr('id', 'sessionDetail'+item.id);
+        // }        
       });
 
       //Listen for event cancel all remaining items

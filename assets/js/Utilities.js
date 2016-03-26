@@ -1,6 +1,24 @@
 var counting = false;
 var countdownDuration = 3;
 
+var type = "to-go";
+if(type == 'dine-in')
+{
+  tableId = '#kitchenOverviewDineInTable';
+}
+else if(type = 'to-go')
+{
+  tableId = '#kitchenOverviewToGoTable';
+}
+
+function testingScope() {
+	var appElement = document.querySelector(tableId);
+	var $scope = angular.element(appElement).scope();
+	$scope.$apply(function() {
+	    $scope.kitchen.testingVariable = 20;
+	});
+}
+
 
 var autoHideNotifyPosition = 'top left';
 var notifyPosition = 'top right';

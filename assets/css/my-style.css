@@ -407,3 +407,9 @@ input[type=number]::-webkit-outer-spin-button {
 .selectedKitchenOrder{
     background-color: rgb(50,230,150);
 }
+
+.disabling {
+    background-color: rgba(0,0,0,0.25);
+    opacity: 0.5;
+    pointer-events: none;
+}
