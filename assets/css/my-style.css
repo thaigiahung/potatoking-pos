@@ -365,51 +365,47 @@ input[type=number]::-webkit-outer-spin-button {
 .filterButton {
     width: 40px;
     text-align: center;
-    border:1px solid black;
+    border:1px solid #FFF;
 }
 
 .tableColor1 {
-    background-color: rgb(0,0,0);
-    color:white;
+    background-color: #F4EFEC;
 }
 
 .tableColor2 {
-    background-color: rgb(0,255,255);
+    background-color: #F4E0E9;
 }
 
 .tableColor3 {
-    background-color: rgb(255,0,255);
+    background-color: #F4D9D0;
 }
 
 .tableColor4 {
-    background-color: rgb(255,255,0);
+    background-color: #F4E3C9;
 }
 
 .tableColor5 {
-    background-color: rgb(0,0,255);
-    color:white;
+    background-color: #B5DCE1;
 }
 
 .tableColor6 {
-    background-color: rgb(255,0,0);
-    color:white;
+    background-color: #D7E0B1;
 }
 
 .tableColor7 {
-    background-color: rgb(0,255,0)
+    background-color: #D6CDC8;
 }
 
 .tableColor8 {
-    background-color: rgb(111,50,111);
-    color:white;
+    background-color: #CFDAF0;
 }
 
 .selectedKitchenOrder{
-    background-color: rgb(50,230,150);
+    background-color: #FFEFFE;
 }
 
 .disabling {
-    background-color: rgba(0,0,0,0.25);
-    opacity: 0.5;
+    background-color: #A2A2A2;
+    /*opacity: 0.5;*/
     pointer-events: none;
 }
