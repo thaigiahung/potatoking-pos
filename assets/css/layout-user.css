@@ -1,25 +1,43 @@
+/*https://google-webfonts-helper.herokuapp.com/fonts/kanit?subsets=vietnamese*/
+
+/* kanit-900 - vietnamese */
 @font-face {
-	font-family: 'VNI-Awchon';
-	src: url('/font/VNI-Awchon.eot');
-	src: local('☺'), url('/font/VNI-Awchon.woff') format('woff'), url('/font/VNI-Awchon.TTF') format('truetype'), url('/font/VNI-Awchon.svg') format('svg');
-	font-weight: normal;
-	font-style: normal;
+  font-family: 'Kanit';
+  font-style: normal;
+  font-weight: 900;
+  src: url('/font/Kanit/kanit-v1-vietnamese-900.eot'); /* IE9 Compat Modes */
+  src: local('Kanit Black'), local('Kanit-Black'),
+       url('/font/Kanit/kanit-v1-vietnamese-900.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/font/Kanit/kanit-v1-vietnamese-900.woff2') format('woff2'), /* Super Modern Browsers */
+       url('/font/Kanit/kanit-v1-vietnamese-900.woff') format('woff'), /* Modern Browsers */
+       url('/font/Kanit/kanit-v1-vietnamese-900.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('/font/Kanit/kanit-v1-vietnamese-900.svg#Kanit') format('svg'); /* Legacy iOS */
+}
+
+/* chonburi-regular - vietnamese */
+@font-face {
+  font-family: 'Chonburi';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/font/Chonburi/chonburi-v1-vietnamese-regular.eot'); /* IE9 Compat Modes */
+  src: local('Chonburi'), local('Chonburi-Regular'),
+       url('/font/Chonburi/chonburi-v1-vietnamese-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/font/Chonburi/chonburi-v1-vietnamese-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('/font/Chonburi/chonburi-v1-vietnamese-regular.woff') format('woff'), /* Modern Browsers */
+       url('/font/Chonburi/chonburi-v1-vietnamese-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('/font/Chonburi/chonburi-v1-vietnamese-regular.svg#Chonburi') format('svg'); /* Legacy iOS */
 }
 
 @font-face {
-	font-family: 'VNI-Swiss-Condense';
-	src: url('/font/VNI-Swiss-Condense.eot');
-	src: local('☺'), url('/font/VNI-Swiss-Condense.woff') format('woff'), url('/font/VNI-Swiss-Condense.TTF') format('truetype'), url('/font/VNI-Swiss-Condense.svg') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'VNI-Park';
-	src: url('/font/VNI-Park.eot');
-	src: local('☺'), url('/font/VNI-Park.woff') format('woff'), url('/font/VNI-Park.TTF') format('truetype'), url('/font/VNI-Park.svg') format('svg');
-	font-weight: normal;
-	font-style: normal;
+  font-family: 'VNI-Park';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/font/VNI-Park/VNI-Park.eot'); /* IE9 Compat Modes */
+  src: local('VNI-Park'), local('Chonburi-Regular'),
+       url('/font/VNI-Park/VNI-Park.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/font/VNI-Park/VNI-Park.woff') format('woff'), /* Modern Browsers */
+       url('/font/VNI-Park/VNI-Park.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('/font/VNI-Park/VNI-Park.svg') format('svg'); /* Legacy iOS */
 }
 
 
@@ -37,9 +55,9 @@ body {
 }
 
 .table-header {
-	font-family:'VNI-Swiss-Condense',Sans-Serif;
+	font-family: 'Kanit', sans-serif;
 	color: #FDC71C;
-	font-size: 20px;
+	font-size: 24px;
 }
 
 .table td {
@@ -47,25 +65,25 @@ body {
 }
 
 .item-name-vn {
-	font-family:'VNI-Awchon',Sans-Serif;
+	font-family:'Chonburi',Sans-Serif;
 	color: #fff;
-	font-size: 24px;
+	font-size: 20px;
 }
 
 .item-name-en {	
 	font-family:'VNI-Park',Sans-Serif;
 	color: #fff;
-	font-size: 18px;
+	font-size: 20px;
 }
 
 .item-price {
 	font-family:'VNI-Park',Sans-Serif;
 	color: #fff;
-	font-size: 24px;
+	font-size: 30px;
 }
 
 .item-status {
-	font-family:'VNI-Swiss-Condense',Sans-Serif;
+	font-family: 'Kanit', sans-serif;
 	color: #FE7900;
 	font-size: 20px;
 }
