@@ -10,6 +10,7 @@ module.exports = {
   attributes: {
     category: { model: 'Category' },
     name: { type: 'string' },
+    nameEn: { type: 'string' },
     description: { type: 'text' },
     price: { type: 'integer' },
     status: {

@@ -55,7 +55,7 @@ body {
 }
 
 .table-header {
-	font-family: 'Kanit', sans-serif;
+	font-family: 'Chonburi', sans-serif;
 	color: #FDC71C;
 	font-size: 24px;
 }
@@ -65,7 +65,7 @@ body {
 }
 
 .item-name-vn {
-	font-family:'Chonburi',Sans-Serif;
+	font-family:'Kanit',Sans-Serif;
 	color: #fff;
 	font-size: 20px;
 }
@@ -80,10 +80,12 @@ body {
 	font-family:'VNI-Park',Sans-Serif;
 	color: #fff;
 	font-size: 30px;
+  text-align: right;
+  padding-right: 30px;
 }
 
 .item-status {
-	font-family: 'Kanit', sans-serif;
+	font-family: 'Chonburi', sans-serif;
 	color: #FE7900;
 	font-size: 20px;
 }
