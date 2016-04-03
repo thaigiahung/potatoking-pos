@@ -59,3 +59,15 @@
   font-weight: bold;
   min-height: 150px;
 }
+
+.sidebar-left {
+  margin-left: 
+}
+
+.nav>li>a>img {
+  max-width: 75px;
+}
+
+/*#content {
+  margin-left: 15px;
+}*/
