@@ -651,11 +651,17 @@
     
     app.controller('menuController', function($scope, $http) {
         var self = this;
+        
         $http.get("/categories")
         .then(function(response) {
             self.categories = response.data.categories;
-            console.log(self.categories);
         });
+        
+        this.selectedCategory = 1;
+        
+        this.changeCategory = function(categoryId) {
+            self.selectedCategory = categoryId;
+        }
     });
 
 	var isInDishesManagement = function(view) {

@@ -9,15 +9,19 @@
 
 <hr>
 
-<div class="row-fluid">
+<div class="row-fluid"
+ng-controller="menuController as menu">
   <div class="span3">
-    <div class="category">A</div>
-    <div class="category">B</div>
-    <div class="category">C</div>
-    <div class="category">D</div>
+      
+      
+    <div class="category"
+    ng-repeat="cate in menu.categories"
+    ng-click="menu.changeCategory(cate.id)"
+    ng-class="[
+    {active: cate.id == menu.selectedCategory}]">{{cate.name}}</div>
   </div>
   <div class="span9">
-    <div ng-controller="menuController as menu">
+    <div>
         <!-- <div class="row-fluid"> -->
         <% _.each(dishes, function (dish) { %>
           <div class="span3" <%if(dish.status=='disable' ) {%>style="display: none;"

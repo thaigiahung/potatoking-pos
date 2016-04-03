@@ -52,9 +52,9 @@
 .category {
   min-height: 100px;
   border: 1px solid;
+  -webkit-transition: all 0.25s ease;
 }
 
 .category.active {
   min-height: 150px;
-  -webkit-transition: all 0.25s ease;
 }

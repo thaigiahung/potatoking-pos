@@ -79,91 +79,16 @@ module.exports = {
 		function callback(deviceIp) {
 			data = req.body;
 			
-			// Category.find({
-			//     parentCategory: null 
-			// })
-			// .populate("childCategories")
-			// .populate("dishes")
-			// .exec(function(err, foundCategories) {
-			//     if(err) {
-			//         return res.json({
-			//             status: Enum.StatusCode.NotFoundObject,
-			//             message:  Message.vn.CategoryNotExists
-			//         }) 
-			//     }
-				
-			//     return res.json({
-			//         status: Enum.StatusCode.Success,
-			//         categories: foundCategories
-			//     })
-			// });
-			
 			Category.find({
 				parentCategory: null
 			})
 				.populate("childCategories")
 				.populate("dishes")
 				.then(function(categories) {
-					var allChildIds = [];
-					
-					for(var i = 0 ; i < categories.length ; i ++) {
-						currentChildIds = _.pluck(categories[i].childCategories, 'id'); 
-						
-						currentChildIds.forEach(function(e) {
-							allChildIds.push(e);
-						})
-					}
-					
-					var childDishes = Dish.find({
-						category: allChildIds
-					})
-					.then(function(childDishes) {
-						return childDishes;
-					})
-					
-					return [categories, childDishes];
-				})
-				.spread(function(categories, childDishes) {
-					
-					for(var i = 0 ; i < categories.length; i++) {
-						categories[i].childCategories = _.map(categories[i].childCategories, function(childCategory) {
-								
-							for(var j = 0; j < childDishes.length; j++) {
-									
-								if(childDishes[j].category == childCategory.id) {
-									
-									if(!childCategory.dishes.length) {
-										childCategory.dishes = [];
-									}
-									
-									childCategory.dishes.push(childDishes[j]);
-									
-									// console.log(childCategory.dishes);
-									// for (var prop in childCategory) {
-									// 	console.log(prop);
-									// }
-									
-									// console.log(childCategory['dishes']);
-								}
-							}
-																
-								for (var prop in childCategory) {
-									console.log(prop);
-								}
-								
-								console.log('_________________');
-									
-							// console.log(childCategory);
-							// console.log(childCategory.dishes);
-
-							return childCategory;
-						})
-					}
-					
 					return res.json({
-							status: Enum.StatusCode.Success,
-							categories: categories
-					})
+						status: Enum.StatusCode.Success,
+						categories: categories
+					});
 				})
 				.catch(function(err) {
 					console.log(err);
