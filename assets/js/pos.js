@@ -1023,7 +1023,11 @@ $(document).on('change', '.input-quantity', function() {
   setTotalAddedItem();
 });
 
-
+$('.category').click(function (event) {
+  console.log(this);
+  $('.category').removeClass('active');
+  $(this).addClass('active');
+})
 
 
 

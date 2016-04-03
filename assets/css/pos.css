@@ -48,3 +48,13 @@
 .row-warning {
   background-color: rgba(226, 129, 8, 0.39);
 }
+
+.category {
+  min-height: 100px;
+  border: 1px solid;
+}
+
+.category.active {
+  min-height: 150px;
+  -webkit-transition: all 0.25s ease;
+}
