@@ -651,7 +651,9 @@
             self.categories = response.data.categories;
         });
         
-        this.selectedCategory = 1;
+        this.friesCategory = 1;
+        
+        this.selectedCategory = friesCategory;
         
         this.isFries = function() {
             return self.selectedCategory == 1;
