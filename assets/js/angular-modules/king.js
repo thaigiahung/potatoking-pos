@@ -642,30 +642,94 @@
 
 		}
 	});
-    
     app.controller('menuController', function($scope, $http) {
         var self = this;
         
         $http.get("/categories")
         .then(function(response) {
             self.categories = response.data.categories;
+            
+            self.childFries = self.getCategory(self.fixCategory.childFries);
+            
+            self.potatoDishes = self.getCategory(self.fixCategory.potatoDishes);
+            self.potatoDip = self.getCategory(self.fixCategory.potatoDip);
+            self.potatoShake = self.getCategory(self.fixCategory.potatoShake);
+            
+            self.potatoDipShake = [];   
+            self.potatoDipShake.push(self.potatoDip);
+            self.potatoDipShake.push(self.potatoShake);
+            
+            self.friesDishes = self.getCategory(self.fixCategory.friesDishes);
+            self.friesDip = self.getCategory(self.fixCategory.friesDip);
+            
+            for(var i = 0 ; i < self.categories.length ; i ++) {
+                var current = self.categories[i];
+                
+                if(self.isSubLevel2(current.id)) {
+                    $http.get("/categories/getDish", {
+                        params: { id: current.id }
+                    })
+                    .then(function(response) {
+                        current.dishes = response.data.dishes;
+                    })
+                }
+            }
+            
+            console.log(self.potatoDishes);
         });
         
-        this.friesCategory = 1;
+        this.getCategory = function(categoryId) {
+            for(var i = 0 ; i < self.categories.length ; i++) {
+                if(self.categories[i].id == categoryId) {
+                    return self.categories[i];
+                }
+            }
+        }
+         
+        this.fixCategory = {
+            fries: 1,
+                potato: 2,
+                    potatoDishes: 4,
+                    potatoDip: 5,
+                    potatoShake: 6,
+                
+                childFries: 3,
+                    friesDishes: 7,
+                    friesDip: 8
+        }
         
-        this.selectedCategory = friesCategory;
+        this.selectedCategory = self.fixCategory.fries;
+        this.selectedSubtab = self.fixCategory.potato;
+        
+        this.isParent = function(category) {
+            return category ? category.parentCategory == null : false;
+        } 
+        
+        this.isSubLevel1 = function(id) {
+            return id == self.fixCategory.fries 
+            || id == self.fixCategory.potato; 
+        }
+        
+        this.isSubLevel2 = function(id) {
+            return id == self.fixCategory.childFries || 
+            id == self.fixCategory.potatoDishes || 
+            id == self.fixCategory.potatoDip || 
+            id == self.fixCategory.potatoShake || 
+            id == self.fixCategory.friesDishes || 
+            id == self.fixCategory.friesDip;
+        }
         
         this.isFries = function() {
-            return self.selectedCategory == 1;
+            return self.selectedCategory == self.fixCategory.fries;
+        }
+        
+        this.changeSubtab = function(categoryId) {
+            self.selectedSubtab = categoryId;
         }
         
         this.changeCategory = function(categoryId) {
             self.selectedCategory = categoryId;
         }
-        
-        // this.haveChild = function(categoryId) {
-        //     return self.categories[.childCategories.count
-        // } 
     });
 
 	var isInDishesManagement = function(view) {

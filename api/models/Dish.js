@@ -21,7 +21,10 @@ module.exports = {
       collection: 'DishImage',
       via: 'dish'
     },
-    order: { type: 'integer' }
+    order: { type: 'integer' },
+    mainImage: {
+        type: 'string'
+    }
   }
 };
 

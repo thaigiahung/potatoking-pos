@@ -13,7 +13,9 @@
     <div class="span3">
 
 
-        <div class="category" ng-repeat="cate in menu.categories" ng-click="menu.changeCategory(cate.id)" ng-class="[
+        <div class="category" ng-repeat="cate in menu.categories" 
+        ng-show="menu.isParent(cate)"
+        ng-click="menu.changeCategory(cate.id)" ng-class="[
     {active: cate.id == menu.selectedCategory}]">{{cate.name}}</div>
     </div>
 
@@ -24,7 +26,7 @@
                 <div ng-repeat="dish in cate.dishes">
                     <div class="span6 menu-item-block">
                         <div class="inline-block">
-                            <img class="menu-item-img" src="/img/template/no-image.jpg">
+                            <img class="menu-item-img" ng-src="{{dish.mainImage}}">
                         </div>
                         <div class="inline-block">
                             <div class="menu-item-name-vn">{{dish.name}}</div>
@@ -36,7 +38,48 @@
         </div>
         
         <div ng-show="menu.isFries()">
-            This is div for friess
+            <div class="row-fluid">
+                <div ng-repeat="cate in menu.categories | orderBy: '-id'" ng-show="menu.isSubLevel1(cate.id)" class="subCategory1 span6"
+                ng-click="menu.changeSubtab(cate.id)"
+                ng-class="[{
+                    inactive: menu.selectedSubtab != cate.id}]">{{cate.name}}</div>
+                    
+                <div ng-show="menu.selectedSubtab == menu.fixCategory.potato">
+                    <div class="row-fluid potatoDishes">
+                        <div ng-repeat="dish in menu.potatoDishes.dishes">{{ dish.name }}</div>
+                    </div>
+                    
+                    <div class="row-fluid">
+                        
+                        <div ng-repeat="dipShake in menu.potatoDipShake" class="dishContainer span6">
+                            <div class="dishName span12">{{dipShake.name}} ({{dipShake.nameEn}})</div>
+                            <div ng-repeat="dish in dipShake.dishes">
+                                {{ dish.name }}
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div ng-show="menu.selectedSubtab == menu.fixCategory.fries">
+                    
+                    <div class="dishContainer span9">
+                        <div class="dishName span12">{{menu.friesDishes.name}} ({{menu.friesDishes.nameEn}})</div>
+                        <div ng-repeat="dish in menu.friesDishes.dishes">
+                            {{ dish.name }}
+                        </div>
+                    </div>
+                    
+                    <div class="dishContainer span3">
+                        <div class="dishName span12">{{menu.friesDip.name}} ({{menu.friesDip.nameEn}})</div>
+                        <div ng-repeat="dish in menu.friesDip.dishes">
+                            {{ dish.name }}
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
         </div>
     </div>
 </div>

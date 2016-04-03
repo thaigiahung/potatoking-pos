@@ -47,22 +47,20 @@ module.exports = {
 		this.deviceIp = DeviceIp;
 
 		function callback(deviceIp) {
-			data = req.body;
-			
 			Dish.find({
-				parentCategory: null 
+				category: req.query.id
 			})
-			.exec(function(err, foundCategories) {
+			.exec(function(err, foundDishes) {
 				if(err) {
 					return res.json({
 						status: Enum.StatusCode.NotFoundObject,
-						message:  Message.vn.CategoryNotExists
+						message:  Message.vn.DishNotExists
 					}) 
 				}
 				
 				return res.json({
 					status: Enum.StatusCode.Success,
-					categories: foundCategories
+					dishes: foundDishes
 				})
 			});
 		};
@@ -79,9 +77,7 @@ module.exports = {
 		function callback(deviceIp) {
 			data = req.body;
 			
-			Category.find({
-				parentCategory: null
-			})
+			Category.find()
 				.populate("childCategories")
 				.populate("dishes")
 				.then(function(categories) {

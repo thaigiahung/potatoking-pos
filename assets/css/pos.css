@@ -68,6 +68,30 @@
   max-width: 75px;
 }
 
+.subCategory1 {
+    background-color:#FDC71D;
+    border-left:5px solid #00A551;
+    border-right:5px solid #00A551;
+    border-bottom:5px solid #00A551;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin:0px!important;
+}
+
+.subCategory1.inactive {
+    background-color: #8D721D;
+    border-color:#29632D;
+}
+
+.dishContainer
+{
+    background-color: rgba(0,0,0,0.2);
+}
+
+.dishName {
+    background-color: rgba(0,0,0,0.2);
+}
+
 /*#content {
   margin-left: 15px;
 }*/

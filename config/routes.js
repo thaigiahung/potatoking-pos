@@ -59,6 +59,7 @@ module.exports.routes = {
   'GET /cashier/ordered' : 'SessionController.cashierOrdered',
 
   //API
+  'GET /categories/getDish': 'DishController.getDishByCategory',
   'GET /categories': 'DishController.getCategories',
   'GET /subscribe/:roomName': 'DeviceController.subscribe',
   'GET /unsubscribe/:roomName': 'DeviceController.unsubscribe',
