@@ -14,66 +14,14 @@
 
 
         <div class="category" ng-repeat="cate in menu.categories" ng-click="menu.changeCategory(cate.id)" ng-class="[
-    {active: cate.id == menu.selectedCategory}]">{{menu.selectedCategory}} | {{menu.isFries()}}</div>
+    {active: cate.id == menu.selectedCategory}]">{{cate.name}}</div>
     </div>
 
 
     <div class="span9">
         <div ng-hide="menu.isFries()">
-            <!-- <div class="row-fluid"> -->
-            <% _.each(dishes, function (dish) { %>
-                <div class="span3" <%if(dish.status=='disable' ) {%>style="display: none;"
-                    <%}%> id="item
-                        <%= dish.id %>">
-                            <button onclick="addItem(<%= dish.id %>, '<%= dish.name %>')">
-                                <%= dish.name %>
-                            </button>
-                </div>
-                <% }) %>
-                    <!-- </div> -->
-
-                    <div class="row-fluid"></div>
-
-                    <hr>
-
-                    <div id="dishesPage" class="row-fluid">
-                        <h1>Các món đã chọn</h1>
-
-                        <div class="box span11">
-                            <div class="box-content">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Món</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="addedItemTableBody">
-                                        <% _.each(added, function (item) { %>
-                                            <% if(item.status == 'added') { %>
-                                                <tr class="dish<%= item.dish.id %>">
-                                                    <td>
-                                                        <%= item.dish.name %>
-                                                    </td>
-                                                    <td>
-                                                        <input type="button" class="btn btn-danger" onclick="removeItem(<%= item.id %>)" value="Hủy" </td>
-                                                </tr>
-                                                <% } %>
-                                                    <% }) %>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="row-fluid device-list-footer">
-                                <div class="device-list-footer-right">
-                                    <button onclick="order(<%= session.id %>)" class="btn btn-large btn-success" data-toggle="modal">Đặt món</button>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
+            This is not fries div
         </div>
-        
         
         <div ng-show="menu.isFries()">
             This is div for fries

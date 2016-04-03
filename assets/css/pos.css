@@ -56,5 +56,6 @@
 }
 
 .category.active {
+  font-weight: bold;
   min-height: 150px;
 }
