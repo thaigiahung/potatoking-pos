@@ -44,7 +44,7 @@ exports.apply = function(context, callback) {
       {
       	return HandleUnauthorized(res);
       }
-      else if(!isExists(roles,deviceIp.type))
+      else if(!isExists(deviceIp.type,roles))
       {
   		return HandleNotFound(res);
 	  }

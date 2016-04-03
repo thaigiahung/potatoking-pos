@@ -18,6 +18,17 @@ module.exports = {
       collection: 'Dish',
       via: 'category'
     },
+    
+    childCategories: {
+        collection: 'Category',
+        via: 'parentCategory'
+    },
+    
+    parentCategory: {
+        model: 'Category',
+    },
+    
+    nameEn: { type: 'string' }
   }
 };
 

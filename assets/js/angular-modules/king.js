@@ -648,6 +648,15 @@
 
 		}
 	});
+    
+    app.controller('menuController', function($scope, $http) {
+        var self = this;
+        $http.get("/categories")
+        .then(function(response) {
+            self.categories = response.data.categories;
+            console.log(self.categories);
+        });
+    });
 
 	var isInDishesManagement = function(view) {
 		return view == 'dishesManage';

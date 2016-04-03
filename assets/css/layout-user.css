@@ -42,12 +42,12 @@
 
 
 body {
-	background-color: #FDC71C;
+	/*background-color: #FDC71C;*/
 }
 
 #content {
-	background-image: url('/img/template/BG.jpg');
-	border: 0px;
+	/*background-image: url('/img/template/BG.jpg');*/
+	/*border: 0px;*/
 }
 
 .page-title {

@@ -629,7 +629,6 @@ module.exports = {
   kitchenOverview: function(req, res) {
     var ip = req.ip;
     ip = ip.substring(ip.lastIndexOf(":")+1, ip.length);
-
     DeviceIp.findOne({
       ip: ip
     }).exec(function (err, deviceIp) {
@@ -641,6 +640,7 @@ module.exports = {
       {
         if(deviceIp.type == 'chief-cook')
         {
+            // console.log("Devide founded");
           /*var query = "SELECT DISTINCT(s.id), s.* 
                       FROM `sessiondetail` sd JOIN session s ON s.id = sd.session 
                       WHERE sd.status = 'ordered' AND s.status = 'open'";*/
@@ -669,7 +669,7 @@ module.exports = {
                   sessionDetailsTogo.push(currentSession);
                 }
               }
-
+              
               return res.view('kitchen-overview', {status: 1
                 , moment: moment
                 , dineInList: sessionDetailsDineIn

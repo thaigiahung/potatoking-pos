@@ -20,7 +20,8 @@ module.exports = {
     images: {
       collection: 'DishImage',
       via: 'dish'
-    }
+    },
+    order: { type: 'integer' }
   }
 };
 
