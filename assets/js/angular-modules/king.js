@@ -653,9 +653,17 @@
         
         this.selectedCategory = 1;
         
+        this.isFries = function() {
+            return self.selectedCategory == 1;
+        }
+        
         this.changeCategory = function(categoryId) {
             self.selectedCategory = categoryId;
         }
+        
+        // this.haveChild = function(categoryId) {
+        //     return self.categories[.childCategories.count
+        // } 
     });
 
 	var isInDishesManagement = function(view) {
