@@ -20,7 +20,19 @@
 
     <div class="span9">
         <div ng-hide="menu.isFries()">
-            This is not fries div
+            <div ng-repeat="cate in menu.categories" ng-show="cate.id == menu.selectedCategory">
+                <div ng-repeat="dish in cate.dishes">
+                    <div class="span6 menu-item-block">
+                        <div class="inline-block">
+                            <img class="menu-item-img" src="/img/template/no-image.jpg">
+                        </div>
+                        <div class="inline-block">
+                            <div class="menu-item-name-vn">{{dish.name}}</div>
+                            <div class="menu-item-name-en">{{dish.nameEn}}   ....................{{dish.price}}vnd</div>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
         </div>
         
         <div ng-show="menu.isFries()">

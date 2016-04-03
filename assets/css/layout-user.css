@@ -89,3 +89,26 @@ body {
 	color: #FE7900;
 	font-size: 20px;
 }
+
+.inline-block {
+  display: inline-block;
+}
+
+.menu-item-img {
+  max-width: 150px;
+}
+
+.menu-item-block {
+  padding-bottom: 10px;
+}
+
+.menu-item-name-vn {
+  font-family:'Kanit',Sans-Serif;
+  font-size: 26px;
+}
+
+.menu-item-name-en { 
+  font-family:'VNI-Park',Sans-Serif;
+  font-size: 22px;
+  line-height: 1.5em;
+}
