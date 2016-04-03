@@ -19,6 +19,7 @@
         this.selectedItems = [];
         this.filters = new Array();
         this.testingVariable = 0;
+        this.selectedTable = -1;
 
         const numberOfTable = 8;
 
@@ -68,6 +69,15 @@
             for(var i = 0 ; i < numberOfTable; i++) {
                 self.filters[i].selected = temp[i];   
             }
+        }
+
+        this.canSelect = function(id) {
+        	return this.selectingTable() == -1 || 
+        		this.selectingTable() == id;
+        }
+        
+        this.selectingTable = function() {
+        	return this.numberOfSelected() == 0 ? -1 : this.getTable(this.selectedItems[0]);
         }
         
         this.getTable = function(id) {
@@ -126,21 +136,6 @@
             		self.reInitKitchen(result.sessionDetails);
               }
             });
-            
-            // $.ajax({
-            //     method: "POST",
-            //     url: url,
-            //     data: self.selectedItems,
-            //     success: function(data) {
-            //         // TODO: This code will be run after the server response
-                    
-            //         /* In the object response from server
-            //          , get all the sessionDetails and response to the client
-            //          */
-                    
-            //         self.reInitKitchen(data.sessionDetails);
-            //     }
-            // });
 
             self.updateNumberOfSelectedPerTable();
         }
@@ -164,7 +159,6 @@
                 }
             }
         }
-        
 
         this.isOn = function (index) {
             return self.filters[index].value == 1;

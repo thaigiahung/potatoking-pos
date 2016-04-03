@@ -407,43 +407,79 @@ module.exports = {
       }
       else
       {
-        session.status = 'close';
-        session.paymentStatus = 'cancelled';
-        session.save(function (err2, saved){
-          if(err2 || !saved)
+        //Check if this table has any item delivered
+        SessionDetail.find({
+          session: sessionId,
+          status: 'delivered'
+        }).exec(function (err, sessionDetails){
+          if(err || !sessionDetails) //No item delivered
           {
-            return res.json({
-              status: 0,
-              message: 'Không thể hủy bàn!'
+            //Cancel all items
+            SessionDetail.update(
+              {session: sessionId, status: 'ordered'},
+              {status:'cancelled'}
+            ).exec(function (err, updated){
+              if(err || !updated)
+              {
+                return res.json({
+                  status: 0,
+                  message: 'Không thể hủy món!'
+                });
+              }
+              else
+              {
+                //Update session status
+                session.status = 'close';
+                session.paymentStatus = 'cancelled';
+                session.save(function (err2, saved){
+                  if(err2 || !saved)
+                  {
+                    return res.json({
+                      status: 0,
+                      message: 'Không thể hủy bàn!'
+                    });
+                  }
+                  else
+                  {
+                    //Broadcast to kitchen to remove these items
+                    sails.sockets.broadcast('device', 'cancelAll', {sessionId: sessionId});
+
+                    SessionDevice.find({
+                      session: sessionId
+                    }).populate('device').exec(function (err3, sessionDevices){
+                      if(!err3 && sessionDevices && sessionDevices.length > 0)
+                      {
+                        async.forEachOfSeries(sessionDevices, function (sessionDevice, index, callback) {
+                          sessionDevice.device.opening = false;
+                          sessionDevice.device.save(function(err4, saved){
+                            if(!err4)
+                            {
+                              sails.sockets.broadcast('device', 'cancelled', sessionDevice.device.table);
+                            }
+                          });
+                          callback();
+                        }, function done() {
+                          sails.sockets.broadcast('table'+session.table, 'cancelled', { msg: session.table });
+
+                          sails.sockets.broadcast('device', 'removeOverviewRow', sessionId);
+
+                          return res.json({
+                            status: 1,
+                            message: 'Hủy bàn thành công!'
+                          });
+                        });
+                      }
+                    });
+                  }
+                });
+              }
             });
           }
           else
           {
-            SessionDevice.find({
-              session: sessionId
-            }).populate('device').exec(function (err3, sessionDevices){
-              if(!err3 && sessionDevices && sessionDevices.length > 0)
-              {
-                async.forEachOfSeries(sessionDevices, function (sessionDevice, index, callback) {
-                  sessionDevice.device.opening = false;
-                  sessionDevice.device.save(function(err4, saved){
-                    if(!err4)
-                    {
-                      sails.sockets.broadcast('device', 'cancelled', sessionDevice.device.table);
-                    }
-                  });
-                  callback();
-                }, function done() {
-                  sails.sockets.broadcast('table'+session.table, 'cancelled', { msg: session.table });
-
-                  sails.sockets.broadcast('device', 'removeOverviewRow', sessionId);
-
-                  return res.json({
-                    status: 1,
-                    message: 'Hủy bàn thành công!'
-                  });
-                });
-              }
+            return res.json({
+              status: 0,
+              message: 'Vui lòng thanh toán trước khi hủy bàn!'
             });
           }
         });
