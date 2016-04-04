@@ -112,3 +112,24 @@ body {
   font-size: 22px;
   line-height: 1.5em;
 }
+
+.horizontal-sub-level1-table {
+  width: 100%;
+}
+
+.dishName {
+  text-align: center;
+  font-size: 40px;
+}
+
+.dish-title {
+  line-height: 1.5em;
+}
+
+.kanit {
+  font-family:'Kanit',Sans-Serif;
+}
+
+.vni-park {
+  font-family:'VNI-Park',Sans-Serif;
+}
