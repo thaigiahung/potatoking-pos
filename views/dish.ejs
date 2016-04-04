@@ -45,17 +45,24 @@
                     inactive: menu.selectedSubtab != cate.id}]">{{cate.name}}</div>
                     
                 <div ng-show="menu.selectedSubtab == menu.fixCategory.potato">
-                    <div class="row-fluid potatoDishes">
-                        <table class="horizontal-sub-level1-table">
+                    <div id="potatoDishesContainer" class="potatoDishesContainer row-fluid">
+                        <img id="potatoDishesArrow" class="nextDishes" src="/img/timeline-left-arrow@2x.png" alt="">
+                        <table id="potatoDishesTable" class="horizontal-sub-level1-table shadedBackground"
+                        style="width: {{menu.potatoDishesWidth}}px; height: {{menu.dishWidth}}px">
                             <tr>
-                                <td ng-repeat="dish in menu.potatoDishes.dishes">{{ dish.name }}</td>
+                                <td class="potatoDish span3" 
+                                ng-repeat="dish in menu.potatoDishes.dishes"
+                                style="width: {{menu.dishWidth}}px; background-image: url('{{dish.mainImage}}');">
+                                <div class="potatoDishName">
+                                    {{ dish.name }}
+                                </div></td>
                             </tr>
                         </table>
                     </div>
                     
                     <div class="row-fluid">
                         
-                        <div ng-repeat="dipShake in menu.potatoDipShake" class="dishContainer span6">
+                        <div ng-repeat="dipShake in menu.potatoDipShake" class="dishContainer shadedBackground span6">
                             <div class="dishName span12 dish-title">
                                 <span class="kanit">{{dipShake.name}}</span>
                                 <span class="vni-park">({{dipShake.nameEn}})</span>
@@ -78,7 +85,7 @@
                 
                 <div ng-show="menu.selectedSubtab == menu.fixCategory.fries">
                     
-                    <div class="dishContainer span9">
+                    <div class="dishContainer shadedBackground span9">
                         <div class="dishName span12 dish-title"> 
                             <span class="kanit">{{menu.friesDishes.name}}</span>
                             <span class="vni-park">({{menu.friesDishes.nameEn}})</span>
@@ -96,7 +103,7 @@
                         </div>
                     </div>
                     
-                    <div class="dishContainer span3">
+                    <div class="dishContainer shadedBackground span3">
                         <div class="dishName span12 dish-title"> 
                             <span class="kanit">{{menu.friesDip.name}}</span>
                             <span class="vni-park">({{menu.friesDip.nameEn}})</span>
@@ -120,3 +127,5 @@
         </div>
     </div>
 </div>
+
+<%- block('localScripts', '<script src="/js/dishMenu/dishMenu.js"></script>') %>

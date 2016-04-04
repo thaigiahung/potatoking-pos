@@ -111,15 +111,60 @@ body {
   font-family:'VNI-Park',Sans-Serif;
   font-size: 22px;
   line-height: 1.5em;
+  
 }
 
 .horizontal-sub-level1-table {
-  width: 100%;
+  padding-top:10px;
+  margin-bottom:10px;
+  height:50px;
+  /*max-width: 100%;*/
+  /*min-width:200%;*/
 }
 
 .dishName {
   text-align: center;
   font-size: 40px;
+}
+
+.potatoDishesContainer {
+  position: relative;
+  overflow-x: scroll;
+}
+
+.potatoDish{
+  background-size:cover;
+  position: relative;
+}
+
+.nextDishes {
+  position: absolute;
+  z-index: 999;
+  right: 0px;
+  height: 50px;
+  width:50px;
+  transform: translate(0, -50%);
+  -webkit-transform: translate(0, -50%);
+  bottom: calc(50%-25px);
+  top: 50%;
+  opacity:0.75;
+  transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+}
+
+.nextDishes.hideArrow {
+  opacity:0;
+  -webkit-transform: translate(-200%, -50%) scale(0.5);
+}
+
+.potatoDishName {
+  text-align: center;
+  color: #00FB61;
+  font-size: 20px;
+  font-weight: 900;
+  position: absolute;
+  width:100%;
+  bottom:0px;
 }
 
 .dish-title {
@@ -132,4 +177,31 @@ body {
 
 .vni-park {
   font-family:'VNI-Park',Sans-Serif;
+}
+
+.subCategory1 {
+    background-color:#FDC71D;
+    border-left:5px solid #00A551;
+    border-right:5px solid #00A551;
+    border-bottom:5px solid #00A551;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.span6.subCategory1 {
+    margin:0px!important;
+    width:50%;
+}
+
+.subCategory1.inactive {
+    background-color: #8D721D;
+    border-color:#29632D;
+}
+
+.shadedBackground {
+    background-color: rgba(0,0,0,0.2);
+}
+
+.dishName {
+    background-color: rgba(0,0,0,0.2);
 }

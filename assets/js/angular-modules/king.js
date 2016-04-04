@@ -645,6 +645,7 @@
     app.controller('menuController', function($scope, $http) {
         var self = this;
         
+            
         $http.get("/categories")
         .then(function(response) {
             self.categories = response.data.categories;
@@ -662,6 +663,13 @@
             self.friesDishes = self.getCategory(self.fixCategory.friesDishes);
             self.friesDip = self.getCategory(self.fixCategory.friesDip);
             
+            self.menuWidth = 512;
+            self.dishWidth = self.menuWidth / 4;
+            
+            self.potatoDishesWidth = self.potatoDishes.dishes.length * self.dishWidth;
+            
+            console.log(self.potatoDishesWidth);
+            
             for(var i = 0 ; i < self.categories.length ; i ++) {
                 var current = self.categories[i];
                 
@@ -671,12 +679,17 @@
                     })
                     .then(function(response) {
                         current.dishes = response.data.dishes;
+                        // console.log(current.id);
+                        // if(current.id == self.fixCategory.friesDishes) {
+                        //     self.potatoDishesWidth = current.dishes.length * self.dishWidth;
+                            
+                        //     console.log(self.potatoDishesWidth);
+                        // }
                     })
                 }
             }
-            
-            console.log(self.potatoDishes);
         });
+        
         
         this.getCategory = function(categoryId) {
             for(var i = 0 ; i < self.categories.length ; i++) {
