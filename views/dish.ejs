@@ -3,19 +3,13 @@
 </div>
 <!--/row-->
 
-<div id="dishesPage" class="row-fluid">
-    <h1>Danh sách món ăn</h1>
-</div>
-
-<hr>
-
 <div class="row-fluid" ng-controller="menuController as menu">
-    <div class="span3">
+
+    <div class="span3" id="categoriesContainer">
 
 
-        <div class="category" ng-repeat="cate in menu.categories" 
-        ng-show="menu.isParent(cate)"
-        ng-click="menu.changeCategory(cate.id)" ng-class="[
+        <div class="category" ng-repeat="cate in menu.categories" ng-show="menu.isParent(cate)" ng-click="menu.changeCategory(cate.id)"
+        ng-class="[
     {active: cate.id == menu.selectedCategory}]">{{cate.name}}</div>
     </div>
 
@@ -24,92 +18,97 @@
         <div ng-hide="menu.isFries()">
             <div ng-repeat="cate in menu.categories" ng-show="cate.id == menu.selectedCategory">
                 <div ng-repeat="dish in cate.dishes">
-                    <div class="span6 menu-item-block">
+                    <div class="span6 menu-item-block" ng-click="menu.selectOneLevel(dish.id)">
                         <div class="inline-block">
                             <img class="menu-item-img" ng-src="{{dish.mainImage}}">
                         </div>
                         <div class="inline-block">
                             <div class="menu-item-name-vn">{{dish.name}}</div>
-                            <div class="menu-item-name-en">{{dish.nameEn}}   ....................{{dish.price}}vnd</div>
+                            <div class="menu-item-name-en">{{dish.nameEn}} ....................{{dish.price}}vnd</div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </div>
-        
+
         <div ng-show="menu.isFries()">
             <div class="row-fluid">
                 <div ng-repeat="cate in menu.categories | orderBy: '-id'" ng-show="menu.isSubLevel1(cate.id)" class="subCategory1 span6"
-                ng-click="menu.changeSubtab(cate.id)"
-                ng-class="[{
+                ng-click="menu.changeSubtab(cate.id)" ng-class="[{
                     inactive: menu.selectedSubtab != cate.id}]">{{cate.name}}</div>
-                    
+
                 <div ng-show="menu.selectedSubtab == menu.fixCategory.potato">
                     <div id="potatoDishesContainer" class="potatoDishesContainer row-fluid">
                         <img id="potatoDishesArrow" class="nextDishes" src="/img/timeline-left-arrow@2x.png" alt="">
-                        <table id="potatoDishesTable" class="horizontal-sub-level1-table shadedBackground"
-                        style="width: {{menu.potatoDishesWidth}}px; height: {{menu.dishWidth}}px">
+                        <table id="potatoDishesTable" class="horizontal-sub-level1-table shadedBackground" style="width: {{menu.potatoDishesWidth}}px; height: {{menu.dishWidth}}px">
                             <tr>
-                                <td class="potatoDish span3" 
-                                ng-repeat="dish in menu.potatoDishes.dishes"
-                                style="width: {{menu.dishWidth}}px; background-image: url('{{dish.mainImage}}');">
-                                <div class="potatoDishName">
-                                    {{ dish.name }}
-                                </div></td>
+                                <td class="potatoDish span3" ng-repeat="dish in menu.potatoDishes.dishes" style="width: {{menu.dishWidth}}px; background-image: url('{{dish.mainImage}}');">
+                                    <div class="potatoDishContainer" ng-click="menu.selectLvl1(dish.id)" ng-class="[{
+                            selectedDish: menu.isSelectedDish(dish.id)}]">
+                                        <div class="potatoDishName">
+                                            {{ dish.name }}
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         </table>
                     </div>
-                    
+
                     <div class="row-fluid">
-                        
+
                         <div ng-repeat="dipShake in menu.potatoDipShake" class="dishContainer shadedBackground span6">
                             <div class="dishName span12 dish-title">
                                 <span class="kanit">{{dipShake.name}}</span>
                                 <span class="vni-park">({{dipShake.nameEn}})</span>
                             </div>
                             <div ng-repeat="dish in dipShake.dishes">
-                                <div class="span12 menu-item-block">
+                                <div class="span12 menu-item-block" ng-click=" menu.steps.dipShake != menu.currentStep || menu.selectLvl2(dipShake.id)" ng-class="[
+                                {disableStep: menu.currentStep < menu.steps.dipShake}
+                                ]">
                                     <div class="inline-block">
                                         <img class="menu-item-img" ng-src="{{dish.mainImage}}">
                                     </div>
                                     <div class="inline-block">
                                         <div class="menu-item-name-vn">{{dish.name}}</div>
-                                        <div class="menu-item-name-en">{{dish.nameEn}}   ....................{{dish.price}}vnd</div>
+                                        <div class="menu-item-name-en">{{dish.nameEn}} ....................{{dish.price}}vnd</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
-                
+
                 <div ng-show="menu.selectedSubtab == menu.fixCategory.fries">
-                    
+
                     <div class="dishContainer shadedBackground span9">
-                        <div class="dishName span12 dish-title"> 
+                        <div class="dishName span12 dish-title">
                             <span class="kanit">{{menu.friesDishes.name}}</span>
                             <span class="vni-park">({{menu.friesDishes.nameEn}})</span>
                         </div>
                         <div ng-repeat="dish in menu.friesDishes.dishes">
-                            <div class="span12 menu-item-block">
+                            <div class="span12 menu-item-block" ng-click="menu.selectLvl1(dish.id)" ng-class="[{
+                            selectedDish: menu.isSelectedDish(dish.id)}]">
                                 <div class="inline-block">
                                     <img class="menu-item-img" ng-src="{{dish.mainImage}}">
                                 </div>
                                 <div class="inline-block">
                                     <div class="menu-item-name-vn">{{dish.name}}</div>
-                                    <div class="menu-item-name-en">{{dish.nameEn}}   ....................{{dish.price}}vnd</div>
+                                    <div class="menu-item-name-en">{{dish.nameEn}} ....................{{dish.price}}vnd</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="dishContainer shadedBackground span3">
-                        <div class="dishName span12 dish-title"> 
+                        <div class="dishName span12 dish-title">
                             <span class="kanit">{{menu.friesDip.name}}</span>
                             <span class="vni-park">({{menu.friesDip.nameEn}})</span>
                         </div>
                         <div ng-repeat="dish in menu.friesDip.dishes">
-                            <div class="span12 menu-item-block">
+                            <div class="span12 menu-item-block" ng-click=" menu.steps.dipShake != menu.currentStep || menu.selectLvl2(dish.id)" ng-class="[
+                                {disableStep: menu.currentStep < menu.steps.dipShake}
+                                ]">>
                                 <div class="inline-block">
                                     <img class="menu-sub-item-img" ng-src="{{dish.mainImage}}">
                                 </div>
@@ -120,9 +119,9 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
-                
+
             </div>
         </div>
     </div>
