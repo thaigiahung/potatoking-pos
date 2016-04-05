@@ -54,6 +54,7 @@ module.exports.routes = {
   'GET /ordered/detail/:id': 'SessionDetailController.detail',
   'GET /kitchen/overview': 'SessionController.kitchenOverview',
   'GET /kitchen/dish': 'DishController.kitchenDish',
+  'GET /kitchen/fastDelivery': 'DeviceController.fastDelivery',
   'GET /dish/manage' : 'DishController.manage',
   'GET /cashier/menu' : 'DishController.cashierMenu',
   'GET /cashier/ordered' : 'SessionController.cashierOrdered',
@@ -84,6 +85,7 @@ module.exports.routes = {
   'POST /blockTable': 'SessionController.blockTable',
   'POST /unblockTable': 'SessionController.unblockTable',
   'POST /cashier/order': 'SessionController.cashierOrder',
+  'POST /kitchen/fastDelivery': 'DeviceController.startFastDelivery',
 
   // Dish management
   'POST /dish/editDish': 'DishController.editDish',

@@ -939,6 +939,26 @@ function setTotalAddedItem ()
   $('#total').attr('value', total);
 }
 
+function fastDelivery () 
+{
+  var selectedTable = $( "input[name=fast-delivery]:checked" ).val();
+  var data = {
+    table: selectedTable
+  }
+
+  io.socket.post('/kitchen/fastDelivery', data, function (result) {
+    console.log(result)
+    if(result.status == 0)
+    {
+      failNotify(result.message);
+    }
+    else
+    {
+      successNotify(result.message);
+    }
+  });
+}
+
 function reload () 
 {
   location.reload();

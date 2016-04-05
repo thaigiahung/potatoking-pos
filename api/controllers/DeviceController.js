@@ -5,6 +5,7 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var fs = require('fs');
 var async = require('async');
 
 module.exports = {
@@ -190,6 +191,90 @@ module.exports = {
         });        
       }      
     });
+  },
+
+  fastDelivery: function(req, res) {
+    this.authorizeRoles = ['chief-cook'];
+    this.req = req;
+    this.res = res;
+    this.deviceIp = DeviceIp;
+
+    function callback(deviceIp) {
+      Device.find({
+        where: {
+          status: 'enable',
+          table: { '<': 30 }
+        },
+        sort: 'table asc'
+      }).exec(function (err, devices) {
+        var opened = [];
+        if(err || !devices)
+        {
+          return res.view('fast-delivery',{status: 0, deviceIp: deviceIp, devices: []});
+        }
+        else
+        {
+          return res.view('fast-delivery', {status: 1, deviceIp: deviceIp, devices: devices});
+        }
+      });
+    };
+
+    return Authorize.apply(this, callback);
+  },
+
+  startFastDelivery: function(req, res) {
+    this.authorizeRoles = ['chief-cook'];
+    this.req = req;
+    this.res = res;
+    this.deviceIp = DeviceIp;
+
+    function callback(deviceIp) {
+      var trainId = 1;
+      var newStr = "2\n" + req.body.table + "\n" + trainId;
+      var fullFilePath = './assets/order.dat';
+
+      fs.readFile(fullFilePath, 'utf8', function read(err, data) {               
+        if(err || !data)
+        {
+          return res.json({
+            status: 0,
+            message: 'Không thể đọc file!'
+          });
+        }
+        else
+        {
+          var arr = data.split("\n");
+          if(arr[0] == 1) //Train is currently at station
+          {
+            fs.writeFile(fullFilePath, newStr, 'utf8', function (err) {
+              if(err)
+              {
+                return res.json({
+                  status: 0,
+                  message: 'Không thể ghi file!'
+                });
+              }
+              else
+              {
+                return res.json({
+                  status: 1,
+                  message: 'Thành công!'
+                });
+              }
+            });
+          }
+          else
+          {
+            return res.json({
+              status: 0,
+              message: 'Xe không sẵn sàng!'
+            });
+          }
+        }
+      });
+    };
+
+    return Authorize.apply(this, callback);
   },
 };
 

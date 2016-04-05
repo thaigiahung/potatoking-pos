@@ -1,0 +1,8 @@
+<div id="divFastDeliveryPage">
+	<% _.each(devices, function (device) { %>
+		<input id="table<%= device.table %>" type="radio" name="fast-delivery" class="big-radio-button" value="<%= device.table %>" />
+		<label for="table<%= device.table %>" class="big-radio-button-label">Bàn <%= device.table %></label>
+	<% }) %>
+
+	<button onclick="fastDelivery()" class="btn btn-large btn-success">Giao</button>
+</div>

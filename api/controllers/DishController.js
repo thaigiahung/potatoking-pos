@@ -565,4 +565,5 @@ module.exports = {
 
 		return Authorize.apply(this, callback);
 	},
+
 };

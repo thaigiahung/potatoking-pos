@@ -71,3 +71,26 @@
 /*#content {
   margin-left: 15px;
 }*/
+
+input[type=radio] {
+    display: none;
+}
+input[type=radio] + label::before {
+    content: '';
+    display: inline-block;
+    border: 1px solid #000;
+    border-radius: 50%;
+    margin: 0 0.5em;
+}
+input[type=radio]:checked + label::before {
+    background-color: #ABF506;
+}
+
+.big-radio-button + label::before {
+    width: 1em;
+    height: 1em;
+}
+
+.big-radio-button-label {
+  font-size: 2.5em;
+}
