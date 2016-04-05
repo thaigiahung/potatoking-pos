@@ -98,6 +98,10 @@ body {
   max-width: 150px;
 }
 
+.menu-sub-item-img {
+  max-width: 50px;
+}
+
 .menu-item-block {
   padding-bottom: 10px;
 }
@@ -112,6 +116,16 @@ body {
   font-size: 22px;
   line-height: 1.5em;
   
+}
+
+.menu-sub-item-name-vn {
+  font-family:'Kanit',Sans-Serif;
+  font-size: 16px;
+}
+
+.menu-sub-item-name-en { 
+  font-family:'VNI-Park',Sans-Serif;
+  font-size: 14px;  
 }
 
 .horizontal-sub-level1-table {
