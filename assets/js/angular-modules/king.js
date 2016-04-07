@@ -2,6 +2,7 @@
     var app = angular.module('king', ['ui.bootstrap']);
     var devicesViewPath = '/templates/devicesView/';
     var dishesViewPath = '/templates/dishesView';
+    var modalsViewPath = '/templates/modalsView/';
 
     var devices = [
         { deviceIndex: 0, isSelected: false },
@@ -638,7 +639,7 @@
         }
     });
 
-    app.controller('menuController', function($scope, $http) {
+    app.controller('menuController', function($scope, $http, $uibModal, $log) {
         var self = this;
 
 
@@ -738,6 +739,26 @@
         this.selectLvl2 = function(level2Id) {
             self.selectedDish.level2 = level2Id;
             console.log(self.selectedDish);
+
+            $scope.items = ['item1', 'item2', 'item3'];
+
+            var modalInstance = $uibModal.open({
+              animation: true,
+              templateUrl: 'myModalContent.html',
+              controller: 'ModalInstanceCtrl',
+              size: '',
+              resolve: {
+                items: function () {
+                  return $scope.items;
+                }
+              }
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+              $scope.selected = selectedItem;
+            }, function () {
+              $log.info('Modal dismissed at: ' + new Date());
+            });
         }
         
         this.selectLvl1 = function(level1Id) {
@@ -790,37 +811,6 @@
             self.selectedCategory = categoryId;
             self.resetStep();
         }
-    });
-
-    app.controller('ModalController', function($scope, $uibModal, $log) {
-        $scope.items = ['item1', 'item2', 'item3'];
-
-        $scope.animationsEnabled = true;
-
-        $scope.open = function (size) {
-
-            var modalInstance = $uibModal.open({
-              animation: $scope.animationsEnabled,
-              templateUrl: 'myModalContent.html',
-              controller: 'ModalInstanceCtrl',
-              size: size,
-              resolve: {
-                items: function () {
-                  return $scope.items;
-                }
-              }
-            });
-
-            modalInstance.result.then(function (selectedItem) {
-              $scope.selected = selectedItem;
-            }, function () {
-              $log.info('Modal dismissed at: ' + new Date());
-            });
-        };
-
-        $scope.toggleAnimation = function () {
-            $scope.animationsEnabled = !$scope.animationsEnabled;
-        };
     });
 
     app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) {
