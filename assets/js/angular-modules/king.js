@@ -740,7 +740,7 @@
             self.selectedDish.level2 = level2Id;
             console.log(self.selectedDish);
 
-            $scope.items = ['item1', 'item2', 'item3'];
+            // $scope.items = ['item1', 'item2', 'item3'];
 
             var modalInstance = $uibModal.open({
               animation: true,
@@ -749,7 +749,8 @@
               size: '',
               resolve: {
                 items: function () {
-                  return $scope.items;
+                  // return $scope.items;
+                  return self.selectedDish;
                 }
               }
             });
