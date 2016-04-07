@@ -24,6 +24,11 @@ module.exports = {
     order: { type: 'integer' },
     mainImage: {
         type: 'string'
+    },
+    
+    otherPrices: {
+        collection: 'Price',
+        via: 'dish'
     }
   }
 };

@@ -708,21 +708,21 @@
 
         this.selectedCategory = self.fixCategory.fries;
         this.selectedSubtab = self.fixCategory.potato;
-        
+
         this.selectedDish = {
             level1: null,
             level2: null,
             onlyLevel: null
         }
-        
+
         this.steps = {
             begin: 1,
             dipShake: 2,
             final: 1000
         }
-        
+
         this.currentStep = self.steps.begin;
-        
+
         this.resetStep = function() {
             self.currentStep = self.steps.begin;
             self.selectedDish = {
@@ -731,52 +731,70 @@
                 onlyLevel: null
             }
         }
-        
+
         this.isSelectedDish = function(id) {
             return self.selectedDish.level1 == id;
         }
-        
+
         this.selectLvl2 = function(level2Id) {
             self.selectedDish.level2 = level2Id;
-            console.log(self.selectedDish);
+            
+            var ids = [];
+            
+            if(self.selectedDish.level1) {
+                ids.push(self.selectedDish.level1);
+            }
+            
+            if(self.selectedDish.level2) {
+                ids.push(self.selectedDish.level2);
+            }
+            
+            if(self.selectedDish.onlyLevel) {
+                ids.push(self.selectedDish.onlyLevel);
+            }
 
-            // $scope.items = ['item1', 'item2', 'item3'];
+            $http.get("/dishes", {
+                params: { ids: ids }
+            })
+                .then(function(response) {
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        templateUrl: 'myModalContent.html',
+                        controller: 'ModalInstanceCtrl',
+                        size: '',
+                        resolve: {
+                            items: function() {
+                                // return $scope.items;
+                                return response.data.dishes;
+                            }
+                        }
+                    });
 
-            var modalInstance = $uibModal.open({
-              animation: true,
-              templateUrl: 'myModalContent.html',
-              controller: 'ModalInstanceCtrl',
-              size: '',
-              resolve: {
-                items: function () {
-                  // return $scope.items;
-                  return self.selectedDish;
-                }
-              }
-            });
+                    modalInstance.result.then(function(selectedItem) {
+                        $scope.selected = selectedItem;
+                    }, function() {
+                        $log.info('Modal dismissed at: ' + new Date());
+                    });
+                })
 
-            modalInstance.result.then(function (selectedItem) {
-              $scope.selected = selectedItem;
-            }, function () {
-              $log.info('Modal dismissed at: ' + new Date());
-            });
+
         }
-        
+
         this.selectLvl1 = function(level1Id) {
             self.resetStep();
             self.currentStep = self.steps.dipShake;
             self.selectedDish.level1 = level1Id;
         }
-        
+
         this.selectOneLevel = function(id) {
             self.selectedDish.onlyLevel = id;
             console.log(self.selectedDish);
         }
-        
+
         this.addStep = function() {
-            self.currentStep = self.currentStep == self.steps.final ? self.steps.final : self.currentStep + 1;   
+            self.currentStep = self.currentStep == self.steps.final ? self.steps.final : self.currentStep + 1;
         }
-        
+
         this.removeStep = function() {
             self.currentStep = self.currentStep == self.steps.begin ? self.steps.begin : self.currentStep - 1;
         }
@@ -814,20 +832,20 @@
         }
     });
 
-    app.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) {
+    app.controller('ModalInstanceCtrl', function($scope, $uibModalInstance, items) {
 
-          $scope.items = items;
-          $scope.selected = {
+        $scope.items = items;
+        $scope.selected = {
             item: $scope.items[0]
-          };
+        };
 
-          $scope.ok = function () {
+        $scope.ok = function() {
             $uibModalInstance.close($scope.selected.item);
-          };
+        };
 
-          $scope.cancel = function () {
+        $scope.cancel = function() {
             $uibModalInstance.dismiss('cancel');
-          };
+        };
     });
 
     var isInDishesManagement = function(view) {

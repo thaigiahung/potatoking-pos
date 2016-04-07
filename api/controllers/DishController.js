@@ -68,6 +68,36 @@ module.exports = {
 		return Authorize.apply(this, callback);
   },
   
+  getDishes: function(req,res) {
+		this.authorizeRoles = ['guest', 'chief-cook', 'cashier'];
+		this.req = req;
+		this.res = res;
+		this.deviceIp = DeviceIp;
+
+		function callback(deviceIp) {
+			Dish.find({
+				id: req.query.ids
+			})
+            .populate('otherPrices')
+			.exec(function(err, foundDishes) {
+				if(err) {
+                    console.log(err);
+					return res.json({
+						status: Enum.StatusCode.NotFoundObject,
+						message:  Message.vn.DishNotExists
+					}) 
+				}
+                
+				return res.json({
+					status: Enum.StatusCode.Success,
+					dishes: foundDishes
+				})
+			});
+		};
+
+		return Authorize.apply(this, callback);
+  },
+  
   getCategories: function(req, res) {
 		this.authorizeRoles = ['guest', 'chief-cook', 'cashier'];
 		this.req = req;
