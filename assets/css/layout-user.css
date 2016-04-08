@@ -245,7 +245,8 @@ body {
 
 .train-container {
   width: 100%;
-  height: 400px;
-  background: url(/img/template/train.png);
+  height: 200px;
+  background: url(/img/template/train.png) no-repeat;
   background-size:contain;
+  padding-top: 5%;
 }
