@@ -118,6 +118,7 @@ module.exports = {
                     return [categories, foundDishes];
 				})
                 .spread(function(categories, dishes) {
+                    
                     categories = _.map(categories, function(cate) {
                         var tempCate = new Object();
                         
@@ -127,16 +128,17 @@ module.exports = {
                         tempCate.status = cate.status
                         tempCate.nameEn = cate.nameEn
                         tempCate.id = cate.id
-                        tempCate.dishes = [];                    
+                        tempCate.dishes = [];        
                        
                        for(var i = 0 ; i < dishes.length ; i++ ){
                            if(dishes[i].category == cate.id) {
                                 tempCate.dishes.push(dishes[i]);
                            }
                        }
-                        
+                       
                        return tempCate;
                     });
+                    
 					return res.json({
                         status: Enum.StatusCode.Success,
                         categories: categories

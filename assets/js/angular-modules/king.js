@@ -638,11 +638,40 @@
 
         }
     });
-
-    app.controller('menuController', function($scope, $http, $uibModal, $log) {
+    
+    app.service('trainService', function() {
+        var selectedItems = ['zxczxczxzxczx'];
         var self = this;
+        
+        var addItem = function(item) {
+            selectedItems.push(item);
+        }
+        
+        var removeItem = function(item) {
+            selectedItems.remove(item);
+        }
+        
+        var resetItems = function() {
+            selectedItems = [];
+        }
+        
+        var getItems = function() {
+            return self.selectedItems;
+        }
+        
+        return {
+            addItem: addItem,
+            removeItem: removeItem,
+            resetItems: resetItems,
+            selectedItems: getItems,
+            testingVar: "TestingVar"
+        }
+    })
 
-
+    app.controller('menuController', function($scope, $http, $uibModal, $log, trainService, $rootScope) {
+        var self = this;
+        
+        
         $http.get("/categories")
             .then(function(response) {
                 self.categories = response.data.categories;
@@ -761,8 +790,6 @@
                                 }   
                                 
                                 if(self.selectedDish.onlyLevel == cateDish.id) {
-                                    // items.onlyLevel = cateDish;
-                                    // items.onlyLevel.size = 0;
                                     items.push({
                                         dish: cateDish,
                                         size: 0,
@@ -771,8 +798,6 @@
                                 }
                                 else {
                                     if(self.selectedDish.level2 == cateDish.id) {
-                                        // items.level2 = cateDish;
-                                        // items.level2.size = 0;
                                         items.push({
                                             dish: cateDish,
                                             size: 0,
@@ -780,8 +805,6 @@
                                         })
                                     }
                                     if(self.selectedDish.level1 == cateDish.id) {
-                                        // items.level1 = cateDish 
-                                        // items.level1.size = 0;
                                         items.push({
                                             dish: cateDish,
                                             size: 0,
@@ -817,7 +840,6 @@
 
         this.selectOneLevel = function(id) {
             self.selectedDish.onlyLevel = id;
-            console.log(self.selectedDish);
         }
 
         this.addStep = function() {
@@ -859,20 +881,35 @@
             self.selectedCategory = categoryId;
             self.resetStep();
         }
+        
+        this.showDishes = [];
+        
+        this.actualDishes = [];
+        
+        this.removeDish = function(index) {
+            self.showDishes.splice(index,1);
+            self.actualDishes.splice(index,1);
+        }
+        
+        $scope.$on('addItem', function(response, data) {
+            if(self.showDishes.length < 3) {
+                var mainDish;
+                data.forEach(function(dish) {
+                    if(dish.dish.category == 4 || dish.dish.category == 7) {
+                        mainDish = dish;
+                    }
+                })
+                
+               self.showDishes.push(mainDish);
+               self.actualDishes.push(data);
+            }
+        })
     });
 
-    app.controller('ModalInstanceCtrl', function($scope, $uibModalInstance, items) {
-        $scope.items = items;
-        
-        // $scope.selected = {
-        //     item: $scope.items[0]
-        // };
-        
-        // $scope.select = items
+    app.controller('ModalInstanceCtrl', function($scope, $uibModalInstance, items, $sce, trainService, $rootScope) {
+        $scope.items = convertItem(items);
         
         $scope.selectedItem = getFirstDish();
-        
-        console.log($scope.selectedItem);
         
         function getFirstDish() {
             for(var i = 0 ; i < $scope.items.length ; i++) {
@@ -881,7 +918,6 @@
                 }
             }    
         }   
-            
             
         $scope.changeItem = function(id) {
             for(var i = 0 ; i < $scope.items.length ; i++) {
@@ -892,8 +928,17 @@
         } 
         
         $scope.ok = function() {
-            $uibModalInstance.close($scope.selected.item);
+            $rootScope.$broadcast('addItem', $scope.items);
+            $uibModalInstance.close();
         };
+        
+        function convertItem(items) {
+            items.forEach(function(item) {
+               item.dish.descriptionTrusted = $sce.trustAsHtml(item.dish.description);  
+            });
+            
+            return items;
+        }
 
         $scope.cancel = function() {
             $uibModalInstance.dismiss('cancel');
@@ -906,7 +951,6 @@
                 }
             }
             
-            console.log($scope.items);
         };
         
         $scope.isSelectedSize = function(currentSize, compareSize) {

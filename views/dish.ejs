@@ -130,9 +130,12 @@
 
         <!-- Train -->
         <div class="row-fluit train-container">
-            <div class="span3"></div>
-            <div class="span3"></div>
-            <div class="span3"></div>
+            <div class="span3"
+            ng-repeat="showDish in menu.showDishes track by $index"
+            ng-click="menu.removeDish($index)">
+                {{ showDish.dish.mainImage}}
+                {{ showDish.dish.name}}
+            </div>
             <div class="span3"></div>
         </div>
     </div>
@@ -145,21 +148,46 @@
     <div class="modal-body">
         <table>
             <tr ng-repeat="item in items | orderBy: 'order'">
-                <td ng-click="changeItem(item.dish.id)">
+                <td ng-click="changeItem(item.dish.id)" class="span2">
                     {{ item.dish.name }}
                 </td>
-                <td>
-                    <button class="btn" ng-repeat="itemPrice in item.dish.otherPrices| orderBy: '-id'"
-                    ng-class="[
-                        { 'btn-primary': isSelectedSize(item.size, itemPrice.id) },
-                        { 'btn-warning': !isSelectedSize(item.size, itemPrice.id) }
-                    ]"
-                    ng-click="changeSize(item.dish.id,itemPrice.id)">{{itemPrice.name}} - {{itemPrice.price}}</button>
+                <td class="span10">
+                    <div class="row-fluid">
+                        <button class="btn span4" ng-repeat="itemPrice in item.dish.otherPrices | orderBy: 'price'"
+                        ng-class="[
+                            { 'btn-primary': isSelectedSize(item.size, itemPrice.id) },
+                            { 'btn-warning': !isSelectedSize(item.size, itemPrice.id) }
+                        ]"
+                        ng-click="changeSize(item.dish.id,itemPrice.id)">{{itemPrice.name}} - {{itemPrice.price}}</button>    
+                    </div>
                 </td>
             </tr>
         </table>
-        
-        Selected: <b>{{ selectedItem.dish.name }}</b>
+        <hr>
+        <!--Selected: <b>{{ selectedItem.dish.name }}</b>-->
+        <div class="row-fluid">
+            <div class="row-fluid">
+                <h2>{{ selectedItem.dish.name }} - {{selectedItem.dish.nameEn}}</h2>
+                    <img class="dishDetailImage" ng-src="{{ selectedItem.dish.mainImage }}">
+                    <div class="row-fluid">
+                        <span ng-bind-html="selectedItem.dish.descriptionTrusted"></span>
+                    </div>
+                    <!--<span>
+                        <div class="row-fluid">
+                            <div class="span4">something here something something something something something </div>
+                            <div class="span8">Some other things here
+                                <ul>
+                                    <li>What will stay here</li>
+                                    <li>What will stay here</li>
+                                    <li>What will stay here</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <b>Something ball</b> 
+                        Add something something something something something something something something something something something something something something something something something something something something something something something something something something something something something 
+                    </span>-->
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>

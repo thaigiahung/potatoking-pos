@@ -250,3 +250,8 @@ body {
   background-size:contain;
   padding-top: 5%;
 }
+
+.dishDetailImage {
+    width:100px;
+    height:100px;
+}
