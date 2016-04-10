@@ -646,9 +646,9 @@
         $http.get("/categories")
             .then(function(response) {
                 self.categories = response.data.categories;
-
+                
                 self.childFries = self.getCategory(self.fixCategory.childFries);
-
+                
                 self.potatoDishes = self.getCategory(self.fixCategory.potatoDishes);
                 self.potatoDip = self.getCategory(self.fixCategory.potatoDip);
                 self.potatoShake = self.getCategory(self.fixCategory.potatoShake);
@@ -662,24 +662,9 @@
 
                 self.menuWidth = 512;
                 self.dishWidth = self.menuWidth / 4;
-
+                
                 self.potatoDishesWidth = self.potatoDishes.dishes.length * self.dishWidth;
-
-                console.log(self.potatoDishesWidth);
-
-                for (var i = 0; i < self.categories.length; i++) {
-                    var current = self.categories[i];
-
-                    if (self.isSubLevel2(current.id)) {
-                        $http.get("/categories/getDish", {
-                            params: { id: current.id }
-                        })
-                            .then(function(response) {
-                                current.dishes = response.data.dishes;
-                            })
-                    }
-                }
-
+                
                 $('html, body').delay(1500).animate({
                     scrollTop: 100
                 }, '2000', 'easeOutCubic');
@@ -752,32 +737,76 @@
             if(self.selectedDish.onlyLevel) {
                 ids.push(self.selectedDish.onlyLevel);
             }
+            
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceCtrl',
+                size: '',
+                resolve: {
+                    items: function() {
+                        var items = [];
+                        self.categories.forEach(function(cate) {
+                            cate.dishes.forEach(function(cateDish) {
+                                var haveMedium = cateDish.otherPrices.some(function(item) {
+                                    return item.id == 0;
+                                })  
+                                     
+                                if(!haveMedium) {
+                                    cateDish.otherPrices.push({
+                                        name: "Medium",
+                                        id: "0",
+                                        price: cateDish.price
+                                    })
+                                }   
+                                
+                                if(self.selectedDish.onlyLevel == cateDish.id) {
+                                    // items.onlyLevel = cateDish;
+                                    // items.onlyLevel.size = 0;
+                                    items.push({
+                                        dish: cateDish,
+                                        size: 0,
+                                        order: 0
+                                    })
+                                }
+                                else {
+                                    if(self.selectedDish.level2 == cateDish.id) {
+                                        // items.level2 = cateDish;
+                                        // items.level2.size = 0;
+                                        items.push({
+                                            dish: cateDish,
+                                            size: 0,
+                                            order: 1
+                                        })
+                                    }
+                                    if(self.selectedDish.level1 == cateDish.id) {
+                                        // items.level1 = cateDish 
+                                        // items.level1.size = 0;
+                                        items.push({
+                                            dish: cateDish,
+                                            size: 0,
+                                            order: 0
+                                        })
+                                    }
+                                    
+                                }
+                            })
+                        })
+                        
+                        console.log(items);
+                        
+                        return items;
+                    }
+                }
+            });
 
-            $http.get("/dishes", {
-                params: { ids: ids }
-            })
-                .then(function(response) {
-                    var modalInstance = $uibModal.open({
-                        animation: true,
-                        templateUrl: 'myModalContent.html',
-                        controller: 'ModalInstanceCtrl',
-                        size: '',
-                        resolve: {
-                            items: function() {
-                                // return $scope.items;
-                                return response.data.dishes;
-                            }
-                        }
-                    });
-
-                    modalInstance.result.then(function(selectedItem) {
-                        $scope.selected = selectedItem;
-                    }, function() {
-                        $log.info('Modal dismissed at: ' + new Date());
-                    });
-                })
-
-
+            modalInstance.result.then(function(selectedItem) {
+                $scope.selected = selectedItem;
+            }, function() {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+            
+            var itemsDetails = [];
         }
 
         this.selectLvl1 = function(level1Id) {
@@ -833,18 +862,55 @@
     });
 
     app.controller('ModalInstanceCtrl', function($scope, $uibModalInstance, items) {
-
         $scope.items = items;
-        $scope.selected = {
-            item: $scope.items[0]
-        };
-
+        
+        // $scope.selected = {
+        //     item: $scope.items[0]
+        // };
+        
+        // $scope.select = items
+        
+        $scope.selectedItem = getFirstDish();
+        
+        console.log($scope.selectedItem);
+        
+        function getFirstDish() {
+            for(var i = 0 ; i < $scope.items.length ; i++) {
+                if($scope.items[i].order == 0){
+                    return $scope.items[i];
+                }
+            }    
+        }   
+            
+            
+        $scope.changeItem = function(id) {
+            for(var i = 0 ; i < $scope.items.length ; i++) {
+                if($scope.items[i].dish.id == id){
+                    $scope.selectedItem = $scope.items[i];
+                }
+            }    
+        } 
+        
         $scope.ok = function() {
             $uibModalInstance.close($scope.selected.item);
         };
 
         $scope.cancel = function() {
             $uibModalInstance.dismiss('cancel');
+        };
+        
+        $scope.changeSize = function(itemId, sizeId) {
+            for(var i = 0 ; i < items.length; i++) {
+                if($scope.items[i].dish.id == itemId) {
+                    $scope.items[i].size = sizeId;
+                }
+            }
+            
+            console.log($scope.items);
+        };
+        
+        $scope.isSelectedSize = function(currentSize, compareSize) {
+            return currentSize == compareSize;
         };
     });
 

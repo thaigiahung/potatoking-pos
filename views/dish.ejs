@@ -34,7 +34,8 @@
 
             <div ng-show="menu.isFries()">
                 <div class="row-fluid">
-                    <div ng-repeat="cate in menu.categories | orderBy: '-id'" ng-show="menu.isSubLevel1(cate.id)" class="subCategory1 span6"
+                    <div ng-repeat="cate in menu.categories | orderBy: '-id'" 
+                    ng-show="menu.isSubLevel1(cate.id)" class="subCategory1 span6"
                     ng-click="menu.changeSubtab(cate.id)" ng-class="[{
                         inactive: menu.selectedSubtab != cate.id}]">{{cate.name}}</div>
 
@@ -143,18 +144,22 @@
     </div>
     <div class="modal-body">
         <table>
-            <tr ng-repeat="item in items">
-                <td ng-click="selected.value = value">
-                    {{ item.name }}
+            <tr ng-repeat="item in items | orderBy: 'order'">
+                <td ng-click="changeItem(item.dish.id)">
+                    {{ item.dish.name }}
                 </td>
                 <td>
-                    <button>Medium - {{item.price}}</button>
-                    <button ng-repeat="price in item.otherPrice">{{price.name}} - {{price.price}}</button>
+                    <button class="btn" ng-repeat="itemPrice in item.dish.otherPrices| orderBy: '-id'"
+                    ng-class="[
+                        { 'btn-primary': isSelectedSize(item.size, itemPrice.id) },
+                        { 'btn-warning': !isSelectedSize(item.size, itemPrice.id) }
+                    ]"
+                    ng-click="changeSize(item.dish.id,itemPrice.id)">{{itemPrice.name}} - {{itemPrice.price}}</button>
                 </td>
             </tr>
         </table>
         
-        Selected: <b>{{ selected.value }}</b>
+        Selected: <b>{{ selectedItem.dish.name }}</b>
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>

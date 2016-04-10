@@ -108,17 +108,43 @@ module.exports = {
 			data = req.body;
 			
 			Category.find()
-				.populate("childCategories")
-				.populate("dishes")
 				.then(function(categories) {
-					return res.json({
-						status: Enum.StatusCode.Success,
-						categories: categories
-					});
+                    var foundDishes = Dish.find()
+                    .populate('otherPrices')
+                    .then(function(foundDishes) {
+                        return foundDishes;
+                    });
+                    
+                    return [categories, foundDishes];
 				})
+                .spread(function(categories, dishes) {
+                    categories = _.map(categories, function(cate) {
+                        var tempCate = new Object();
+                        
+                        tempCate.parentCategory = cate.parentCategory
+                        tempCate.name = cate.name
+                        tempCate.description = cate.description
+                        tempCate.status = cate.status
+                        tempCate.nameEn = cate.nameEn
+                        tempCate.id = cate.id
+                        tempCate.dishes = [];                    
+                       
+                       for(var i = 0 ; i < dishes.length ; i++ ){
+                           if(dishes[i].category == cate.id) {
+                                tempCate.dishes.push(dishes[i]);
+                           }
+                       }
+                        
+                       return tempCate;
+                    });
+					return res.json({
+                        status: Enum.StatusCode.Success,
+                        categories: categories
+					})
+                })
 				.catch(function(err) {
-					console.log(err);
-					
+                    console.log(err);
+                    
 					return res.json({
 						status: Enum.StatusCode.NotFoundObject,
 						message: Message.vn.CategoryNotExists
