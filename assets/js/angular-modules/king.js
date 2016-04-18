@@ -638,27 +638,27 @@
 
         }
     });
-    
+
     app.service('trainService', function() {
         var selectedItems = ['zxczxczxzxczx'];
         var self = this;
-        
+
         var addItem = function(item) {
             selectedItems.push(item);
         }
-        
+
         var removeItem = function(item) {
             selectedItems.remove(item);
         }
-        
+
         var resetItems = function() {
             selectedItems = [];
         }
-        
+
         var getItems = function() {
             return self.selectedItems;
         }
-        
+
         return {
             addItem: addItem,
             removeItem: removeItem,
@@ -670,14 +670,14 @@
 
     app.controller('menuController', function($scope, $http, $uibModal, $log, trainService, $rootScope) {
         var self = this;
-        
-        
+
+
         $http.get("/categories")
             .then(function(response) {
                 self.categories = response.data.categories;
-                
+
                 self.childFries = self.getCategory(self.fixCategory.childFries);
-                
+
                 self.potatoDishes = self.getCategory(self.fixCategory.potatoDishes);
                 self.potatoDip = self.getCategory(self.fixCategory.potatoDip);
                 self.potatoShake = self.getCategory(self.fixCategory.potatoShake);
@@ -691,9 +691,9 @@
 
                 self.menuWidth = 512;
                 self.dishWidth = self.menuWidth / 4;
-                
+
                 self.potatoDishesWidth = self.potatoDishes.dishes.length * self.dishWidth;
-                
+
                 $('html, body').delay(1500).animate({
                     scrollTop: 100
                 }, '2000', 'easeOutCubic');
@@ -719,6 +719,8 @@
             friesDishes: 7,
             friesDip: 8
         }
+
+        this.trainLength = 3;
 
         this.selectedCategory = self.fixCategory.fries;
         this.selectedSubtab = self.fixCategory.potato;
@@ -752,21 +754,21 @@
 
         this.selectLvl2 = function(level2Id) {
             self.selectedDish.level2 = level2Id;
-            
+
             var ids = [];
-            
-            if(self.selectedDish.level1) {
+
+            if (self.selectedDish.level1) {
                 ids.push(self.selectedDish.level1);
             }
-            
-            if(self.selectedDish.level2) {
+
+            if (self.selectedDish.level2) {
                 ids.push(self.selectedDish.level2);
             }
-            
-            if(self.selectedDish.onlyLevel) {
+
+            if (self.selectedDish.onlyLevel) {
                 ids.push(self.selectedDish.onlyLevel);
             }
-            
+
             var modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'myModalContent.html',
@@ -779,45 +781,48 @@
                             cate.dishes.forEach(function(cateDish) {
                                 var haveMedium = cateDish.otherPrices.some(function(item) {
                                     return item.id == 0;
-                                })  
-                                     
-                                if(!haveMedium) {
+                                })
+
+                                if (!haveMedium) {
                                     cateDish.otherPrices.push({
                                         name: "Medium",
                                         id: "0",
                                         price: cateDish.price
                                     })
-                                }   
-                                
-                                if(self.selectedDish.onlyLevel == cateDish.id) {
+                                }
+
+                                if (self.selectedDish.onlyLevel == cateDish.id) {
                                     items.push({
                                         dish: cateDish,
                                         size: 0,
-                                        order: 0
+                                        order: 0,
+                                        main: true
                                     })
                                 }
                                 else {
-                                    if(self.selectedDish.level2 == cateDish.id) {
+                                    if (self.selectedDish.level2 == cateDish.id) {
                                         items.push({
                                             dish: cateDish,
                                             size: 0,
-                                            order: 1
+                                            order: 1,
+                                            main: false
                                         })
                                     }
-                                    if(self.selectedDish.level1 == cateDish.id) {
+                                    if (self.selectedDish.level1 == cateDish.id) {
                                         items.push({
                                             dish: cateDish,
                                             size: 0,
-                                            order: 0
+                                            order: 0,
+                                            main: true
                                         })
                                     }
-                                    
+
                                 }
                             })
                         })
-                        
+
                         console.log(items);
-                        
+
                         return items;
                     }
                 }
@@ -828,7 +833,7 @@
             }, function() {
                 $log.info('Modal dismissed at: ' + new Date());
             });
-            
+
             var itemsDetails = [];
         }
 
@@ -839,6 +844,18 @@
         }
 
         this.selectOneLevel = function(id) {
+            var currentItem;
+
+            self.categories.forEach(function(cate) {
+                cate.dishes.forEach(function(dish) {
+                    if (dish.id == id) {
+                        currentItem = dish;
+                    }
+                })
+            });
+
+
+            self.addDishOnlyLevel(currentItem);
             self.selectedDish.onlyLevel = id;
         }
 
@@ -881,78 +898,139 @@
             self.selectedCategory = categoryId;
             self.resetStep();
         }
-        
+
         this.showDishes = [];
-        
+
         this.actualDishes = [];
-        
-        this.removeDish = function(index) {
-            self.showDishes.splice(index,1);
-            self.actualDishes.splice(index,1);
+
+        // Triggered when recieve broadcast message from the function broadcastRemoveDish() 
+        this._removeDish = function(index) {
+            self.showDishes.splice(index, 1);
+            self.actualDishes.splice(index, 1);
         }
         
+        this.removeDish = function(index) {
+            self.broadcastRemoveDish(index);
+            self._removeDish(index);
+        }
+        
+        this.broadcastRemoveDish = function(index) {
+            // broadcast to other devices
+        }
+
+        this.fullTrain = function() {
+            return self.showDishes.length >= self.trainLength;
+        }
+        
+        //  This function will be triggered when recieve broadcast message 
+        //from other devices in the function broadcastAddDish()
+        //  Only add the new dish to train, does not broad cast
+        this._addDishToTrain = function (showDish, actualDish) {
+                self.showDishes.push(showDish);
+                self.actualDishes.push(actualDish);
+        }
+        
+        // This function will be triggered when user order a dish
+        // Including 2 steps, add dish to train and broadcast message
+        this.addDishToTrain = function(showDish, actualDish) {
+                self.broadcastAddDish(actualDish);
+                self._addDishToTrain(showDish, actualDish);
+        }
+        
+        this.broadcastAddDish = function(dish) {
+            // Broadcast to other devices
+        }
+
+        // Trigger when user choose dish 1 level
+        this.addDishOnlyLevel = function(dish) {
+            if (!self.fullTrain()) {
+
+                var showDish = {
+                    dish: dish,
+                    order: -1,
+                    size: 0,
+                    main: true
+                };
+
+                var actualDish = [showDish];
+                
+                self.addDishToTrain(showDish, actualDish);
+            }
+        }
+        
+        this.submitOrder = function() {
+            // Broadcast to other devices
+            // Post datas to server
+            // Data use to post : self.actualDish
+        }
+
+        this.blankCargo = self.trainLength - self.showDishes.length;
+
+        // Trigger when user choose dish with 2 levels
         $scope.$on('addItem', function(response, data) {
-            if(self.showDishes.length < 3) {
+            if (!self.fullTrain()) {
                 var mainDish;
                 data.forEach(function(dish) {
-                    if(dish.dish.category == 4 || dish.dish.category == 7) {
+                    if (dish.dish.category == 4 || dish.dish.category == 7) {
                         mainDish = dish;
                     }
                 })
                 
-               self.showDishes.push(mainDish);
-               self.actualDishes.push(data);
+                self.addDishToTrain(mainDish, data);
             }
-        })
+        });
+
+        this.submitOrder = function() {
+            console.log(self.actualDishes);
+        }
     });
 
     app.controller('ModalInstanceCtrl', function($scope, $uibModalInstance, items, $sce, trainService, $rootScope) {
         $scope.items = convertItem(items);
-        
+
         $scope.selectedItem = getFirstDish();
-        
+
         function getFirstDish() {
-            for(var i = 0 ; i < $scope.items.length ; i++) {
-                if($scope.items[i].order == 0){
+            for (var i = 0; i < $scope.items.length; i++) {
+                if ($scope.items[i].order == 0) {
                     return $scope.items[i];
                 }
-            }    
-        }   
-            
+            }
+        }
+
         $scope.changeItem = function(id) {
-            for(var i = 0 ; i < $scope.items.length ; i++) {
-                if($scope.items[i].dish.id == id){
+            for (var i = 0; i < $scope.items.length; i++) {
+                if ($scope.items[i].dish.id == id) {
                     $scope.selectedItem = $scope.items[i];
                 }
-            }    
-        } 
-        
+            }
+        }
+
         $scope.ok = function() {
             $rootScope.$broadcast('addItem', $scope.items);
             $uibModalInstance.close();
         };
-        
+
         function convertItem(items) {
             items.forEach(function(item) {
-               item.dish.descriptionTrusted = $sce.trustAsHtml(item.dish.description);  
+                item.dish.descriptionTrusted = $sce.trustAsHtml(item.dish.description);
             });
-            
+
             return items;
         }
 
         $scope.cancel = function() {
             $uibModalInstance.dismiss('cancel');
         };
-        
+
         $scope.changeSize = function(itemId, sizeId) {
-            for(var i = 0 ; i < items.length; i++) {
-                if($scope.items[i].dish.id == itemId) {
+            for (var i = 0; i < items.length; i++) {
+                if ($scope.items[i].dish.id == itemId) {
                     $scope.items[i].size = sizeId;
                 }
             }
-            
         };
-        
+
         $scope.isSelectedSize = function(currentSize, compareSize) {
             return currentSize == compareSize;
         };
