@@ -354,6 +354,7 @@ io.socket.on('connect', function () {
 
       //Listen for event add item
       io.socket.on('addItem', function (message) {
+          alert('adding item success');
         $('#addedItemTableBody').prepend(
           '<tr class="dish' + message.msg.sessionDetail.dish + '">' +
             '<td>' +

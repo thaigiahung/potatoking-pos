@@ -3,8 +3,8 @@
 </div>
 <!--/row-->
 
-<div class="row-fluid" ng-controller="menuController as menu">
-
+<div class="row-fluid" ng-controller="menuController as menu"
+ng-init="menu.sessionId = <%= session.id %>">
     <div class="span3" id="categoriesContainer">
 
 

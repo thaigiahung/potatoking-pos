@@ -191,19 +191,44 @@
         }
     });
 
-    app.controller('allDevicesController', function() {
+    app.controller('allDevicesController', function($scope) {
         this.devices = devices;
+        this.devicePerRow = 4;
+        
+        $scope.myFilter = function (item) { 
+            return item.table < 100; 
+        };
+        
+        var self = this;
+        
+        this.imagePath = {
+            yellow: "/img/device-status/yellow.png",
+            green: "/img/device-status/green.png",
+            black: "/img/device-status/black.png"
+        };
+        
+        this.getDeviceImage = function(info) {
+            if(info.connecting) {
+                if(info.opening) {
+                    return self.imagePath.yellow;
+                }
+                
+                return self.imagePath.green;
+            }
+            
+            return self.imagePath.black;
+        };
 
         this.changeStatus = function(index, status) {
             this.devices[index].status = status;
         };
 
         this.isAnyChecked = function() {
-            return countSelection() > 0 ? true : false;
+            return countSelection() > 0;
         };
 
         this.canMerge = function() {
-            return countSelection() > 1 ? true : false;
+            return countSelection() > 1;
         };
     });
 
@@ -821,8 +846,6 @@
                             })
                         })
 
-                        console.log(items);
-
                         return items;
                     }
                 }
@@ -974,9 +997,16 @@
                     if (dish.dish.category == 4 || dish.dish.category == 7) {
                         mainDish = dish;
                     }
-                })
+                });
                 
-                self.addDishToTrain(mainDish, data);
+                var currentDishes = data;
+                
+                $http.post("/addItem", {
+                    sessionId: 1,
+                    data: data
+                });
+                // self.addDishToTrain(mainDish, data);
+                // self.postAddDish()
             }
         });
 
