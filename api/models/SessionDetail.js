@@ -11,6 +11,7 @@ module.exports = {
     session: { model: 'Session' },
     dish: { model: 'Dish' },
     price: { type: 'integer' },
+    size: { type: 'integer' },
     status: {
       type: 'string',
       enum: ['added', 'cancelled', 'ordered', 'removed', 'preparing', 'delivering', 'delivered']

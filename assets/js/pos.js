@@ -355,16 +355,16 @@ io.socket.on('connect', function () {
       //Listen for event add item
       io.socket.on('addItem', function (message) {
           alert('adding item success');
-        $('#addedItemTableBody').prepend(
-          '<tr class="dish' + message.msg.sessionDetail.dish + '">' +
-            '<td>' +
-              message.msg.name +
-            '</td>' +
-            '<td>' +
-              '<input type="button" class="btn btn-danger" onclick="removeItem('+message.msg.sessionDetail.id+')" value="Hủy"' +
-            '</td>' +
-          '</tr>'
-        );
+        // $('#addedItemTableBody').prepend(
+        //   '<tr class="dish' + message.msg.sessionDetail.dish + '">' +
+        //     '<td>' +
+        //       message.msg.name +
+        //     '</td>' +
+        //     '<td>' +
+        //       '<input type="button" class="btn btn-danger" onclick="removeItem('+message.msg.sessionDetail.id+')" value="Hủy"' +
+        //     '</td>' +
+        //   '</tr>'
+        // );
       });
 
       //Listen for event remove item

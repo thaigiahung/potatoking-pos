@@ -240,14 +240,16 @@ module.exports = {
       }
     });    
   },
+  
 
   addItem: function(req, res) {
     var roomName = req.body.roomName;
-    var data = req.body.data;
-    var eventName = req.body.eventName;
+    var data = req.body;
+    
+    var mainDish = getMainDishId(data.items);
 
     Dish.findOne({
-      id: data.id,
+      id: mainDish.dish.id,
       status: 'enable',
     }).exec(function (err, dish){      
       if(err || !dish)
@@ -275,9 +277,10 @@ module.exports = {
           {
             //Create Session Detail
             SessionDetail.create({
-              session: session.id,
-              dish: dish.id,
-              price: dish.price,
+              session: data.sessionId,
+              dish: mainDish.dish.id,
+              price: getDishPriceBySize(mainDish.dish, mainDish.size),
+              size: mainDish.size,
               status: 'added'
             }).exec(function (err, createdSessionDetail){              
               if(err || !createdSessionDetail)
@@ -289,8 +292,23 @@ module.exports = {
               }
               else
               {
+                  
+                data.items.forEach(function(dish) {
+                   if(!dish.main) {
+                    SessionDetail.create({
+                        session: data.sessionId,
+                        dish: dish.dish.id,
+                        price: getDishPriceBySize(dish.dish, dish.size),
+                        size: dish.size,
+                        status: 'added'
+                    }).exec(function(err, createdDetail) {
+                        
+                    });
+                   }
+                });
+                  
                 data['sessionDetail'] = createdSessionDetail;
-                sails.sockets.broadcast(roomName, eventName, { msg: data });
+                sails.sockets.broadcast(roomName, 'addItem', { msg: data });
                 return res.json({
                   status: 1,
                   message: 'Thành công!'
@@ -991,3 +1009,24 @@ module.exports = {
   },
 };
 
+var getMainDishId = function(dishes) {
+    for(var i = 0 ; i < dishes.length; i++ ) {
+        if(dishes[i].main) {
+            return dishes[i];
+        }
+    }
+}
+
+var getDishPriceBySize = function(dish, sizeId) {
+    if(sizeId == 0) { 
+        return dish.price;
+    }
+    
+    for(var i = 0 ; i < dish.otherPrices.length ; i ++ ) {
+        var currentPrice = dish.otherPrices[i];
+        
+        if(currentPrice.id == sizeId) {
+            return currentPrice.price;
+        }
+    }
+}

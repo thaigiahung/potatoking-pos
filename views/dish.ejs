@@ -7,7 +7,6 @@
 ng-init="menu.sessionId = <%= session.id %>">
     <div class="span3" id="categoriesContainer">
 
-
         <div class="category" ng-repeat="cate in menu.categories" ng-show="menu.isParent(cate)" ng-click="menu.changeCategory(cate.id)"
         ng-class="[
     {active: cate.id == menu.selectedCategory}]">{{cate.name}}</div>

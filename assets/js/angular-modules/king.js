@@ -845,8 +845,11 @@
                                 }
                             })
                         })
-
+                        
                         return items;
+                    },
+                    sessionId: function() {
+                        return self.sessionId;
                     }
                 }
             });
@@ -1001,13 +1004,18 @@
                 
                 var currentDishes = data;
                 
+                alert("YAAAAAAAAAAAAAAY");
+                
                 $http.post("/addItem", {
-                    sessionId: 1,
+                    sessionId: self.sessionId,
                     data: data
                 });
-                // self.addDishToTrain(mainDish, data);
-                // self.postAddDish()
             }
+            
+            this.addItem = function() {
+                alert("Adding Item");
+            }
+            
         });
 
         this.submitOrder = function() {
@@ -1015,7 +1023,7 @@
         }
     });
 
-    app.controller('ModalInstanceCtrl', function($scope, $uibModalInstance, items, $sce, trainService, $rootScope) {
+    app.controller('ModalInstanceCtrl', function($scope, $uibModalInstance, items, sessionId, $sce, trainService, $rootScope, $http) {
         $scope.items = convertItem(items);
 
         $scope.selectedItem = getFirstDish();
@@ -1035,9 +1043,20 @@
                 }
             }
         }
+        
+        var dataToPost = {
+            items: items,
+            sessionId: sessionId,
+            roomName: localStorage.currentTable
+        }
 
         $scope.ok = function() {
-            $rootScope.$broadcast('addItem', $scope.items);
+            // $rootScope.$broadcast('addItem', $scope.items);
+            $http.post('/addItem', dataToPost)
+            .then(function success(result) {
+                // alert("Testing");
+            });
+            
             $uibModalInstance.close();
         };
 
