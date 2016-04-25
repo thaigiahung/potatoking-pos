@@ -369,11 +369,12 @@ io.socket.on('connect', function () {
 
       //Listen for event remove item
       io.socket.on('removeItem', function (message) {
-        var firstTR = $(".dish"+message.msg.sessionDetail.dish.id).first();
-        if(firstTR.length > 0)
-        {
-          firstTR.remove();
-        }
+          alert('remove item success');
+        // var firstTR = $(".dish"+message.msg.sessionDetail.dish.id).first();
+        // if(firstTR.length > 0)
+        // {
+        //   firstTR.remove();
+        // }
       });
 
       //Listen for event order item
