@@ -287,7 +287,7 @@ io.socket.on('connect', function () {
     }    
 
     //Page: Dishes
-    if($('#dishesPage').length > 0)
+    if($('#divDishPageAlert').length > 0)
     {
       //Subscribe to room table (All table will subscribe to this room)
       io.socket.get('/subscribe/table', function (message) {console.log("table")});

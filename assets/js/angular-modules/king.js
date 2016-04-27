@@ -1006,9 +1006,21 @@
                 
                 alert("YAAAAAAAAAAAAAAY");
                 
-                $http.post("/addItem", {
+                /*$http.post("/addItem", {
                     sessionId: self.sessionId,
                     data: data
+                });*/
+
+                var postData = {
+                  sessionId: self.sessionId,
+                  data: data
+                }
+
+                io.socket.post('/addItem', postData, function (result) {
+                  if(result.status == 0)
+                  {
+                    failNotify(result.message);
+                  }
                 });
             }
             

@@ -244,8 +244,7 @@ module.exports = {
 
   addItem: function(req, res) {
     var roomName = req.body.roomName;
-    var data = req.body;
-    
+    var data = req.body;    
     var mainDish = getMainDishId(data.items);
 
     Dish.findOne({
@@ -282,7 +281,7 @@ module.exports = {
               price: getDishPriceBySize(mainDish.dish, mainDish.size),
               size: mainDish.size,
               status: 'added'
-            }).exec(function (err, createdSessionDetail){              
+            }).exec(function (err, createdSessionDetail){   
               if(err || !createdSessionDetail)
               {
                 return res.json({
