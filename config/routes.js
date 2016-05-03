@@ -66,6 +66,7 @@ module.exports.routes = {
   'GET /subscribe/:roomName': 'DeviceController.subscribe',
   'GET /unsubscribe/:roomName': 'DeviceController.unsubscribe',
   'GET /list-subscriber/:roomName': 'TestController.listSubscriber',
+  'POST /api/ordered/detail' : 'SessionController.getSessionDetails',
   'POST /broadcast': 'TestController.broadcast',
   'POST /device/connect': 'DeviceController.connect',
   'POST /table/open': 'SessionController.openTable',

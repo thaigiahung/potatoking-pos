@@ -354,27 +354,22 @@ io.socket.on('connect', function () {
 
       //Listen for event add item
       io.socket.on('addItem', function (message) {
-          alert('adding item success');
-        // $('#addedItemTableBody').prepend(
-        //   '<tr class="dish' + message.msg.sessionDetail.dish + '">' +
-        //     '<td>' +
-        //       message.msg.name +
-        //     '</td>' +
-        //     '<td>' +
-        //       '<input type="button" class="btn btn-danger" onclick="removeItem('+message.msg.sessionDetail.id+')" value="Hủy"' +
-        //     '</td>' +
-        //   '</tr>'
-        // );
+        var appElement = document.querySelector('#menuPage');
+        var $scope = angular.element(appElement).scope();
+
+        $scope.$apply(function() {
+          $scope.menu.reloadTrain();
+        });
       });
 
       //Listen for event remove item
       io.socket.on('removeItem', function (message) {
-          alert('remove item success');
-        // var firstTR = $(".dish"+message.msg.sessionDetail.dish.id).first();
-        // if(firstTR.length > 0)
-        // {
-        //   firstTR.remove();
-        // }
+        var appElement = document.querySelector('#menuPage');
+        var $scope = angular.element(appElement).scope();
+
+        $scope.$apply(function() {
+          $scope.menu.reloadTrain();
+        });
       });
 
       //Listen for event order item

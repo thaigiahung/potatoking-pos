@@ -10,6 +10,7 @@ module.exports = {
   attributes: {
     session: { model: 'Session' },
     dish: { model: 'Dish' },
+    parent: { model: 'Session' },
     price: { type: 'integer' },
     size: { type: 'integer' },
     status: {

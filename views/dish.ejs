@@ -3,8 +3,8 @@
 </div>
 <!--/row-->
 
-<div class="row-fluid" ng-controller="menuController as menu"
-ng-init="menu.sessionId = <%= session.id %>">
+<div id="menuPage" class="row-fluid" ng-controller="menuController as menu"
+ng-init="menu.init(<%= session.id %>)">
     <div class="span3" id="categoriesContainer">
 
         <div class="category" ng-repeat="cate in menu.categories" ng-show="menu.isParent(cate)" ng-click="menu.changeCategory(cate.id)"
@@ -137,10 +137,11 @@ ng-init="menu.sessionId = <%= session.id %>">
         <div class="row-fluit train-container">
             <div class="span3"
             ng-repeat="dishIndex in [0,1,2]"
-            ng-click="menu.removeDish(dishIndex)">
-                {{ menu.showDishes[dishIndex].dish.mainImage }}
-                {{ menu.showDishes[dishIndex].dish.name }}
-
+            ng-click="menu.removeDish(menu.train[dishIndex].id)">
+                <img ng-src="{{ menu.train[dishIndex].dish.mainImage }}" 
+                alt="" class="trainImage">
+                
+                {{ menu.train[dishIndex].dish.name }}
             </div>
             <div class="span3 trainHead" ng-click="menu.submitOrder()"></div>
         </div>
