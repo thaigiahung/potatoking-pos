@@ -136,12 +136,10 @@ ng-init="menu.init(<%= session.id %>)">
         <!-- Train -->
         <div class="row-fluit train-container">
             <div class="span3"
-            ng-repeat="dishIndex in [0,1,2]"
+            ng-repeat="dishIndex in menu.trainCars"
             ng-click="menu.removeDish(menu.train[dishIndex].id)">
                 <img ng-src="{{ menu.train[dishIndex].dish.mainImage }}" 
                 alt="" class="trainImage">
-                
-                {{ menu.train[dishIndex].dish.name }}
             </div>
             <div class="span3 trainHead" ng-click="menu.submitOrder()"></div>
         </div>

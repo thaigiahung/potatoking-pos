@@ -695,6 +695,7 @@
 
     app.controller('menuController', function ($scope, $http, $uibModal, $log, trainService, $rootScope) {
         var self = this;
+        self.trainCars = [0,1,2];
         
         this.init = function(sessionId) {
             self.sessionId = sessionId;
@@ -707,9 +708,11 @@
         }
             
         this.reloadTrain = function() {
+            self.trainCars = [];
             $http.post('/api/ordered/detail', {
                 sessionId: self.sessionId
             }).then(function(response) {
+                self.trainCars = [0,1,2];
                 self.train = response.data.details;
             })
         }
