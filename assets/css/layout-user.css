@@ -102,7 +102,7 @@ body {
 }
 
 .menu-sub-item-img {
-  max-width: 50px;
+  max-width: 100px;
 }
 
 .menu-item-block {
@@ -112,24 +112,29 @@ body {
 .menu-item-name-vn {
   font-family:'Kanit',Sans-Serif;
   font-size: 26px;
+  color: #fff;
+  text-transform: uppercase; 
 }
 
 .menu-item-name-en { 
   font-family:'VNI-Park',Sans-Serif;
-  font-size: 22px;
+  font-size: 28px;
   line-height: 1.5em;
-  background-color: rgba(0,0,0,0.5);
-  text-transform: uppercase;  
+  /*background-color: rgba(0,0,0,0.5);   */
+  color: #fff;
 }
 
 .menu-sub-item-name-vn {
   font-family:'Kanit',Sans-Serif;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
 }
 
 .menu-sub-item-name-en { 
   font-family:'VNI-Park',Sans-Serif;
   font-size: 14px;  
+  color: #fff;
 }
 
 .horizontal-sub-level1-table {
@@ -141,8 +146,17 @@ body {
 }
 
 .dishName {
-  text-align: center;
+  text-align: center;  
+}
+
+.dishName > span:first-child { 
+  color: #FDC71D;
   font-size: 40px;
+}
+
+.dishName > span:nth-child(2) { 
+  color: #fff;
+  font-size: 35px;
 }
 
 .potatoDishesContainer {
@@ -231,10 +245,12 @@ body {
 
 .shadedBackground {
     background-color: rgba(0,0,0,0.2);
+    padding-top: 10px;
 }
 
 .dishName {
     background-color: rgba(0,0,0,0.2);
+    margin-bottom: 10px;
 }
 
 #categoriesContainer {

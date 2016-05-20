@@ -73,19 +73,19 @@ ng-init="menu.init(<%= session.id %>)">
 
                                 <div ng-repeat="dipShake in menu.potatoDipShake" class="dishContainer shadedBackground span6">
                                     <div class="dishName span12 dish-title">
-                                        <span class="kanit">{{dipShake.name}}</span>
+                                        <span class="kanit">{{dipShake.name}} </span>
                                         <span class="vni-park">({{dipShake.nameEn}})</span>
                                     </div>
                                     <div ng-repeat="dish in dipShake.dishes">
-                                        <div class="span12 menu-item-block" ng-click=" menu.steps.dipShake != menu.currentStep || menu.selectLvl2(dipShake.id)" ng-class="[
+                                        <div class="span6 menu-item-block" ng-click=" menu.steps.dipShake != menu.currentStep || menu.selectLvl2(dipShake.id)" ng-class="[
                                         {disableStep: menu.currentStep < menu.steps.dipShake || menu.fullTrain()}
                                         ]">
                                             <div class="inline-block">
-                                                <img class="menu-item-img" ng-src="{{dish.mainImage}}">
+                                                <img class="menu-sub-item-img" ng-src="{{dish.mainImage}}">
                                             </div>
                                             <div class="inline-block">
-                                                <div class="menu-item-name-vn">{{dish.name}}</div>
-                                                <div class="menu-item-name-en">{{dish.nameEn}} ....................{{dish.price}}vnd</div>
+                                                <div class="menu-sub-item-name-vn">{{dish.name}}</div>
+                                                <div class="menu-sub-item-name-en">{{dish.nameEn}} ... {{dish.price}}vnd</div>
                                             </div>
                                         </div>
                                     </div>
@@ -104,7 +104,7 @@ ng-init="menu.init(<%= session.id %>)">
                                 <div ng-repeat="dish in menu.friesDishes.dishes">
                                     <div class="span12 menu-item-block" ng-click="menu.selectLvl1(dish.id)" ng-class="[{
                                     selectedDish: menu.isSelectedDish(dish.id)},
-                                    { disableStep: menu.fullTrain() }]">
+                                    { disableStep: menu.fullTrain() }]" style="padding: 15px 0;">
                                         <div class="inline-block">
                                             <img class="menu-item-img" ng-src="{{dish.mainImage}}">
                                         </div>
