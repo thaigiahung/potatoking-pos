@@ -191,7 +191,7 @@ body {
   text-transform: uppercase;
   display: inline-block;
   padding: 2px 5px;
-  margin: 3px 10px;
+  margin: 8px 10px;
   border-radius: 5px;
 }
 
@@ -257,7 +257,9 @@ body {
 }
 
 .selectedDish {
-    border: 5px solid black;
+    border: 5px solid #00FB61;
+    margin-left: -2px;
+    margin-bottom: -5px;
 }
 
 .train-container {
