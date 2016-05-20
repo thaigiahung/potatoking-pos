@@ -107,7 +107,7 @@ module.exports = {
 		function callback(deviceIp) {
 			data = req.body;
 			
-			Category.find()
+			Category.find({status: 'enable'})
 				.then(function(categories) {
                     var foundDishes = Dish.find()
                     .populate('otherPrices')
@@ -128,6 +128,7 @@ module.exports = {
                         tempCate.status = cate.status
                         tempCate.nameEn = cate.nameEn
                         tempCate.id = cate.id
+                        tempCate.image = cate.image
                         tempCate.dishes = [];        
                        
                        for(var i = 0 ; i < dishes.length ; i++ ){

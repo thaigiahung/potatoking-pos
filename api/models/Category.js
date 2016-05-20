@@ -28,7 +28,8 @@ module.exports = {
         model: 'Category',
     },
     
-    nameEn: { type: 'string' }
+    nameEn: { type: 'string' },
+    image: {type: 'string'}
   }
 };
 
