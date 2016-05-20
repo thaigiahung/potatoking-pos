@@ -144,7 +144,7 @@ ng-init="menu.init(<%= session.id %>)">
 
             <!-- Train -->
             <div class="row-fluit train-container">
-                <div class="span3"
+                <div class="span3 train-item"
                 ng-repeat="dishIndex in menu.trainCars"
                 ng-click="menu.removeDish(menu.train[dishIndex].id)">
                     <img ng-src="{{ menu.train[dishIndex].dish.mainImage }}" 
