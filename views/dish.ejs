@@ -53,13 +53,15 @@ ng-init="menu.init(<%= session.id %>)">
                             ng-class="[
                             {disableStep: menu.fullTrain()} ]">
                                 <img id="potatoDishesArrow" class="nextDishes" src="/img/timeline-left-arrow@2x.png" alt="">
-                                <table id="potatoDishesTable" class="horizontal-sub-level1-table shadedBackground" style="width: {{menu.potatoDishesWidth}}px; height: {{menu.dishWidth}}px">
+                                <table id="potatoDishesTable" class="horizontal-sub-level1-table shadedBackground" style="width: 90%; height: 130px">
                                     <tr>
-                                        <td class="potatoDish span3" ng-repeat="dish in menu.potatoDishes.dishes" style="width: {{menu.dishWidth}}px; background-image: url('{{dish.mainImage}}');">
+                                        <td class="potatoDish span3" ng-repeat="dish in menu.potatoDishes.dishes" style="width: {{menu.dishWidth}}px; background-image: url('{{dish.mainImage}}'); background-size: cover;">
                                             <div class="potatoDishContainer" ng-click="menu.selectLvl1(dish.id)" ng-class="[{
                                     selectedDish: menu.isSelectedDish(dish.id)}]">
                                                 <div class="potatoDishName">
-                                                    {{ dish.name }}
+                                                    <div>
+                                                        {{ dish.name }}
+                                                    </div>                                                    
                                                 </div>
                                             </div>
                                         </td>

@@ -109,7 +109,7 @@ module.exports = {
 			
 			Category.find({status: 'enable'})
 				.then(function(categories) {
-                    var foundDishes = Dish.find()
+                    var foundDishes = Dish.find({status: 'enable'})
                     .populate('otherPrices')
                     .then(function(foundDishes) {
                         return foundDishes;

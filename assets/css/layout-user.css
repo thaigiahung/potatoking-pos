@@ -118,7 +118,8 @@ body {
   font-family:'VNI-Park',Sans-Serif;
   font-size: 22px;
   line-height: 1.5em;
-  
+  background-color: rgba(0,0,0,0.5);
+  text-transform: uppercase;  
 }
 
 .menu-sub-item-name-vn {
@@ -182,6 +183,16 @@ body {
   position: absolute;
   width:100%;
   bottom:0px;
+  text-transform: uppercase;
+}
+
+.potatoDishName > div {
+  background-color: rgba(0,0,0,0.5);
+  text-transform: uppercase;
+  display: inline-block;
+  padding: 2px 5px;
+  margin: 3px 10px;
+  border-radius: 5px;
 }
 
 .dish-title {
