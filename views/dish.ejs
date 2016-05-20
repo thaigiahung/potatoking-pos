@@ -43,7 +43,10 @@ ng-init="menu.init(<%= session.id %>)">
                         <div ng-repeat="cate in menu.categories | orderBy: '-id'" 
                         ng-show="menu.isSubLevel1(cate.id)" class="subCategory1 span6"
                         ng-click="menu.changeSubtab(cate.id)" ng-class="[{
-                            inactive: menu.selectedSubtab != cate.id}]">{{cate.name}}</div>
+                            inactive: menu.selectedSubtab != cate.id}]">
+                            <span class="subCategory-name">{{cate.name}} </span>
+                            <span class="subCategory-name-en">({{cate.nameEn}})</span>                            
+                        </div>
 
                         <div ng-show="menu.selectedSubtab == menu.fixCategory.potato">
                             <div id="potatoDishesContainer" class="potatoDishesContainer row-fluid"

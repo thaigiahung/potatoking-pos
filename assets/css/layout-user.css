@@ -208,6 +208,9 @@ body {
 .span6.subCategory1 {
     margin:0px!important;
     width:50%;
+    height: 38px;
+    text-align: center;
+    line-height: 2.4em;
 }
 
 .subCategory1.inactive {
@@ -257,4 +260,16 @@ body {
 .dishDetailImage {
     width:100px;
     height:100px;
+}
+
+.subCategory-name {
+  font-family: 'Kanit',Sans-Serif;
+  font-size: 24px;
+  color: #000;
+  text-transform: uppercase;
+}
+
+.subCategory-name-en {
+  font-family: 'VNI-Park',Sans-Serif;
+  font-size: 20px;
 }
