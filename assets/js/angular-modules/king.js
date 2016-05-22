@@ -797,6 +797,20 @@
         this.isSelectedDish = function (id) {
             return self.selectedDish.level1 == id;
         }
+        
+        this.addDishOnlyLevel = function(dish) {
+            var dataToPost = {
+                items: [{dish: dish}],
+                sessionId: self.sessionId,
+                roomName: localStorage.currentTable
+            }
+            
+            $http.post('/addItem', dataToPost)
+            .then(function success(result) {
+                console.log(result);
+                // alert("successfully added");
+            })
+        }
 
         this.selectLvl2 = function (level2Id) {
             self.selectedDish.level2 = level2Id;
