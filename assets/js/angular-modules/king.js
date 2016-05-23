@@ -978,9 +978,17 @@
         this.blankCargo = self.trainLength - self.showDishes.length;
 
         this.submitOrder = function () {
-            alert("Submit: " + self.sessionId);
-            $http.post('/order', {
+            // alert("Submit: " + self.sessionId);
+           /* $http.post('/order', {
                sessionId: self.sessionId
+            });*/
+
+            var data = {sessionId: self.sessionId}
+
+            io.socket.post('/order', data, function (result) {
+                if (result.status == 0) {
+                    failNotify(result.message);
+                }
             });
         }
     });

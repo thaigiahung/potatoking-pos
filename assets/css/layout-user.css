@@ -310,3 +310,7 @@ body {
 .train-item > img {
   max-width: 130px;
 }
+
+.train-head {
+  height: 100px;
+}

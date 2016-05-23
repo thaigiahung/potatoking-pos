@@ -623,37 +623,37 @@ module.exports = {
         }).populate('session').populate('dish').exec(function (err1, sessionDetails) {
           console.log(sessionDetails);
           
-          // if (!err1 && sessionDetails.length > 0) {
-          //   //Broadcast to view Kitchen Overview
-          //   sails.sockets.broadcast('device', 'newOrderAdded', { type: 'dine-in', sessionDetails: JSON.stringify(sessionDetails) });
+          if (!err1 && sessionDetails.length > 0) {
+            //Broadcast to view Kitchen Overview
+            sails.sockets.broadcast('device', 'newOrderAdded', { type: 'dine-in', sessionDetails: JSON.stringify(sessionDetails) });
 
-          //   //Change status to ordered
-          //   SessionDetail.update(
-          //     { session: sessionId, status: 'added' },
-          //     { status: 'ordered' }
-          //   ).exec(function (err2, updatedSessionDetail) {
-          //     if (err2 || !updatedSessionDetail) {
-          //       return res.json({
-          //         status: 0,
-          //         message: 'Không thể đặt món!'
-          //       });
-          //     }
-          //     else {
-          //       sails.sockets.broadcast('table' + session.table, 'ordered', { msg: '/menu' });
+            //Change status to ordered
+            SessionDetail.update(
+              { session: sessionId, status: 'added' },
+              { status: 'ordered' }
+            ).exec(function (err2, updatedSessionDetail) {
+              if (err2 || !updatedSessionDetail) {
+                return res.json({
+                  status: 0,
+                  message: 'Không thể đặt món!'
+                });
+              }
+              else {
+                sails.sockets.broadcast('table' + session.table, 'ordered', { msg: '/menu' });
 
-          //       return res.json({
-          //         status: 1,
-          //         message: 'Đặt món thành công!'
-          //       });
-          //     }
-          //   });
-          // }
-          // else {
-          //   return res.json({
-          //     status: 0,
-          //     message: 'Không thể đặt món!'
-          //   });
-          // }
+                return res.json({
+                  status: 1,
+                  message: 'Đặt món thành công!'
+                });
+              }
+            });
+          }
+          else {
+            return res.json({
+              status: 0,
+              message: 'Không thể đặt món!'
+            });
+          }
         });
       }
     });
