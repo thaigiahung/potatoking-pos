@@ -978,7 +978,10 @@
         this.blankCargo = self.trainLength - self.showDishes.length;
 
         this.submitOrder = function () {
-            console.log(self.actualDishes);
+            alert("Submit: " + self.sessionId);
+            $http.post('/order', {
+               sessionId: self.sessionId
+            });
         }
     });
 
