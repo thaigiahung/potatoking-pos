@@ -78,7 +78,7 @@ ng-init="menu.init(<%= session.id %>)">
                                         <span class="vni-park">({{dipShake.nameEn}})</span>
                                     </div>
                                     <div ng-repeat="dish in dipShake.dishes">
-                                        <div class="span6 menu-item-block" ng-click=" menu.steps.dipShake != menu.currentStep || menu.selectLvl2(dipShake.id)" ng-class="[
+                                        <div class="span6 menu-item-block" ng-click=" menu.steps.dipShake != menu.currentStep || menu.selectLvl2(dish.id)" ng-class="[
                                         {disableStep: menu.currentStep < menu.steps.dipShake || menu.fullTrain()}
                                         ]">
                                             <div class="inline-block">
