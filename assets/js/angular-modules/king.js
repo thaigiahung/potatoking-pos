@@ -800,7 +800,12 @@
 
     this.addDishOnlyLevel = function(dish) {
       var dataToPost = {
-        items: [{ dish: dish }],
+        items: [{ 
+          dish: dish,
+          order: 0,
+          parentDish: null,
+          size: 0 
+        }],
         sessionId: self.sessionId,
         roomName: localStorage.currentTable
       }
@@ -1014,7 +1019,7 @@
       items: items,
       sessionId: sessionId,
       roomName: localStorage.currentTable
-    }
+    }  
 
     $scope.ok = function() {
       // $rootScope.$broadcast('addItem', $scope.items);

@@ -301,6 +301,7 @@ module.exports = {
                 status: 'added',
                 parent: dish.parentDish
               }
+
               if (dish.parentDish != null) {
                 itemsToAdd.push(currentItemToAdd);
               }
@@ -308,7 +309,6 @@ module.exports = {
                 parentItems.push(currentItemToAdd);
               }
             });
-
 
             SessionDetail.find({
               session: data.sessionId,
@@ -620,9 +620,7 @@ module.exports = {
         SessionDetail.find({
           session: sessionId,
           status: 'added'
-        }).populate('session').populate('dish').exec(function (err1, sessionDetails) {
-          console.log(sessionDetails);
-          
+        }).populate('session').populate('dish').exec(function (err1, sessionDetails) {          
           if (!err1 && sessionDetails.length > 0) {
             //Broadcast to view Kitchen Overview
             sails.sockets.broadcast('device', 'newOrderAdded', { type: 'dine-in', sessionDetails: JSON.stringify(sessionDetails) });
