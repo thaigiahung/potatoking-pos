@@ -542,7 +542,7 @@ io.socket.on('connect', function () {
           failNotify('Món ' + msg.dishName + ': ' + msg.message);
         }
 
-        $("#tdSessionDetail"+msg.sessionDetailId).text(msg.message);
+        $("#tdSessionDetail"+msg.sessionDetailId).html('<div class="item-status">' + msg.message + '</div>');
       });
 
       io.socket.on('removeOrderedItem', function (result) {  
@@ -555,7 +555,7 @@ io.socket.on('connect', function () {
           fade_out_speed: 100
         });
 
-        $("#tdSessionDetail"+result.sessionDetailId).text(msg.message);
+        $("#tdSessionDetail"+result.sessionDetailId).html('<div class="item-status">' + msg.message + '</div>');
       });
 
       //Listen for event block table
