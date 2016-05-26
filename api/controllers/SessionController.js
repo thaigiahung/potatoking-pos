@@ -437,15 +437,15 @@ module.exports = {
                 });
               }
 
-                sails.sockets.broadcast(roomName, 'removeItem', null);
-                return res.json({
-                  status: 1,
-                  message: 'Thành công!'
+              sails.sockets.broadcast(roomName, 'removeItem', null);
+              return res.json({
+                status: 1,
+                message: 'Thành công!'
 
-            })
+              })
 
 
-          });
+            });
         }
       });
   },
@@ -482,10 +482,40 @@ module.exports = {
                 type: 2, //Đã hủy
                 message: 'Nhà bếp đã hủy'
               });
-            return res.json({
-              status: 1,
-              message: 'Thành công!'
-            });
+
+            SessionDetail.find({
+              where: {
+                status: 'ordered'
+              },
+              sort: 'id ASC'
+            }).populate('dish')
+              .populate('session')
+              .exec(function (err, found) {
+                if (err || !found) {
+                  return res.json({ status: 0 });
+                }
+                else {
+                  // var sessionDetailsDineIn = [];
+                  // var sessionDetailsTogo = [];
+
+                  // for (var i = 0; i < sessionDetails.length; i++) {
+                  //   var currentSession = sessionDetails[i];
+
+                  //   if (currentSession.session.deliveryType == 'dine-in') {
+                  //     sessionDetailsDineIn.push(currentSession);
+                  //   }
+                  //   else if (currentSession.session.deliveryType == 'to-go') {
+                  //     sessionDetailsTogo.push(currentSession);
+                  //   }
+                  // }
+                  
+                  return res.json({
+                    status: 1,
+                    message: 'Thành công!',
+                    sessionDetails: found
+                  });
+                }
+              })
           }
         });
       }
@@ -606,7 +636,7 @@ module.exports = {
 
   order: function (req, res) {
     var sessionId = req.body.sessionId;
-    
+
     Session.findOne({
       id: sessionId
     }).exec(function (err, session) {
@@ -620,7 +650,7 @@ module.exports = {
         SessionDetail.find({
           session: sessionId,
           status: 'added'
-        }).populate('session').populate('dish').exec(function (err1, sessionDetails) {          
+        }).populate('session').populate('dish').exec(function (err1, sessionDetails) {
           if (!err1 && sessionDetails.length > 0) {
             //Broadcast to view Kitchen Overview
             sails.sockets.broadcast('device', 'newOrderAdded', { type: 'dine-in', sessionDetails: JSON.stringify(sessionDetails) });

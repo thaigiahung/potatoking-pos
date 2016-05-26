@@ -99,15 +99,18 @@
       var data = {
         id: id
       }
+      
 
       io.socket.post('/removeOrderedItem', data, function(result) {
         if (result.status == 0) {
           failNotify(result.message);
         }
         else {
+          console.log(result);
           self.items = result.sessionDetails;
         }
       });
+      
       self.updateNumberOfSelectedPerTable();
     }
 
