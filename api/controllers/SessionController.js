@@ -538,7 +538,13 @@ module.exports = {
           {
             //Cancel all items
             SessionDetail.update(
-              { session: sessionId, status: 'ordered' },
+              { 
+                session: sessionId, 
+                or: [
+                  {status: 'ordered'},
+                  {status: 'added'}
+                ]
+              },
               { status: 'cancelled' }
             ).exec(function (err, updated) {
               if (err || !updated) {
