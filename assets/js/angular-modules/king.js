@@ -810,14 +810,21 @@
           size: 0 
         }],
         sessionId: self.sessionId,
-        roomName: localStorage.currentTable
+        roomName: 'table'+localStorage.currentTable
       }
 
-      $http.post('/addItem', dataToPost)
+      /*$http.post('/addItem', dataToPost)
         .then(function success(result) {
           console.log(result);
           // alert("successfully added");
-        })
+        })*/
+      
+      io.socket.post('/addItem', dataToPost, function (result) {
+        if(result.status == 0)
+        {
+          failNotify(result.message);
+        }
+      });
     }
 
     this.selectLvl2 = function(level2Id) {
@@ -975,8 +982,20 @@
     this.actualDishes = [];
 
     this.removeDish = function(id) {
-      $http.post('/removeItem', {
+      /*$http.post('/removeItem', {
         detailId: id
+      });*/
+
+      var dataToPost = {
+        detailId: id,
+        roomName: 'table'+localStorage.currentTable
+      };
+
+      io.socket.post('/removeItem', dataToPost, function (result) {
+        if(result.status == 0)
+        {
+          failNotify(result.message);
+        }
       });
     }
 
@@ -1021,15 +1040,22 @@
     var dataToPost = {
       items: items,
       sessionId: sessionId,
-      roomName: localStorage.currentTable
+      roomName: 'table'+localStorage.currentTable
     }  
 
     $scope.ok = function() {
       // $rootScope.$broadcast('addItem', $scope.items);
-      $http.post('/addItem', dataToPost)
+      /*$http.post('/addItem', dataToPost)
         .then(function success(result) {
           // alert("Testing");
-        });
+        });*/
+
+      io.socket.post('/addItem', dataToPost, function (result) {
+        if(result.status == 0)
+        {
+          failNotify(result.message);
+        }
+      });
 
       $uibModalInstance.close();
     };
