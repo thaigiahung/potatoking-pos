@@ -1026,7 +1026,8 @@ $("#confirmCloseTableModal").click(function (event) {
   io.socket.post('/cancelTable', {sessionId: selectedTable}, function (data) {
     if(data.status == 1)
     {
-      $("input[name='rdoOpenedTable']:checked").parent().remove();
+      // $("input[name='rdoOpenedTable']:checked").parent().remove();
+      reload();
     }
     else
     {

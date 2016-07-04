@@ -23,7 +23,6 @@ module.exports = {
       }).populate('dish')
         .exec(function (err, found) {
           if (err) {
-            console.log(err);
             res.json({
               status: 0,
               message: "Internal Error"
@@ -316,14 +315,12 @@ module.exports = {
               parent: null
             }).exec(function (err, foundDetails) {
               if (err) {
-                console.log(err);
                 return res.json({
                   status: 0,
                   message: 'Không thể chọn món!'
                 });
               }
               else if (foundDetails.length >= Util.trainSize || (foundDetails.length + parentItems.lenght) > Util.trainSize) {
-                console.log('Train maximum capacity reached!');
                 return res.json({
                   status: 0,
                   message: 'Train maximum capacity reached!'
@@ -334,7 +331,6 @@ module.exports = {
                   .exec(function (err, created) {
                     if (err || !created) {
                       if (err) {
-                        console.log(err);
                         return res.json({
                           status: 0,
                           message: 'Không thể chọn món!'
@@ -356,7 +352,6 @@ module.exports = {
                       .exec(function (err, createdChild) {
                         if (err || !createdChild) {
                           if (err) {
-                            console.log(err);
                             return res.json({
                               status: 0,
                               message: 'Không thể chọn món!'
@@ -380,10 +375,8 @@ module.exports = {
                               if (err || !details) {
 
                                 if (err) {
-                                  console.log(err);
                                 }
                                 else {
-                                  console.log('Can not find session details');
                                 }
                               }
 
@@ -541,7 +534,7 @@ module.exports = {
           session: sessionId,
           status: 'delivered'
         }).exec(function (err, sessionDetails) {
-          if (err || !sessionDetails) //No item delivered
+          if (err || !sessionDetails || sessionDetails.length == 0) //No item delivered
           {
             //Cancel all items
             SessionDetail.update(
