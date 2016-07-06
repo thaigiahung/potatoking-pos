@@ -278,14 +278,6 @@ body {
     margin-bottom: -5px;
 }
 
-.train-container {
-  width: 100%;
-  height: 200px;
-  background: url(/img/template/train.png) no-repeat;
-  background-size:contain;
-  padding-top: 5%;
-}
-
 .dishDetailImage {
     width:100px;
     height:100px;
@@ -303,12 +295,24 @@ body {
   font-size: 20px;
 }
 
+.train-container {
+  width: 100%;
+  height: 200px;
+  background: url(/img/template/train.png) no-repeat;
+  background-size:contain;
+  margin-top: 40px;
+}
+
+.train-item-container {
+  text-align: center;
+}
+
 .train-item {
-  margin-top: -30px;
+  margin-top: -25px;
 }
 
 .train-item > img {
-  max-width: 130px;
+  max-height: 80px;
 }
 
 .train-head {

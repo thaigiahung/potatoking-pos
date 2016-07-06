@@ -145,7 +145,7 @@ ng-init="menu.init(<%= session.id %>)">
 
             <!-- Train -->
             <div class="row-fluit train-container">
-                <div class="span3"
+                <div class="span3 train-item-container"
                 ng-repeat="dishIndex in menu.trainCars"
                 ng-click="menu.removeDish(menu.train[dishIndex].id)">
                     <div class="train-item">
