@@ -231,7 +231,7 @@ module.exports = {
     function callback(deviceIp) {
       var trainId = 1;
       var newStr = "2\n" + req.body.table + "\n" + trainId;
-      var fullFilePath = './assets/order.dat';
+      var fullFilePath = 'C:\\Program Files (x86)\\TBrain\\order.dat';
 
       fs.readFile(fullFilePath, 'utf8', function read(err, data) {               
         if(err || !data)

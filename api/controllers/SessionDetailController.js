@@ -12,7 +12,7 @@
  	deliver: function(req, res) {
  		var sessionDetailId = req.body.sessionDetailId;
  		var trainId = req.body.trainId;
- 		var fullFilePath = './assets/order.dat';
+ 		var fullFilePath = 'C:\\Program Files (x86)\\TBrain\\order.dat';
 
  		SessionDetail.findOne({
  			id: sessionDetailId,
@@ -109,7 +109,7 @@
  	batchDeliverDineIn: function(req, res) {
  		var arrSessionDetailId = req.body.arrSessionDetailId;
  		var trainId = req.body.trainId;
- 		var fullFilePath = './assets/order.dat';
+ 		var fullFilePath = 'C:\\Program Files (x86)\\TBrain\\order.dat';
 
  		fs.readFile(fullFilePath, 'utf8', function read(err3, data) { 							
  			if(err3 || !data)
