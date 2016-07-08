@@ -7,6 +7,7 @@
 
 var fs = require('fs');
 var async = require('async');
+var fullFilePath = 'D:\\Program Files (x86)\\TB\\order.dat';
 
 module.exports = {
   subscribe: function(req, res) {
@@ -230,8 +231,7 @@ module.exports = {
 
     function callback(deviceIp) {
       var trainId = 1;
-      var newStr = "2\n" + req.body.table + "\n" + trainId;
-      var fullFilePath = 'C:\\Program Files (x86)\\TBrain\\order.dat';
+      var newStr = "2\n" + req.body.table;
 
       fs.readFile(fullFilePath, 'utf8', function read(err, data) {               
         if(err || !data)
