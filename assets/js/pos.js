@@ -901,6 +901,8 @@ function cashierCheckout ()
         if(result.status == 1)
         {
           successNotify(result.message);
+          resetModalCashierCheckout();
+          resetBtnDish();
           reload();
         }
         else
@@ -910,6 +912,16 @@ function cashierCheckout ()
       });
     }
   }
+}
+
+function resetModalCashierCheckout () {
+  $('#total').val("");
+  $('#receive').val("");
+  $('#change').val("");
+}
+
+function resetBtnDish () {
+  $('.btnDish').attr('disabled', false);
 }
 
 function setTotalAddedItem () 

@@ -20,7 +20,7 @@
 						<% _.each(dishes, function (dish) { %>
 							<% if(dish.category.id == category.id) { %> 
 								<div class="span3">
-									<button id="btnDish<%= dish.id %>" onclick="cashierAddItem(<%= dish.id %>, '<%= dish.name %>', <%= dish.price %>)"><%= dish.name %></button>
+									<button class="btnDish" id="btnDish<%= dish.id %>" onclick="cashierAddItem(<%= dish.id %>, '<%= dish.name %>', <%= dish.price %>)"><%= dish.name %></button>
 								</div>
 							<% } %>
 						<% }) %>
