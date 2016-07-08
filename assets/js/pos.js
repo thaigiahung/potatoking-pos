@@ -70,7 +70,7 @@ io.socket.on('connect', function () {
       io.socket.on('opened', function (openedData) {
         //Find img tag & change img source
         $("#img-table-"+openedData.table).attr('src', '/img/device-status/yellow.png');
-        $("#img-table-"+cancelledData).parent().parent().removeAttr('select-device');
+        $("#img-table-"+openedData.table).parent().parent().removeAttr('select-device');
         $("#img-table-"+openedData.table).parent().parent().addClass('disabled-table');
       });
 
