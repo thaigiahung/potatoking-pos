@@ -59,28 +59,24 @@ io.socket.on('connect', function () {
           imgSrc = '/img/device-status/green.png';
         }
         //Find img tag & change img source
-        var img = $("#table"+newDeviceConnectedData.data.table).parent().parent().parent().children("img").eq(0);
-        img.attr('src', imgSrc);
+        $("#img-table-"+newDeviceConnectedData.data.table).attr('src', imgSrc);
       });
 
       io.socket.on('deviceDisconnected', function (deviceDisconnectedData) {
         //Find img tag & change img source
-        var img = $("#table"+deviceDisconnectedData.table).parent().parent().parent().children("img").eq(0);
-        img.attr('src','/img/device-status/black.png');
+        $("#img-table-"+deviceDisconnectedData.table).attr('src', '/img/device-status/black.png');
       });
 
       io.socket.on('opened', function (openedData) {
         //Find img tag & change img source
-        var img = $("#table"+openedData.table).parent().parent().parent().children("img").eq(0);
-        img.attr('src','/img/device-status/yellow.png');
+        $("#img-table-"+openedData.table).attr('src', '/img/device-status/yellow.png');
+        $("#img-table-"+cancelledData).parent().parent().removeAttr('select-device');
+        $("#img-table-"+openedData.table).parent().parent().addClass('disabled-table');
       });
 
       io.socket.on('cancelled', function (cancelledData) {
-        $("#table"+cancelledData).prop('disabled', false);
-        $.uniform.update();
-        //Find img tag & change img source
-        var img = $("#table"+cancelledData).parent().parent().parent().children("img").eq(0);
-        img.attr('src','/img/device-status/green.png');
+        $("#img-table-"+cancelledData).attr('src', '/img/device-status/green.png');
+        $("#img-table-"+cancelledData).parent().parent().removeClass('disabled-table');
       });      
 
       io.socket.on('addToDivOpenedTable', function (data) {        
@@ -1038,8 +1034,8 @@ $("#confirmCloseTableModal").click(function (event) {
   io.socket.post('/cancelTable', {sessionId: selectedTable}, function (data) {
     if(data.status == 1)
     {
-      // $("input[name='rdoOpenedTable']:checked").parent().remove();
-      reload();
+      $("input[name='rdoOpenedTable']:checked").parent().parent().parent().parent().remove();
+      // reload();
     }
     else
     {

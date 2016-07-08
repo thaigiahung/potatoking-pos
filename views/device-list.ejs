@@ -22,7 +22,7 @@ ng-init="allDevices.infos = <%= JSON.stringify(data) %>">
         name="chkSelectTable" id="{{allDevices.infos[$index + $parent.$index ].table}}" 
         value="{{allDevices.infos[$index + $parent.$index].id}}">
         
-        <img class="device-status-img" ng-src="{{ allDevices.getDeviceImage(allDevices.infos[$index + $parent.$index]) }}">
+        <img class="device-status-img" id="img-table-{{ allDevices.infos[$index + $parent.$index ].table }}" ng-src="{{ allDevices.getDeviceImage(allDevices.infos[$index + $parent.$index]) }}">
         Bàn {{ allDevices.infos[$index + $parent.$index ].table }} | ID:{{ allDevices.infos[$index + $parent.$index].id}}
         </div>
     </label>
