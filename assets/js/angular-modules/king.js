@@ -238,16 +238,14 @@
 
     this.addToDivOpenedTable = function (session, table) {
       var openedTableHTML = '<div>' +
-                              '<label ng-class="[' +
-                                '{\'select-device\': closeTableCheckbox'+session+'}]" class="label-list ng-binding">' +
-                                '<div style="display: none;" class="checker">' +
-                                  '<span class="">' +
-                                    '<input type="checkbox" hidden="" ng-model="closeTableCheckbox'+session+'" value="'+session+'" name="rdoOpenedTable" class="ng-untouched ng-valid ng-dirty ng-valid-parse ng-empty">' +
-                                  '</span>' +
-                                '</div> Bàn ' + table +
+                              '<label class="label-list"' +
+                              'ng-class="[' +
+                              '{\'select-device\': closeTableCheckbox'+session+'}]">' +
+                                '<input hidden type="checkbox" name="rdoOpenedTable" value="'+session+'"' +
+                                'ng-model="closeTableCheckbox'+session+'"> Bàn ' + table +
                               '</label>' +
                             '</div>';
-
+                            
       angular.element(document.getElementById('divOpenedTable')).append($compile(openedTableHTML)($scope));
     }
   });
