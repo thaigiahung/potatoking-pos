@@ -43,6 +43,7 @@
     }
 
     this.reInitKitchen = function(newItems) {
+      console.log(newItems)
       if (newItems) {
         self.reassignItems(newItems);
       }
@@ -90,14 +91,15 @@
     }
 
     // This function will be run after the user click Huy~ in the kitchen-overview page
-    this.removeOrderedItem = function(e, id) {
+    this.removeOrderedItem = function(e, id, type) {
       e.stopPropagation();
       self.removeItemById(id);
 
       //TODO: This code will be run before the server response
 
       var data = {
-        id: id
+        id: id,
+        type: type
       }
       
 
@@ -106,8 +108,9 @@
           failNotify(result.message);
         }
         else {
-          console.log(result);
           self.items = result.sessionDetails;
+
+          self.reInitKitchen(result.sessionDetails);
         }
       });
       
@@ -127,7 +130,6 @@
       }
 
       io.socket.post(url, data, function(result) {
-        console.log(result.status)
         if (result.status == 0) {
           failNotify(result.message);
         }

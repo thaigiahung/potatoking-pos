@@ -119,4 +119,7 @@ nbproject
 .node_history
 
 assets/images/dish-images
+assets/order.dat
+assets/status.dat
+assets/table.dat
 config/myconfig.js

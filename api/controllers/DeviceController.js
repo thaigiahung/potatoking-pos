@@ -7,8 +7,8 @@
 
 var fs = require('fs');
 var async = require('async');
-var fullStatusFilePath = 'D:\\Program Files (x86)\\TB\\status.dat';
-var fullTableFilePath = 'D:\\Program Files (x86)\\TB\\table.dat';
+var fullStatusFilePath = sails.config.local.fullStatusFilePath;
+var fullTableFilePath = sails.config.local.fullTableFilePath;
 
 module.exports = {
   subscribe: function(req, res) {

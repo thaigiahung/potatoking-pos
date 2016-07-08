@@ -445,6 +445,7 @@ module.exports = {
 
   removeOrderedItem: function (req, res) {
     var id = req.body.id;
+    var type = req.body.type;
 
     //Update status in Session Detail
     SessionDetail.findOne({
@@ -501,11 +502,20 @@ module.exports = {
                   //     sessionDetailsTogo.push(currentSession);
                   //   }
                   // }
+
+                  var sessionDetails = [];
+                  for(var i = 0 ; i < found.length; i++) {
+                      var currentSessionDetail = found[i];
+
+                      if(currentSessionDetail.session.deliveryType == type) {
+                        sessionDetails.push(currentSessionDetail);
+                      }
+                  }
                   
                   return res.json({
                     status: 1,
                     message: 'Thành công!',
-                    sessionDetails: found
+                    sessionDetails: sessionDetails
                   });
                 }
               })
