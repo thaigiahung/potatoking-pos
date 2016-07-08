@@ -70,7 +70,7 @@ io.socket.on('connect', function () {
       io.socket.on('opened', function (openedData) {
         //Find img tag & change img source
         $("#img-table-"+openedData.table).attr('src', '/img/device-status/yellow.png');
-        $("#img-table-"+openedData.table).parent().parent().removeAttr('select-device');
+        $("#img-table-"+openedData.table).parent().parent().removeClass('select-device');
         $("#img-table-"+openedData.table).parent().parent().addClass('disabled-table');
       });
 
@@ -80,14 +80,34 @@ io.socket.on('connect', function () {
       });      
 
       io.socket.on('addToDivOpenedTable', function (data) {        
-        $("#divOpenedTable").append(
+        // $("#divOpenedTable").append(
+        //   '<div>' +
+        //     '<div style="clear:both"></div>' +
+        //     '<label>' +
+        //       '<input type="radio" name="rdoOpenedTable" value="'+data.session+'"> Bàn ' + data.table +
+        //     '</label>' +
+        //   '</div>'
+        // );
+
+        var appElement = document.querySelector("#divOpenedTable");
+        var $scope = angular.element(appElement).scope();
+
+        $scope.$apply(function() {
+          $scope.allDevices.addToDivOpenedTable(data.session, data.table);
+        });
+
+        /*$("#divOpenedTable").append(
           '<div>' +
-            '<div style="clear:both"></div>' +
-            '<label>' +
-              '<input type="radio" name="rdoOpenedTable" value="'+data.session+'"> Bàn ' + data.table +
+            '<label ng-class="[' +
+              '{\'select-device\': closeTableCheckbox'+data.session+'}]" class="label-list ng-binding">' +
+              '<div style="display: none;" class="checker">' +
+                '<span class="">' +
+                  '<input type="checkbox" hidden="" ng-model="closeTableCheckbox'+data.session+'" value="'+data.session+'" name="rdoOpenedTable" class="ng-untouched ng-valid ng-dirty ng-valid-parse ng-empty">' +
+                '</span>' +
+              '</div> Bàn ' + data.table +
             '</label>' +
           '</div>'
-        );
+        );*/
       });
 
       io.socket.on('addOverviewRow', function (openedData) {

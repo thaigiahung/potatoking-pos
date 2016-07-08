@@ -196,7 +196,7 @@
     }
   });
 
-  app.controller('allDevicesController', function($scope) {
+  app.controller('allDevicesController', function($scope, $compile) {
     this.devices = devices;
     this.devicePerRow = 4;
 
@@ -235,6 +235,21 @@
     this.canMerge = function() {
       return countSelection() > 1;
     };
+
+    this.addToDivOpenedTable = function (session, table) {
+      var openedTableHTML = '<div>' +
+                              '<label ng-class="[' +
+                                '{\'select-device\': closeTableCheckbox'+session+'}]" class="label-list ng-binding">' +
+                                '<div style="display: none;" class="checker">' +
+                                  '<span class="">' +
+                                    '<input type="checkbox" hidden="" ng-model="closeTableCheckbox'+session+'" value="'+session+'" name="rdoOpenedTable" class="ng-untouched ng-valid ng-dirty ng-valid-parse ng-empty">' +
+                                  '</span>' +
+                                '</div> Bàn ' + table +
+                              '</label>' +
+                            '</div>';
+
+      angular.element(document.getElementById('divOpenedTable')).append($compile(openedTableHTML)($scope));
+    }
   });
 
   app.directive('mergeTableModal', function() {
