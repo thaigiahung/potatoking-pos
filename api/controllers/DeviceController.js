@@ -231,7 +231,7 @@ module.exports = {
 
     function callback(deviceIp) {
       var trainId = 1;
-      var newStr = "2\n" + req.body.table;
+      var newStr = "2\n" + req.body.table + "\n";
 
       fs.readFile(fullFilePath, 'utf8', function read(err, data) {               
         if(err || !data)

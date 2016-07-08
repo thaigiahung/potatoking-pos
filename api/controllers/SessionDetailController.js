@@ -51,7 +51,7 @@
  								var arr = data.split("\n");
  								if(arr[0] == 1) //Train is currently at station
  								{
- 									var newStr = "2\n" + sessionDetail.session.table;
+ 									var newStr = "2\n" + sessionDetail.session.table + "\n";
  									fs.writeFile(fullFilePath, newStr, 'utf8', function (err4) {
  										if(err4)
  										{
@@ -171,7 +171,7 @@
  				 			}
  				 		});
 			 		}, function (err) {
-	   					var newStr = "2\n" + table;
+	   					var newStr = "2\n" + table + "\n";
 	   					fs.writeFile(fullFilePath, newStr, 'utf8', function (err4) {
 	   						if(err4)
 	   						{
@@ -287,7 +287,7 @@
 			 			}
 			 		});
 		 		}, function (err) {
-		 			var newStr = "2\n" + table;
+		 			var newStr = "2\n" + table + "\n";
 		 			fs.writeFile(fullFilePath, newStr, 'utf8', function (err4) {
 		 				if(err4)
 		 				{
