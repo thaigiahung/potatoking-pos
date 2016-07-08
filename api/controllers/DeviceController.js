@@ -7,7 +7,8 @@
 
 var fs = require('fs');
 var async = require('async');
-var fullFilePath = 'D:\\Program Files (x86)\\TB\\order.dat';
+var fullStatusFilePath = 'D:\\Program Files (x86)\\TB\\status.dat';
+var fullTableFilePath = 'D:\\Program Files (x86)\\TB\\table.dat';
 
 module.exports = {
   subscribe: function(req, res) {
@@ -231,9 +232,9 @@ module.exports = {
 
     function callback(deviceIp) {
       var trainId = 1;
-      var newStr = "2\n" + req.body.table + "\n";
+      // var newStr = "2\n" + req.body.table + "\n";
 
-      fs.readFile(fullFilePath, 'utf8', function read(err, data) {               
+      fs.readFile(fullStatusFilePath, 'utf8', function read(err, data) {               
         if(err || !data)
         {
           return res.json({
@@ -246,7 +247,7 @@ module.exports = {
           var arr = data.split("\n");
           if(arr[0] == 1) //Train is currently at station
           {
-            fs.writeFile(fullFilePath, newStr, 'utf8', function (err) {
+            fs.writeFile(fullStatusFilePath, 2, 'utf8', function (err) {
               if(err)
               {
                 return res.json({
@@ -256,9 +257,21 @@ module.exports = {
               }
               else
               {
-                return res.json({
-                  status: 1,
-                  message: 'Thành công!'
+                fs.writeFile(fullTableFilePath, req.body.table, 'utf8', function (err) {
+                  if(err)
+                  {
+                    return res.json({
+                      status: 0,
+                      message: 'Không thể ghi file!'
+                    });
+                  }
+                  else
+                  {
+                    return res.json({
+                      status: 1,
+                      message: 'Thành công!'
+                    });
+                  }
                 });
               }
             });
