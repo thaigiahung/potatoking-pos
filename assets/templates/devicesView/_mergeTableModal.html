@@ -15,7 +15,7 @@
             hidden
             ng-checked="mergeTable.isSelected(device.deviceIndex)"
             type="radio"  name="rdoMergeTable" 
-            value="{{device.deviceIndex}}"
+            value="{{device.deviceIndex + 1}}"
             ng-click="mergeTable.changeDevice(device.deviceIndex)">Bàn {{device.deviceIndex + 1}}
           </label>
       </div>
