@@ -425,7 +425,7 @@ io.socket.on('connect', function () {
 
       //Listen for event block table
       io.socket.on('blockTable', function (message) {
-        $("#modalBlockTableBodyAlert"+message.msg);
+        $("#modalBlockTableBodyAlert").text(message.msg);
         $('#modalBlockTable').modal('show');
       });
 

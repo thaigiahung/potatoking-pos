@@ -854,11 +854,11 @@ module.exports = {
             sails.sockets.broadcast('device', 'checkout', { session: session });
             sails.sockets.broadcast('device', 'receive-message', { table: session.table, sessionId: session.id, message: 'Thanh toán. <a href="/ordered/detail/' + session.id + '">Xem chi tiết</a>' });
 
-            sails.sockets.broadcast('table' + session.table, 'checkout', { msg: 'Nhân viên sẽ liên hệ với bạn ngay!' });
+            sails.sockets.broadcast('table' + session.table, 'checkout', { msg: 'Bàn của quý khách đang được thanh toán!' });
 
             return res.json({
               status: 1,
-              message: 'Nhân viên sẽ liên hệ với bạn ngay!'
+              message: 'Bàn của quý khách đang được thanh toán!'
             });
           }
         });
@@ -1057,7 +1057,7 @@ module.exports = {
 
   blockTable: function (req, res) {
     var table = req.body.table;
-    sails.sockets.broadcast('table' + table, 'blockTable', { msg: "Bàn của quý khách đang được thanh toán!" });
+    sails.sockets.broadcast('table' + table, 'blockTable', { msg: "Vui lòng liên hệ quầy thu ngân!" });
   },
 
   unblockTable: function (req, res) {
