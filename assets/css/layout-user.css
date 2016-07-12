@@ -318,3 +318,13 @@ body {
 .train-head {
   height: 100px;
 }
+
+#modalBlockTableBody {
+  text-align: center;
+  background-color: #fdc71d;
+}
+
+#modalBlockTableBodyAlert {
+  font-size: 20px;
+  color: #000;
+}
