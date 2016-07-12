@@ -53,7 +53,7 @@ ng-init="menu.init(<%= session.id %>)">
                             <div id="potatoDishesContainer" class="potatoDishesContainer row-fluid"
                             ng-class="[
                             {disableStep: menu.fullTrain()} ]">
-                                <img id="potatoDishesArrow" class="nextDishes" src="/img/timeline-left-arrow@2x.png" alt="">
+                                <!-- <img id="potatoDishesArrow" class="nextDishes" src="/img/timeline-left-arrow@2x.png" alt=""> -->
                                 <table id="potatoDishesTable" class="horizontal-sub-level1-table shadedBackground" style="width: 90%; height: 130px">
                                     <tr>
                                         <td class="potatoDish span3" ng-repeat="dish in menu.potatoDishes.dishes" style="width: {{menu.dishWidth}}px; background-image: url('{{dish.mainImage}}'); background-size: cover;">
@@ -98,10 +98,10 @@ ng-init="menu.init(<%= session.id %>)">
                         <div ng-show="menu.selectedSubtab == menu.fixCategory.fries">
 
                             <div class="dishContainer shadedBackground span9">
-                                <div class="dishName span12 dish-title">
+                                <!-- <div class="dishName span12 dish-title">
                                     <span class="kanit">{{menu.friesDishes.name}}</span>
                                     <span class="vni-park">({{menu.friesDishes.nameEn}})</span>
-                                </div>
+                                </div> -->
                                 <div ng-repeat="dish in menu.friesDishes.dishes">
                                     <div class="span12 menu-item-block" ng-click="menu.selectLvl1(dish.id)" ng-class="[{
                                     selectedDish: menu.isSelectedDish(dish.id)},
