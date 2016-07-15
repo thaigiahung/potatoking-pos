@@ -30,6 +30,7 @@
 	                                { filterButtonDisabled: !kitchen.isOn(filter.index) }
 	                            ]">{{ filter.index + 1 }} ({{filter.selected}})</th>
 						  	<th>Món</th>
+						  	<th>Size</th>
 						  	<th>Giờ đặt món</th>
 						  	<th>&nbsp;</th>
 					  	</tr>
@@ -55,6 +56,9 @@
 		                        {{ item.dish.name }}
 		                    </td>
 		                    <td>
+		                        {{ item.size }}
+		                    </td>
+		                    <td>
 		                        {{ kitchen.convertDate(item.updatedAt) }}
 		                    </td>
 		                    <td>
@@ -76,6 +80,7 @@
 				  			<th>Mã chi tiết {{ kitchen.testingVariable }}</th>
 	                        <th>Mã đơn hàng</th>
 						  	<th>Món</th>
+						  	<th>Size</th>
 						  	<th>Giờ đặt món</th>
 						  	<th>&nbsp;</th>
 					  	</tr>
@@ -96,6 +101,9 @@
 		                    </td>
 		                    <td>
 		                        {{ item.dish.name }}
+		                    </td>
+		                    <td>
+		                        {{ item.size }}
 		                    </td>
 		                    <td>
 		                        {{ kitchen.convertDate(item.updatedAt) }}

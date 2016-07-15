@@ -290,13 +290,15 @@ module.exports = {
           else {
             var itemsToAdd = [];
             var parentItems = [];
-
+            
             data.items.forEach(function (dish) {
+              var dishSize = getDishPriceAndNameBySize(dish.dish, dish.size)
+
               var currentItemToAdd = {
                 session: data.sessionId,
                 dish: dish.dish.id,
-                price: getDishPriceBySize(dish.dish, dish.size),
-                size: dish.size,
+                price: dishSize[1],
+                size: dishSize[0],
                 status: 'added',
                 parent: dish.parentDish
               }
@@ -1074,16 +1076,21 @@ var getMainDishId = function (dishes) {
   }
 }
 
-var getDishPriceBySize = function (dish, sizeId) {
+var getDishPriceAndNameBySize = function (dish, sizeId) {
+  var result = [];
   if (sizeId == 0) {
-    return dish.price;
+    result.push("Medium");
+    result.push(dish.price);
   }
 
   for (var i = 0; i < dish.otherPrices.length; i++) {
     var currentPrice = dish.otherPrices[i];
 
     if (currentPrice.id == sizeId) {
-      return currentPrice.price;
+      result.push(currentPrice.name);
+      result.push(currentPrice.price);
     }
   }
+  
+  return result;
 }

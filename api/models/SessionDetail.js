@@ -12,7 +12,7 @@ module.exports = {
     dish: { model: 'Dish' },
     parent: { model: 'Session' },
     price: { type: 'integer' },
-    size: { type: 'integer' },
+    size: { type: 'string' },
     status: {
       type: 'string',
       enum: ['added', 'cancelled', 'ordered', 'removed', 'preparing', 'delivering', 'delivered']
