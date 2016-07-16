@@ -1066,6 +1066,19 @@ module.exports = {
     var table = req.body.table;
     sails.sockets.broadcast('table' + table, 'unblockTable', { msg: "Bàn của quý khách đã được mở lại!" });
   },
+
+  report: function(req, res) {
+    this.authorizeRoles = ['chief-cook'];
+    this.req = req;
+    this.res = res;
+    this.deviceIp = DeviceIp;
+
+    function callback(deviceIp) {
+      return res.view('report', {status: 1, deviceIp: deviceIp, devices: [], cashiers: []});
+    };
+
+    return Authorize.apply(this, callback);
+  },
 };
 
 var getMainDishId = function (dishes) {
