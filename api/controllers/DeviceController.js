@@ -208,15 +208,27 @@ module.exports = {
           table: { '<': 30 }
         },
         sort: 'table asc'
-      }).exec(function (err, devices) {
-        var opened = [];
+      }).exec(function (err, devices) { 
         if(err || !devices)
         {
-          return res.view('fast-delivery',{status: 0, deviceIp: deviceIp, devices: []});
+          return res.view('fast-delivery',{status: 0, deviceIp: deviceIp, devices: [], cashiers: []});
         }
         else
         {
-          return res.view('fast-delivery', {status: 1, deviceIp: deviceIp, devices: devices});
+          DeviceIp.find({
+            where: {
+              type: 'cashier'
+            }
+          }).populate('device').exec(function (err2, cashiers) {
+            if(err2 || !cashiers)
+            {
+              return res.view('fast-delivery',{status: 1, deviceIp: deviceIp, devices: devices, cashiers: []});
+            }
+            else
+            {
+              return res.view('fast-delivery', {status: 1, deviceIp: deviceIp, devices: devices, cashiers: cashiers});
+            }
+          });         
         }
       });
     };

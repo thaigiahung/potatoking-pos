@@ -9,6 +9,7 @@ module.exports = {
 
   attributes: {    
     mac: { type: 'string' },
+    name: { type: 'string' },
     table: { type: 'integer' },
     connecting: { type: 'boolean' },
     socketId: {type: 'string'},
