@@ -106,3 +106,12 @@ input[type=radio]:checked + label::before {
 .big-radio-button-label {
   font-size: 2.5em;
 }
+
+.menu-item-img {
+  max-width: 70px;
+}
+
+.sauce-shake-title {
+  font-size: 32px;
+  font-weight: bold;
+}
