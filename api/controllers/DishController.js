@@ -245,19 +245,53 @@ module.exports = {
 		  {
 			device = deviceIp.device;
 
-			Category.find({'status' : 'enable'}).exec(function (err, categories) {
+			var potatoDishes = [];
+			var potatoSauces = [];
+			var potatoShakes = [];
+			var friesDishes = [];
+			var friesSauces = [];
+
+			Category.find({
+				'status' : 'enable',
+				'parentCategory': null
+			}).exec(function (err, categories) {
 				if (err || !categories) {
-					return res.view('cashier-dish', { status: 0, dishes: [], categories: [], deviceIp: deviceIp });
+					return res.view('cashier-dish', { status: 0, dishes: [], categories: [], deviceIp: deviceIp, friesSubCat1s: [], potatoDishes: potatoDishes, potatoSauces: potatoSauces, potatoShakes: potatoShakes, friesDishes: friesDishes, friesSauces: friesSauces });
 				}
 				else 
 				{
-					Dish.find({'status' : 'enable'}).populate('category').exec(function (err, dishes) {
-						if (err || !dishes) {
-							return res.view('cashier-dish', { status: 0, dishes: [], categories: categories, deviceIp: deviceIp });
+					Category.find({
+						'status' : 'enable',
+						'parentCategory': 1
+					}).exec(function (err2, friesSubCat1s) {
+						if (err2 || !friesSubCat1s) {
+							return res.view('cashier-dish', { status: 0, dishes: [], categories: categories, deviceIp: deviceIp, friesSubCat1s: [], potatoDishes: potatoDishes, potatoSauces: potatoSauces, potatoShakes: potatoShakes, friesDishes: friesDishes, friesSauces: friesSauces });
 						}
 						else 
 						{
-							return res.view('cashier-dish', { status: 0, dishes: dishes, categories: categories, deviceIp: deviceIp });
+							Dish.find({'status' : 'enable'}).populate('category').exec(function (err, dishes) {
+								if (err || !dishes) {
+									return res.view('cashier-dish', { status: 0, dishes: [], categories: categories, deviceIp: deviceIp, friesSubCat1s: friesSubCat1s, potatoDishes: potatoDishes, potatoSauces: potatoSauces, potatoShakes: potatoShakes, friesDishes: friesDishes, friesSauces: friesSauces });
+								}
+								else 
+								{
+									for(var i = 0; i < dishes.length; i++)
+									{
+										if(dishes[i].category.id == 4)
+											potatoDishes.push(dishes[i]);
+										else if(dishes[i].category.id == 5)
+											potatoSauces.push(dishes[i]);
+										else if(dishes[i].category.id == 6)
+											potatoShakes.push(dishes[i]);
+										else if(dishes[i].category.id == 7)
+											friesDishes.push(dishes[i]);
+										else if(dishes[i].category.id == 8)
+											friesSauces.push(dishes[i]);
+									}
+									
+									return res.view('cashier-dish', { status: 0, dishes: dishes, categories: categories, deviceIp: deviceIp, friesSubCat1s: friesSubCat1s, potatoDishes: potatoDishes, potatoSauces: potatoSauces, potatoShakes: potatoShakes, friesDishes: friesDishes, friesSauces: friesSauces });
+								}
+							});
 						}
 					});
 				}

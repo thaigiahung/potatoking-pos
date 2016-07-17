@@ -4,7 +4,7 @@
 
 <div class="box">
 	<div class="box-header">
-		<h2><i class="fa fa-th"></i><span class="break"></span>Danh sách món ăn</h2>
+		<h2><i class="fa fa-th"></i><span class="break"></span></h2>
 	</div>
 	<div class="box-content">
 		<ul class="nav tab-menu nav-tabs" id="myTab">
@@ -17,13 +17,82 @@
 			<% _.each(categories, function (category) { %>
 				<div class="tab-pane" id="cat-<%= category.id %>">
 					<div class="row-fluid">
-						<% _.each(dishes, function (dish) { %>
-							<% if(dish.category.id == category.id) { %> 
-								<div class="span3">
-									<button class="btnDish" id="btnDish<%= dish.id %>" onclick="cashierAddItem(<%= dish.id %>, '<%= dish.name %>', <%= dish.price %>)"><%= dish.name %></button>
+						<% if(category.id == 1) { %>
+							<div class="box">
+								<div class="box-header">
+									<h2><i class="fa fa-th"></i><span class="break"></span></h2>
 								</div>
-							<% } %>
-						<% }) %>
+								<div class="box-content">
+									<ul class="nav tab-menu nav-tabs" id="mySubTab1">
+										<% _.each(friesSubCat1s, function (friesSubCat1) { %>
+											<li><a href="#subcat1-<%= friesSubCat1.id %>"><%= friesSubCat1.name  %></a></li>
+										<% }) %>
+									</ul>
+
+									<div class="tab-content">
+										<% _.each(friesSubCat1s, function (friesSubCat1) { %>
+											<div class="tab-pane" id="subcat1-<%= friesSubCat1.id %>">
+												<div class="row-fluid">
+														<!-- Khoai tay -->
+														<% if(friesSubCat1.id == 2) { %>
+															<div class="row-fluid">
+																<% _.each(potatoDishes, function (potatoDish) { %>
+																	<div class="span4">
+																		<button class="btnDish" id="btnDish<%= potatoDish.id %>" onclick="cashierAddItem(<%= potatoDish.id %>, '<%= potatoDish.name %>', <%= potatoDish.price %>)"><%= potatoDish.name %></button>
+																	</div>
+																<% }) %>
+															</div>
+															<div class="row-fluid">
+																<div class="span6">
+																	<% _.each(potatoSauces, function (potatoSauce) { %>
+																		<div class="span4">
+																			<button class="btnDish" id="btnDish<%= potatoSauce.id %>" onclick="cashierAddItem(<%= potatoSauce.id %>, '<%= potatoSauce.name %>', <%= potatoSauce.price %>)"><%= potatoSauce.name %></button>
+																		</div>
+																	<% }) %>
+																</div>
+																<div class="span6">
+																	<% _.each(potatoShakes, function (potatoShake) { %>
+																		<div class="span4">
+																			<button class="btnDish" id="btnDish<%= potatoShake.id %>" onclick="cashierAddItem(<%= potatoShake.id %>, '<%= potatoShake.name %>', <%= potatoShake.price %>)"><%= potatoShake.name %></button>
+																		</div>
+																	<% }) %>
+																</div>
+															</div>
+															
+														<% } else if(friesSubCat1.id == 3) { %> <!-- Do Chien -->
+															<div class="row-fluid">
+																<div class="span6">
+																	<% _.each(friesDishes, function (friesDish) { %>
+																		<div class="span4">
+																			<button class="btnDish" id="btnDish<%= friesDish.id %>" onclick="cashierAddItem(<%= friesDish.id %>, '<%= friesDish.name %>', <%= friesDish.price %>)"><%= friesDish.name %></button>
+																		</div>
+																	<% }) %>
+																</div>
+																<div class="span6">
+																	<% _.each(friesSauces, function (friesSauce) { %>
+																		<div class="span4">
+																			<button class="btnDish" id="btnDish<%= friesSauce.id %>" onclick="cashierAddItem(<%= friesSauce.id %>, '<%= friesSauce.name %>', <%= friesSauce.price %>)"><%= friesSauce.name %></button>
+																		</div>
+																	<% }) %>
+																</div>
+															</div>
+														<% } %>
+														
+												</div>
+											</div>
+										<% }) %>
+									</div>
+								</div>
+							</div>
+						<% } else { %>
+							<% _.each(dishes, function (dish) { %>
+								<% if(dish.category.id == category.id) { %> 
+									<div class="span3">
+										<button class="btnDish" id="btnDish<%= dish.id %>" onclick="cashierAddItem(<%= dish.id %>, '<%= dish.name %>', <%= dish.price %>)"><%= dish.name %></button>
+									</div>
+								<% } %>
+							<% }) %>
+						<% } %>
 					</div>					
 				</div>
 			<% }) %>

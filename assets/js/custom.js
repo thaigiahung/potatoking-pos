@@ -211,6 +211,12 @@ function template_functions(){
 	  $(this).tab('show');
 	});
 
+	$('#mySubTab1 a:first').tab('show');
+	$('#mySubTab1 a').click(function (e) {
+	  e.preventDefault();
+	  $(this).tab('show');
+	});
+
 	/* ---------- Makes elements soratble, elements that sort need to have id attribute to save the result ---------- */
 	$('.sortable').sortable({
 		revert:true,
