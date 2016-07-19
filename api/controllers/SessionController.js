@@ -568,6 +568,7 @@ module.exports = {
               else {
                 //Update session status
                 session.status = 'close';
+                session.endTime = new Date();
                 session.paymentStatus = 'cancelled';
                 session.save(function (err2, saved) {
                   if (err2 || !saved) {
