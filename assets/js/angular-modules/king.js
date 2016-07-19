@@ -31,9 +31,11 @@
     var self = this;
 
     this.convertDate = function(input) {
-      var rawResult = input.match(/T.+Z$/);
+      /*var rawResult = input.match(/T.+Z$/);
       var result = rawResult[0].replace(/^T/, "");
-      result = result.replace(/\.\d{3}Z$/, "");
+      result = result.replace(/\.\d{3}Z$/, "");*/
+
+      var result = moment(input).format("hh:mm:ss a")
 
       return result;
     }

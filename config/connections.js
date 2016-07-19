@@ -45,8 +45,7 @@ module.exports.connections = {
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'potato-king-pos',
-    timezone: 'GMT+7'
+    database: 'potato-king-pos'
   },
 
   /***************************************************************************
