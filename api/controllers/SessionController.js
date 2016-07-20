@@ -967,6 +967,7 @@ module.exports = {
                     session: createdSession.id,
                     dish: item.id,
                     price: item.price,
+                    size: item.size,
                     status: 'ordered'
                   }).exec(function (err1, createdSessionDetail) {
                     if (err1 || !createdSessionDetail) {

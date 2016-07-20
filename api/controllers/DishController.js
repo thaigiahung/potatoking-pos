@@ -269,7 +269,7 @@ module.exports = {
 						}
 						else 
 						{
-							Dish.find({'status' : 'enable'}).populate('category').exec(function (err, dishes) {
+							Dish.find({'status' : 'enable'}).populate('category').populate('otherPrices').exec(function (err, dishes) {
 								if (err || !dishes) {
 									return res.view('cashier-dish', { status: 0, dishes: [], categories: categories, deviceIp: deviceIp, friesSubCat1s: friesSubCat1s, potatoDishes: potatoDishes, potatoSauces: potatoSauces, potatoShakes: potatoShakes, friesDishes: friesDishes, friesSauces: friesSauces });
 								}

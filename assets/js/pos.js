@@ -811,7 +811,7 @@ function cancelAll (sessionId) {
   });
 };
 
-function cashierAddItem (id, name, price) 
+function cashierAddItem (id, name, price, size) 
 {
   //Get variable cashierAddedItems from localStorage
   var cashierAddedItems = localStorage.getItem("cashierAddedItems");
@@ -821,7 +821,8 @@ function cashierAddItem (id, name, price)
     [id]: {
       id: id,
       quantity: 1,
-      price: price
+      price: price,
+      size: size
     }
   };
 
@@ -845,13 +846,14 @@ function cashierAddItem (id, name, price)
   localStorage.setItem("cashierAddedItemsTotalPrice", total);
   
   
-  $('#btnDish'+id).attr('disabled', true);
+  $('.btnDish'+id).attr('disabled', true);
   $('#cashierMenuPageTableBody').append(
     '<tr>' +
-      '<td>' + name + '</td>' +
+      '<td>' + name + '</td>' +      
       '<td>' + price + '</td>' +
-      '<td><input type="number" class="input-quantity" item-id="'+id+'" price="'+price+'" value="1"></td>' +
+      '<td><input type="number" class="input-quantity" item-id="'+id+'" price="'+price+'" size="'+size+'" value="1"></td>' +
       '<td>' + price + '</td>' +
+      '<td>' + size + '</td>' +
       '<td><button class="btn btn-large btn-danger" onclick="cashierRemoveAddedItem(this, '+id+')">Hủy</button></td>' +
     '</tr>'
   );
@@ -863,7 +865,7 @@ function cashierAddItem (id, name, price)
 function cashierRemoveAddedItem (element, itemId) 
 {
   $(element).parent().parent().remove();
-  $('#btnDish' + itemId).attr('disabled', false);
+  $('.btnDish' + itemId).attr('disabled', false);
 
   //Set total to table footer
   setTotalAddedItem();
@@ -888,6 +890,7 @@ function cashierCheckout ()
       var quantity = inputQuantity.val();
       var id = inputQuantity.attr('item-id');
       var price = inputQuantity.attr('price');
+      var size = inputQuantity.attr('size');
 
       total += (quantity * price);
 
@@ -895,7 +898,8 @@ function cashierCheckout ()
       {
         items.push({
           id: id,
-          price: price 
+          price: price,
+          size: size 
         });
       }
     }
