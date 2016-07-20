@@ -66,8 +66,8 @@ module.exports = {
               table: device.table,
               status: 'open',
               deliveryType: 'dine-in',
-              startTime: moment.tz("UTC+7").format(),
-              endTime: moment.tz("UTC+7").format()
+              startTime: moment.tz("GMT+7").format(),
+              endTime: moment.tz("GMT+7").format()
             }).exec(function (err2, createdSession) {
               if (err2 || !createdSession) {
                 return res.json({
@@ -166,8 +166,8 @@ module.exports = {
           table: selectedMergeTable,
           status: 'open',
           deliveryType: 'dine-in',
-          startTime: moment.tz("UTC+7").format(),
-          endTime: moment.tz("UTC+7").format()
+          startTime: moment.tz("GMT+7").format(),
+          endTime: moment.tz("GMT+7").format()
         }).exec(function (err, createdSession) {
           if (err || !createdSession) {
             return res.json({
@@ -568,7 +568,7 @@ module.exports = {
               else {
                 //Update session status
                 session.status = 'close';
-                session.endTime = moment.tz("UTC+7").format();
+                session.endTime = moment.tz("GMT+7").format();
                 session.paymentStatus = 'cancelled';
                 session.save(function (err2, saved) {
                   if (err2 || !saved) {
@@ -950,8 +950,8 @@ module.exports = {
               receive: receive,
               change: change,
               total: total,
-              startTime: moment.tz("UTC+7").format(),
-              endTime: moment.tz("UTC+7").format()
+              startTime: moment.tz("GMT+7").format(),
+              endTime: moment.tz("GMT+7").format()
             }).exec(function (err, createdSession) {
               if (err || !createdSession) {
                 return res.json({
