@@ -30,6 +30,7 @@
 	                                { filterButtonDisabled: !kitchen.isOn(filter.index) }
 	                            ]">{{ filter.index + 1 }} ({{filter.selected}})</th>
 						  	<th>Món</th>
+						  	<th>Hình</th>
 						  	<th>Size</th>
 						  	<th>Giờ đặt món</th>
 						  	<th>&nbsp;</th>
@@ -56,6 +57,9 @@
 		                        {{ item.dish.name }}
 		                    </td>
 		                    <td>
+		                    	<img class="kitchen-overview-dish-img" ng-src="{{ item.dish.mainImage }}">
+		                    </td>
+		                    <td>
 		                        {{ item.size }}
 		                    </td>
 		                    <td>
@@ -80,6 +84,7 @@
 				  			<th>Mã chi tiết {{ kitchen.testingVariable }}</th>
 	                        <th>Mã đơn hàng</th>
 						  	<th>Món</th>
+						  	<th>Hình</th>
 						  	<th>Size</th>
 						  	<th>Giờ đặt món</th>
 						  	<th>&nbsp;</th>
@@ -101,6 +106,9 @@
 		                    </td>
 		                    <td>
 		                        {{ item.dish.name }}
+		                    </td>
+		                    <td>
+		                    	<img class="kitchen-overview-dish-img" ng-src="{{ item.dish.mainImage }}">
 		                    </td>
 		                    <td>
 		                        {{ item.size }}

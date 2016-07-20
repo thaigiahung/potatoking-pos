@@ -116,3 +116,8 @@ input[type=radio]:checked + label::before {
   font-size: 32px;
   font-weight: bold;
 }
+
+.kitchen-overview-dish-img {
+  max-width: 100px;
+  max-height: 100px;
+}
