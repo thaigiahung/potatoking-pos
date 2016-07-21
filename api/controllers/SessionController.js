@@ -1081,6 +1081,37 @@ module.exports = {
 
     return Authorize.apply(this, callback);
   },
+
+  getReport: function (req, res) {    
+    this.authorizeRoles = ['chief-cook'];
+    this.req = req;
+    this.res = res;
+    this.deviceIp = DeviceIp;
+
+    function callback(deviceIp) {
+      var dateFrom = req.body.dateFrom;
+      var dateTo = req.body.dateTo;
+
+      Session.query("SELECT createdAt, SUM(total) AS total FROM `session` WHERE DATE(createdAt) BETWEEN '"+moment(dateFrom).format("YYYY-MM-DD")+"' AND '"+moment(dateTo).format("YYYY-MM-DD")+"' GROUP BY (DATE(createdAt))", function (err, sessions) {
+        if(err || !sessions)
+        {
+          res.json({
+            status: 0,
+            sessions: []
+          });
+        }
+        else
+        {
+          res.json({
+            status: 1,
+            sessions: sessions
+          });
+        }
+      });
+    };
+
+    return Authorize.apply(this, callback);
+  },
 };
 
 var getMainDishId = function (dishes) {

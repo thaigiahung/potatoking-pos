@@ -1,14 +1,40 @@
 <div id="divReportPage">
-	<form role="form">
-		<div class="form-group">
-			<label class="control-label" for="daterange">Form with DateRangePicker</label>
-			<div class="controls">
-				<div class="input-group col-sm-4">
-					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-					<input type="text" class="form-control" id="daterange" value="09/09/2013 - 09/28/2013">
+	<div class="row-fluid">
+		<form class="form-horizontal">
+			<div class="span6">
+				<div class="control-group">
+				  <label class="control-label" for="dateFrom">Từ ngày</label>
+				  <div class="controls">
+					<input type="text" class="input-xlarge datepicker" id="dateFrom" value="02/16/12" />
+				  </div>
 				</div>
 			</div>
-		</div>
-	</form>
-	<button onclick="fastDelivery()" class="btn btn-large btn-success">Giao</button>
+
+			<div class="span6">
+				<div class="control-group">
+				  <label class="control-label" for="dateTo">Đến ngày</label>
+				  <div class="controls">
+					<input type="text" class="input-xlarge datepicker" id="dateTo" value="02/16/12" />
+				  </div>
+				</div>
+			</div>
+			
+		</form>
+	</div>
+	
+	<div style="text-align: right;">
+		<button onclick="getReport()" class="btn btn-large btn-success">Thống kê</button>
+	</div>
+
+	<div class="row-fluid">
+		<table class="table">
+			<thead>
+				<th>Ngày</th>
+				<th>Tổng tiền</th>
+			</thead>
+			<tbody id="reportBody">
+				
+			</tbody>
+		</table>
+	</div>
 </div>

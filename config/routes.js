@@ -89,6 +89,7 @@ module.exports.routes = {
   'POST /unblockTable': 'SessionController.unblockTable',
   'POST /cashier/order': 'SessionController.cashierOrder',
   'POST /kitchen/fastDelivery': 'DeviceController.startFastDelivery',
+  'POST /kitchen/report': 'SessionController.getReport',
 
   // Dish management
   'POST /dish/editDish': 'DishController.editDish',

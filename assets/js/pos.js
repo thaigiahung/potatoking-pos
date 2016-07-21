@@ -5,8 +5,6 @@ $( document ).ready(function() {
     localStorage.setItem("cashierAddedItems", JSON.stringify([]));
   }
 
-  
-
   //Calculate change
   $( "#receive" ).keyup(function() {
     var total = $("#total").val();
@@ -23,6 +21,12 @@ $( document ).ready(function() {
       $("#change").removeClass("change-warning");
     }
   });
+
+  if($('#divReportPage').length > 0)
+  {
+    $("#dateFrom").val(moment().format("MM/DD/YYYY"));
+    $("#dateTo").val(moment().format("MM/DD/YYYY"));
+  }
 });
 
 
@@ -984,6 +988,33 @@ function fastDelivery ()
     else
     {
       successNotify(result.message);
+    }
+  });
+}
+
+function getReport () {
+  var dateFrom = $("#dateFrom").val();
+  var dateTo = $("#dateTo").val();
+  var data = {
+    dateFrom: dateFrom,
+    dateTo: dateTo
+  }
+
+  io.socket.post('/kitchen/report', data, function (result) {    
+    if(result.status == 1)
+    {      
+      var reportBody = '';
+      var sessions = result.sessions
+      for(var i = 0; i < sessions.length; i++)
+      {        
+        reportBody += '<tr><td>' + 
+                        moment(sessions[i].createdAt).format("DD/MM/YYYY") +
+                      '</td>' + 
+                      '<td>' + 
+                        sessions[i].total +
+                      '</td></tr>';
+      }     
+      $("#reportBody").html(reportBody);
     }
   });
 }
