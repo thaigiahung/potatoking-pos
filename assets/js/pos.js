@@ -1100,8 +1100,8 @@ $("#confirmCloseTableModal").click(function (event) {
 });
 
 $("#btnFullScreen").click(function (event) {
-  var body = document.body;
-  body.webkitRequestFullScreen();
+  var html = document.documentElement;
+  html.webkitRequestFullScreen();
 });
 
 $(document).on('change', '.input-quantity', function() {
