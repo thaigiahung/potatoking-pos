@@ -1099,6 +1099,11 @@ $("#confirmCloseTableModal").click(function (event) {
   });
 });
 
+$("#btnFullScreen").click(function (event) {
+  var body = document.body;
+  body.webkitRequestFullScreen();
+});
+
 $(document).on('change', '.input-quantity', function() {
   var amount = 0;
   if($(this).val() < 0)
