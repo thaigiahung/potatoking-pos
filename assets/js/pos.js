@@ -916,7 +916,7 @@ function cashierCheckout ()
     {
       var data = {
         data: items,
-        total: total,
+        total: $('#total').val(),
         receive: $('#receive').val(),
         change: $('#change').val()
       }
