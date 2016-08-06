@@ -79,8 +79,11 @@
 			<div class="tab-pane" id="to-go"
 					ng-controller="kitchenOverviewController as kitchen"
 					ng-init="kitchen.items = <%= JSON.stringify(toGoList) %>">
-					<button ng-click="kitchen.shipOrders('/batchDeliverToGo')"
+					<button ng-click="kitchen.shipOrders('/batchDeliverToGo', false)"
 					ng-disabled="kitchen.numberOfSelected() == 0" class="btn btn-large btn-success">Giao hàng {{kitchen.numberOfSelected()}}</button>
+
+					<button ng-click="kitchen.shipOrders('/batchDeliverToGo', true)"
+					ng-disabled="kitchen.numberOfSelected() == 0" class="btn btn-large btn-success">Đã giao {{kitchen.numberOfSelected()}}</button>
 				<table class="table" id="kitchenOverviewToGoTable">
 				  	<thead>
 					  	<tr>
