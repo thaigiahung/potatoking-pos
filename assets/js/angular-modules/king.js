@@ -15,6 +15,12 @@
     { deviceIndex: 7, isSelected: false }
   ];
 
+  var smoothScrollToBottom = function () {
+    $('html, body').animate({
+      scrollTop: 500
+    }, '1000');
+  }
+
   app.controller('kitchenOverviewController', function($scope) {
     this.items = [];
     this.selectedItems = [];
@@ -841,6 +847,10 @@
         {
           failNotify(result.message);
         }
+        else
+        {
+          smoothScrollToBottom();
+        }
       });
     }
 
@@ -1071,6 +1081,10 @@
         if(result.status == 0)
         {
           failNotify(result.message);
+        }
+        else
+        {
+          smoothScrollToBottom();
         }
       });
 
