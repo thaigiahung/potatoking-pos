@@ -16,8 +16,11 @@
 			<div class="tab-pane active" id="dine-in"
 					ng-controller="kitchenOverviewController as kitchen"
 					ng-init="kitchen.items = <%= JSON.stringify(dineInList) %>">
-					<button ng-click="kitchen.shipOrders('/batchDeliverDineIn')"
+					<button ng-click="kitchen.shipOrders('/batchDeliverDineIn', false)"
 					ng-disabled="kitchen.numberOfSelected() == 0" class="btn btn-large btn-success">Giao hàng {{kitchen.numberOfSelected()}}</button>
+
+					<button ng-click="kitchen.shipOrders('/batchDeliverDineIn', true)"
+					ng-disabled="kitchen.numberOfSelected() == 0" class="btn btn-large btn-success">Đã giao {{kitchen.numberOfSelected()}}</button>
 				<table class="table" id="kitchenOverviewDineInTable">
 				  	<thead>
 					  	<tr>

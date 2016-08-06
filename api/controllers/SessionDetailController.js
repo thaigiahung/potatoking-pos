@@ -122,6 +122,10 @@
  	batchDeliverDineIn: function(req, res) {
  		var arrSessionDetailId = req.body.arrSessionDetailId;
  		var trainId = req.body.trainId;
+ 		var shipped = req.body.shipped;
+ 		//shipped:
+ 		//  true: already shipped -> train won't start
+ 		//  false: not yet -> start train
 
  		fs.readFile(fullStatusFilePath, 'utf8', function read(err3, data) { 							
  			if(err3 || !data)
@@ -134,7 +138,7 @@
  			else
  			{
  				var arr = data.split("\n");
- 				if(arr[0] == 1) //Train is currently at station
+ 				if(arr[0] == 1 || shipped) //Train is currently at station or this item doesn't use train
  				{
  					var table = 0;
 			 		async.forEachOfSeries(arrSessionDetailId, function (sessionDetailId, index, callback) {
@@ -185,7 +189,16 @@
  				 		});
 			 		}, function (err) {
 	   					// var newStr = "2\n" + table + "\n";
-	   					fs.writeFile(fullStatusFilePath, 2, 'utf8', function (err4) {
+
+	   					var shipStatus = arr[0];
+	   					var shipTable = 0;
+   						if(!shipped) //not shipped -> set status & table to prepare for shipping
+   						{
+   							shipStatus = 2;
+   							shipTable = table;
+   						}
+
+	   					fs.writeFile(fullStatusFilePath, shipStatus, 'utf8', function (err4) {
 	   						if(err4)
 	   						{
 	   							return res.json({
@@ -195,7 +208,7 @@
 	   						}
 	   						else
 	   						{
-	   							fs.writeFile(fullTableFilePath, table, 'utf8', function (err) {
+	   							fs.writeFile(fullTableFilePath, shipTable, 'utf8', function (err) {
 	   							  	if(err)
 	   							  	{
 		   							    return res.json({

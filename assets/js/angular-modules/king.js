@@ -126,7 +126,10 @@
     }
 
     // This function will be ran after the user click Giao in the kitchen-overview page
-    this.shipOrders = function(url) {
+    this.shipOrders = function(url, shipped) {
+      //shipped:
+      //  true: already shipped -> train won't start
+      //  false: not yet -> start train
 
       //TODO: This code will be run before the server response
 
@@ -134,7 +137,8 @@
 
       var data = {
         arrSessionDetailId: self.selectedItems,
-        trainId: 1
+        trainId: 1,
+        shipped: shipped
       }
 
       io.socket.post(url, data, function(result) {
