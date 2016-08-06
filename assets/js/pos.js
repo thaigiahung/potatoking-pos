@@ -469,7 +469,6 @@ io.socket.on('connect', function () {
         redirect('/');
       });
 
-
       //Listen for event merge table
       io.socket.on('merged', function (mergedMessage) {
         io.socket.get('/subscribe/'+mergedMessage.room, function (message) {
@@ -504,39 +503,7 @@ io.socket.on('connect', function () {
           redirect('/');
         }
       });
-
-      //Listen for event open table
-      io.socket.on('opened', function (message) {
-        //Single table (not merged to any others) => currentTable will be original table
-        localStorage.currentTable = deviceData.data.table;
-
-        //Store current session id in localStorage
-        localStorage.sessionId = message.sessionId;
-
-        /*$("#divDishPageAlert").prepend('<div class="alert alert-success">' +
-                                      '<button type="button" class="close" data-dismiss="alert">×</button>' +
-                                      message.message +
-                                    '</div>');*/   
-        redirect('/');
-      });
-
-
-      //Listen for event merge table
-      io.socket.on('merged', function (mergedMessage) {
-        io.socket.get('/subscribe/'+mergedMessage.room, function (message) {
-          //Table is merged => currentTable will be the return value from API
-          localStorage.currentTable = mergedMessage.table;
-
-          //Store current session id in localStorage
-          localStorage.sessionId = mergedMessage.sessionId;
-
-          /*$('#divDishPageAlert').prepend('<div class="alert alert-success">' +
-                                        '<button type="button" class="close" data-dismiss="alert">×</button>' +
-                                        mergedMessage.message +
-                                      '</div>');*/
-        });
-        redirect('/');
-      });
+      
 
       //Listen for event order item
       io.socket.on('ordered', function (message) {        
@@ -562,7 +529,7 @@ io.socket.on('connect', function () {
           failNotify('Món ' + msg.dishName + ': ' + msg.message);
         }
 
-        $("#tdSessionDetail"+msg.sessionDetailId).html('<div class="item-status">' + msg.message + '</div>');
+        // $("#tdSessionDetail"+msg.sessionDetailId).html('<div class="item-status">' + msg.message + '</div>');
       });
 
       io.socket.on('removeOrderedItem', function (result) {  
@@ -575,7 +542,7 @@ io.socket.on('connect', function () {
           fade_out_speed: 100
         });
 
-        $("#tdSessionDetail"+result.sessionDetailId).html('<div class="item-status">' + msg.message + '</div>');
+        // $("#tdSessionDetail"+result.sessionDetailId).html('<div class="item-status">' + msg.message + '</div>');
       });
 
       //Listen for event block table

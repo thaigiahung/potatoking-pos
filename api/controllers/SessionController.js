@@ -723,7 +723,7 @@ module.exports = {
               SessionDetail.find({
                 where: {
                   session: session.id,
-                  status: ['ordered', 'cancelled', 'removed', 'delivered']
+                  status: ['ordered', 'delivered']
                 },
                 sort: 'id DESC'
               }).populate('dish').exec(function (err, ordered) {
