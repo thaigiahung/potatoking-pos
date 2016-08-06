@@ -153,11 +153,28 @@ ng-init="menu.init(<%= session.id %>)">
                     alt="" class="trainImage">
                     </div>                    
                 </div>
-                <div class="span3 train-head" ng-click="menu.submitOrder()"></div>
+                <!-- <div class="span3 train-head" ng-click="menu.submitOrder()"></div> -->
+                <div class="span3 train-head" data-toggle="modal" data-target="#modalConfirmAddItem"></div>
+            </div>
+
+            <div class="modal hide fade" id="modalConfirmAddItem">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3>Thông báo</h3>
+              </div>
+              <div class="modal-body">
+                <p>Bạn có muốn đặt món không?</p>
+              </div>
+              <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Không</a>
+                <a href="#" class="btn btn-primary" ng-click="menu.submitOrder()">Có</a>
+              </div>
             </div>
         </div>
     </div>
 </div>
+
+
 
 <script type="text/ng-template" id="myModalContent.html">        
     <div class="modal-header">
