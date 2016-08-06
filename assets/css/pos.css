@@ -121,3 +121,9 @@ input[type=radio]:checked + label::before {
   max-width: 100px;
   max-height: 100px;
 }
+
+.arrow-left-container {
+  float: right;
+  margin-right: -20px;
+  margin-top: 40px;
+}

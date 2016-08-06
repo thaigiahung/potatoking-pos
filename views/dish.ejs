@@ -152,9 +152,12 @@ ng-init="menu.init(<%= session.id %>)">
                         <img ng-src="{{ menu.train[dishIndex].dish.mainImage }}" 
                     alt="" class="trainImage">
                     </div>                    
-                </div>
-                <!-- <div class="span3 train-head" ng-click="menu.submitOrder()"></div> -->
-                <div class="span3 train-head" data-toggle="modal" data-target="#modalConfirmAddItem"></div>
+                </div>                
+                <div class="span3 train-head" data-toggle="modal" data-target="#modalConfirmAddItem">
+                    <div class="arrow-left-container">
+                        <img src="/img/template/arrow-left.gif">
+                    </div>
+                </div>                
             </div>
 
             <div class="modal hide fade" id="modalConfirmAddItem">
