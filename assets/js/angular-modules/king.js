@@ -738,6 +738,7 @@
     }
 
     this.reloadTrain = function() {
+      smoothScrollToBottom();
       self.trainCars = [];
       $http.post('/api/ordered/detail', {
         sessionId: self.sessionId

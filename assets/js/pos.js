@@ -39,7 +39,6 @@ $( document ).ready(function() {
 io.socket.on('connect', function (status) {
   //TODO: call api update device status
   io.socket.post('/device/connect', function (deviceData) {    
-    console.log(deviceData)
     if(deviceData.status == 1)
     {
       successNotify("Thiết bị đã kết nối thành công!");
@@ -343,6 +342,8 @@ io.socket.on('connect', function (status) {
 
       //Listen for event merge table
       io.socket.on('merged', function (mergedMessage) {
+        console.log(mergedMessage)
+        alert(mergedMessage.room)
         io.socket.get('/subscribe/'+mergedMessage.room, function (message) {
           //Table is merged => currentTable will be the return value from API
           localStorage.currentTable = mergedMessage.table;
@@ -355,7 +356,7 @@ io.socket.on('connect', function (status) {
                                         mergedMessage.message +
                                       '</div>');*/
         });
-        reload();
+        // reload();
       });
 
       //Listen for event cancel table
@@ -378,6 +379,8 @@ io.socket.on('connect', function (status) {
 
       //Listen for event add item
       io.socket.on('addItem', function (message) {
+        console.log(message)
+        alert(message)
         var appElement = document.querySelector('#menuPage');
         var $scope = angular.element(appElement).scope();
 

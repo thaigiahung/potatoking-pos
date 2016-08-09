@@ -219,11 +219,13 @@ module.exports = {
                       });
                     }
                   });
+
+                  arrSelectedTableName.push(device.table);
                 }
                 else {
                   arrError.push(selectedTable);
                 }
-                arrSelectedTableName.push(selectedTable);
+                
                 callback();
               });
             }, function done() {
