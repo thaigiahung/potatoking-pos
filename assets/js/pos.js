@@ -354,7 +354,7 @@ io.socket.on('connect', function (status) {
                                         mergedMessage.message +
                                       '</div>');*/
         });
-        // reload();
+        reload();
       });
 
       //Listen for event cancel table
