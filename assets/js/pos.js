@@ -40,6 +40,11 @@ io.socket.on('connect', function (status) {
   //TODO: call api update device status
   io.socket.post('/device/connect', function (deviceData) {    
     console.log(deviceData)
+    if(deviceData.status == 1)
+    {
+      successNotify("Thiết bị đã kết nối thành công!");
+    }
+
     //Subscribe to global room named 'pos'
     io.socket.get('/subscribe/pos', function (message) {});
 
