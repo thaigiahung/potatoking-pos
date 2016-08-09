@@ -221,9 +221,9 @@ module.exports = {
                   });
                 }
                 else {
-                  arrError.push(device.table);
+                  arrError.push(selectedTable);
                 }
-                arrSelectedTableName.push(device.table);
+                arrSelectedTableName.push(selectedTable);
                 callback();
               });
             }, function done() {

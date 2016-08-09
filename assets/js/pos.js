@@ -36,9 +36,10 @@ $( document ).ready(function() {
 * Socket IO
 *
 *******************************************************/
-io.socket.on('connect', function () {
+io.socket.on('connect', function (status) {
   //TODO: call api update device status
   io.socket.post('/device/connect', function (deviceData) {    
+    console.log(deviceData)
     //Subscribe to global room named 'pos'
     io.socket.get('/subscribe/pos', function (message) {});
 
@@ -156,54 +157,52 @@ io.socket.on('connect', function () {
     //Page: Order Detail
     if($('#sessionDetailPage').length > 0)
     {      
-      $( document ).ready(function() {
-        io.socket.get('/subscribe/device', function (message) {});
+      io.socket.get('/subscribe/device', function (message) {});
 
-        //Call API checkout
-        $("#btnCheckout").click(function () {
-          var change = $("#change").val();
-          if(change < 0)
-          {
-            failNotify('Vui lòng kiểm tra lại số tiền!');
+      //Call API checkout
+      $("#btnCheckout").click(function () {
+        var change = $("#change").val();
+        if(change < 0)
+        {
+          failNotify('Vui lòng kiểm tra lại số tiền!');
+        }
+        else
+        {
+          var data = {
+            sessionId: $("#hdSessionId").val(),
+            receive: $("#receive").val(),
+            change: change
           }
-          else
-          {
-            var data = {
-              sessionId: $("#hdSessionId").val(),
-              receive: $("#receive").val(),
-              change: change
+
+          io.socket.post('/finalCheckout', data, function (result) {
+            if(result.status == 1)
+            {
+              successNotify(result.message);
+
+              $("#receive").prop('disabled', true);
+
+              //Clear modal footer & add button OK
+              $("#modalCheckoutFooter").html('<a href="/ordered/overview" class="btn btn-default">Ok</a>');
             }
+            else
+            {
+              failNotify(result.message);
+            }
+          });
+        }          
+      });
 
-            io.socket.post('/finalCheckout', data, function (result) {
-              if(result.status == 1)
-              {
-                successNotify(result.message);
-
-                $("#receive").prop('disabled', true);
-
-                //Clear modal footer & add button OK
-                $("#modalCheckoutFooter").html('<a href="/ordered/overview" class="btn btn-default">Ok</a>');
-              }
-              else
-              {
-                failNotify(result.message);
-              }
-            });
-          }          
-        });
-
-        //http://www.jqueryscript.net/other/Classic-Growl-like-Notification-Plugin-For-jQuery-Gritter.html
-        io.socket.on('receive-message', function (msg) {
-          /*$.gritter.add({
-            // (string | mandatory) the heading of the notification
-            title: 'Bàn ' + msg.table,
-            // (string | mandatory) the text inside the notification
-            text: msg.message,
-            sticky: true,
-            fade_out_speed: 100
-          });*/
-          persistNotify('[Bàn ' + msg.table + '] ' + msg.message);
-        });
+      //http://www.jqueryscript.net/other/Classic-Growl-like-Notification-Plugin-For-jQuery-Gritter.html
+      io.socket.on('receive-message', function (msg) {
+        /*$.gritter.add({
+          // (string | mandatory) the heading of the notification
+          title: 'Bàn ' + msg.table,
+          // (string | mandatory) the text inside the notification
+          text: msg.message,
+          sticky: true,
+          fade_out_speed: 100
+        });*/
+        persistNotify('[Bàn ' + msg.table + '] ' + msg.message);
       });
     }
 
@@ -984,6 +983,12 @@ function getReport () {
       $("#reportBody").html(reportBody);
     }
   });
+}
+
+function smoothScrollToBottom() {
+  $('html, body').animate({
+    scrollTop: 500
+  }, '1000');
 }
 
 function reload () 
