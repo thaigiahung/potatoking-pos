@@ -876,8 +876,7 @@ module.exports = {
 
     Session.findOne({
       id: sessionId,
-      status: 'open',
-      paymentStatus: 'checkout'
+      status: 'open'
     }).exec(function (err, session) {
       if (err || !session) {
         return res.json({
